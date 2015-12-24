@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Harvy Vanegas">
+    <meta name="author" content="">
+
+    <title>Comprobante</title>
+
+    <!-- CSS núcleo Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Añadir CSS personalizado aquí -->
+    <link href="css/metro_dcsa.css" rel="stylesheet">
+	<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+	<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+	<link href="/static/css/fonts.css" rel="stylesheet" type="text/css"/>
+		
+</head>
+
+<body>
+	{% load i18n grp_tags log %}
+         {% for pa in paginas %}
+         {% for p in pa.comprobantes %}
+    <!--Contenedor de las columnas del diseñador-->
+    <div class="container" style="width: 800px;">
+    	<div class="row modal-content">
+            <div class="contenedor-izquierdo">
+				<table class="posicion-tabla-izq">
+					<tr>
+						<td>
+							<p class="campo izquierdo barra">*{{p.barra}}*</p>
+						</td>
+						<td>
+							<img class="logo-metro" src="{{ STATIC_URL }}/metropolitana/logo-metro.jpg" border="0" width="150mm" height="35mm"></td>
+						</td>
+					</tr>
+				</table>
+				
+				<!-- <p class="campo izquierdo">AÑO : {{ p.ano }} | MES : {{p.mes}} | CICLO : {{ p.ciclo }}</p> -->
+				<p class="campo izquierdo">CODIGO {{p.name_fila}}</p>
+				<p class="campo izquierdo">LOTE # : {{p.lote.numero}} | CONSECUTIVO : {{p.consecutivo}} | CONTRATO : {{ p.contrato }}</p>
+				<p class="campo izquierdo">CLIENTE : {{p.cliente}} | TELEFONO: {{p.get_telefono}}</p>
+				<p class="campo izquierdo">DIRECCION : {{p.direccion}}</p>
+				<p class="campo izquierdo">DEPARTAMENTO : {{p.lote.departamento.name}} | MUNICIPIO : {{p.lote.municipio.name}} | BARRIO : {{p.lote.barrio.name}}</p>
+				<div style="margin-top: 6mm;">
+					<p class="firma-data izquierdo">Recibido Por :_________________________________________________________________</p>
+					<p class="firma-data izquierdo">Parentezco :___________________________ Fecha Rec.:_____________________________</p>
+					
+					<table class="posicion-tabla firma-data">
+						<tr>
+							<td>Cambio</td> <td class="bordeado sin_fond">__</td>
+							<td>No existe</td> <td class="bordeado sin_fond">__</td>
+							<td>Direccion mala</td> <td class="bordeado sin_fond">__</td>
+							<td>Rechazada</td> <td class="bordeado sin_fond">__</td>
+							<td>Sin Cobertura</td> <td class="bordeado sin_fond">__</td>
+						</tr>
+					</table>
+				</div>
+    	   </div>
+           <div class="contenedor-derecho">
+                <p class="rotar derecho barra-derecho barra">*{{p.barra}}*</p>
+				<p class="rotar derecho fuente-derecho ciclo-derecho">AÑO : {{ p.ano }} | MES : {{p.mes}} | CICLO : {{ p.ciclo }}</p>
+				<p class="rotar derecho fuente-derecho cliente-derecho">CLIENTE : {{p.cliente}}</p>
+				<p class="rotar derecho fuente-derecho direccion-derecho">DIRECCION : {{p.direccion}}</p>
+				<div class="rotar derecho recibido recibido-derecho">
+					<p>Firma del Colector</p>
+				</div>
+           </div>
+        </div>
+    </div>
+    <!--End Container-->
+	{% endfor %}
+	<div class="saltopagina"></div>
+	{% endfor %}
+</body>
+
+</html>

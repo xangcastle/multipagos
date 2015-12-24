@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load staticfiles %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/ui.js"></script>
+        <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ STATIC_URL }}css/ui.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<style>
+    .invicible {
+        display: none;
+        }
+</style>
+<script>
+    function cargar_pod(id ,code, path){
+        $.ajax({
+	type:"GET",
+	contentType:"application/json; charset=utf-8",
+	dateType:"json",
+	url:"{% url 'cargar_pod' %}",
+	data: {code:code, path:path, id: id},
+	success:function(response){
+	    $("#comprobante").remove();
+	    $("#code").val("");
+	}
+	});
+        }
+
+</script>
+<script>
+    $( document ).ready(function() {
+        $('#code').autocomplete({
+                                minLength: 4,
+                                source: "{% url 'autocomplete_pod' %}",
+                                select: function( event, ui ) {
+                                    var c = $("#comprobante")
+                                    var code = ui.item.value;
+                                    var path = c.find("iframe").attr("src");
+                                    var id = $("#id").val();
+                                    cargar_pod(id, code, path);
+                                }
+                            });
+
+        $("#code").on("focus", function(){
+        $("#code").val("");
+
+        });
+
+    });
+</script>
+    </head>
+    <body>
+    <div class="container-fluid">
+        <div class="row well">
+            <div class="col-md-8">
+                    {% for a in archivos %}
+                <div class="well" id="comprobante">
+                    <iframe src="{{a}}" width=800 height=310 class=""></iframe>
+                </div>
+                    {% endfor %}
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <button class="btn" onclick='$("#comprobante").remove();'>Ignorar</button>
+                    <input type="text" id="code" name="code" class="form-control" placeholder="INGRESE CODE"></input>
+                    <input type="hidden" id="id" name="id" class="form-control" value="{{ id }}"></input>
+                </div>
+            </div>
+    </div>
+    </div>
+    </body>
+</html>

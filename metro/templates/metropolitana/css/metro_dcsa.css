@@ -1,0 +1,246 @@
+body
+{
+  padding-top: 10px
+}
+
+.slide-image {
+  width: 100%;
+}
+
+.carousel-holder {
+  margin-bottom: 30px;
+}
+
+.carousel-control,.item {
+  border-radius: 4px;
+}
+
+.caption {
+  height: 130px;
+  overflow: hidden;
+}
+
+.caption h4 {
+  white-space: nowrap;
+}
+
+.thumbnail img {
+  width: 100%;
+}
+
+.ratings {
+  color: #d17581;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.thumbnail {
+  padding: 0;
+}
+
+.thumbnail .caption-full {
+  padding: 9px;
+  color: #333;
+}
+
+footer {
+  margin: 50px 0;
+}
+
+/*Aclara 10% la imagen*/
+.acl-img:hover {
+filter: alpha(opacity=70);
+-moz-opacity: 0.7;
+-khtml-opacity: 0.7;
+
+opacity: 0.7;
+}
+
+/*Resaltar texto*/
+.rslt-txt {
+    font-weight: bold !important;
+    font-size: 13px !important;
+}
+/*Cambiar color texto azul*/
+.color-blue {
+color: rgb(66, 139, 202)
+}
+/* Seccion de pagina */
+.section,
+.section-colored {
+  padding: 50px 0;
+}
+.section-colored {
+background-color: #e1e1e1
+}
+
+/* Encerrar en un cuadro con borde suavisado */
+.box {
+         background: transparent;
+         border-radius: 8px 8px 8px 8px;
+         padding: 4px;
+         border: 1px solid black;
+         margin: 30px;
+      }
+
+/* Pie de modal alineacion perzonalizada */
+.modal-footer-left {
+    padding: 19px 20px 20px;
+    margin-top: 15px;
+    text-align: left;
+    border-top: 1px solid rgb(229, 229, 229);
+}
+
+.btn-default-collapse {
+    color: rgb(51, 51, 51);
+    background-color: rgb(255, 255, 255);
+    border-color: rgb(204, 204, 204);
+}
+.col-md-9-full {
+    width: 100%;
+}
+/* *********************************************************************************************** */
+.comprobante {
+width: 215mm;
+height: 69.85mm;
+}
+.bordeado {
+border-color:#000000;
+border-style:solid;
+border-width:1px;
+}
+.campo {
+margin-top: 0mm;
+margin-left: 4mm;
+height: 4mm;
+font-size:9pt;
+color:#000000;
+font-family:Microsoft Sans Serif;
+font-weight:normal;
+}
+.izquierdo {
+max-width: 140mm;
+}
+.derecho {
+max-width: 65mm;
+}
+.contenedor-izquierdo {
+  max-width: 150mm;
+  height: 70.85mm;
+  border-right-style: dashed;
+  border-width: 3px;
+  margin-top: 1mm;
+}
+
+.contenedor-derecho {
+  margin-left: 150mm;
+  max-width: 91mm;
+  height: 40mm;
+  margin-top: -69.85mm;
+}
+.barra {
+font-family:'Connect-Code-39',Sans-Serif;
+font-size: 14px;
+}
+.recibido {
+width: 50mm;
+margin: 7mm;
+border-top-style: double;
+border-width: 5px;
+text-align: center;
+}
+.rotar {
+-webkit-transform: rotate(-90deg);
+transform: rotate(-90deg)
+}
+.logo-metro {
+margin-right: 2mm;
+}
+.ciclo-derecho {
+margin-left: -14mm;
+margin-top: -7mm;
+}
+.cliente-derecho {
+margin-left: -5mm;
+max-width: 60mm;
+margin-top: -5mm;
+}
+.recibido-derecho {
+margin-top: -10mm;
+margin-left: 33mm;
+}
+
+@media all{
+   div.saltopagina{
+   }
+}
+
+@media print{
+   div.saltopagina{
+	  display:block;
+	  page-break-before:always;
+   }
+}
+
+@media all{
+   .invicible{
+	   color: transparent;
+   }
+}
+
+@media print{
+   .invicible{
+						color: transparent;
+   }
+}
+<!-- Agregado x Harvy -->
+.borde-campo {
+border-top-style: simple;
+border-width: 3px;
+}
+
+.firma-data {
+margin-top: -5px;
+margin-left: 5mm;
+font-size:9pt;
+color:#000000;
+font-family:Microsoft Sans Serif;
+font-weight:normal;
+}
+
+.posicion-tabla {
+margin-top: -6px;
+margin-left: 17px;
+}
+
+.posicion-tabla-izq {
+margin-left: 13px;
+margin-top: -6px;
+}
+
+.cuadro-select {
+color: transparent;
+}
+.direccion-derecho {
+margin-top: -9mm;
+margin-left: 5mm;
+}
+
+.sin_fond {
+color: transparent;
+}
+
+.barra-derecho {
+margin-top: 30mm;
+margin-left: -24mm;
+height: 4mm;
+font-size:9pt;
+color:#000000;
+font-weight:normal;
+}
+
+.fuente-derecho {
+font-size:8pt;
+color:#000000;
+font-weight:normal;
+}

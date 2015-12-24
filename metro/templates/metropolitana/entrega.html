@@ -1,0 +1,58 @@
+<html>
+<head>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+<link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+<script>
+$(document).keypress(function(e) {
+    if(e.which == 13) {
+        $.ajax({
+	type:"GET",
+	contentType:"application/json; charset=utf-8",
+	dateType:"json",
+	url:"{% url 'datos_paquete' %}",
+	data: {barra:$("#barra").val(),csrfmiddlewaretoken:$('input[name="csrfmiddlewaretoken"]').val()},
+	success:function(response){
+		if(response.nombre!='nada') {
+			$('#id_cliente').val(response.cliente);
+			$('#id_entregado').removeClass("alert alert-success");
+			$('#id_entregado').removeClass("alert alert-danger");
+			$('#id_entregado').addClass(response.clase);
+			$('#id_entregado').val(response.valor);
+		} else {
+			$('#id_cliente').val('');
+			$('#id_entregado').val('');
+		  }
+	}
+	});
+	$('#barra').val('');
+    }
+});
+</script>
+<script>    $(document).ready(function() {
+        $(".input").val("Email Address");
+
+    $(".input").on("focus", function(){
+        $(".input").val("");
+
+    });
+
+    $(".button").on("click", function(event){
+        $(".input").val("");
+    });
+
+
+    });
+</script>
+</head>
+<body>
+<div class="container well">
+<input type="hidden" name="csrfmiddlewaretoken" value="6KkIETF9H30DlhVymWau2CdE5GTHOqZG">
+<label for="barra"> codigo de barras </label>
+<input type="text" id="barra" class="form-control">
+<label for="id_cliente"> nombre del cliente </label>
+<input type="text" id="id_cliente" class="form-control">
+<input class="form-control" id="id_entregado">
+</div>
+</body>
+</html>
+

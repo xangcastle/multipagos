@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "Metropolitana Distribucion">
+<html>
+    <head>
+        <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+        <link href="/static/css/fonts.css" rel="stylesheet" type="text/css"/>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <link href='http://fonts.googleapis.com/css?family=Tinos' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+        <style>
+            .pagina {
+                min-width: 355.6mm;
+                max-width: 355.6mm;
+                min-height: 215.7mm;
+                max-height: 215.7mm;
+                margin-left: -2mm;
+                z-index:0;
+            }
+            .primera {
+                margin-top: -2mm;
+            }
+            .pod {
+                width: 177.2mm;
+                height: 71.2mm;
+                float: left;
+                z-index: 1;
+            }
+            .bordeado {
+                border-color:#000000;
+                border-style:solid;
+                border-width:1px;
+            }
+            .campo {
+                margin-top: 0mm;
+                margin-left: 3mm;
+                font-size:7pt;
+                color:#000000;
+                font-family:Microsoft Sans Serif;
+                font-weight:normal;
+                z-index: 1;
+            }
+            .campo-tabla {
+                text-align: center;
+            }
+            .izquierdo {
+                max-width: 119mm;
+                min-width: 119mm;
+            }
+            .derecho {
+                max-width: 46mm;
+                min-width: 46mm;
+            }
+            .valor {
+                min-width: 23mm;
+                text-align: center;
+                font-weight: bold;
+                font-size: 8pt;
+            }
+            .cliente {
+                min-width: 96.8mm;
+                min-height: 3mm;
+                margin-top: 1mm;
+            }
+            .direccion {
+                min-width: 96.8mm;
+                min-height: 8mm;
+            }
+            .recibido {
+                margin-top: 0mm;
+            }
+            .code_per {
+                margin-top: 2mm;
+                margin-left: 8mm;
+                height: 4mm;
+                font-size: 10pt;
+                color: #000000;
+                font-family: 'PT Sans', sans-serif;
+                font-weight: black;
+            }
+            .barra {
+                font-family: 'Connect-Code-39',Sans-Serif;
+                font-size: 14px;
+                margin: -1px;
+            }
+            .inferior {
+                border-top-style: dashed;
+                border-width: 2px;
+                padding-top: 2mm;
+                z-index: 0;
+            }
+            .rotar {
+                -webkit-transform: rotate(-90deg);
+                transform: rotate(-90deg)
+            }
+            .contenedor-derecho {
+                margin-left: 150mm;
+                max-width: 90mm;
+                height: 66.85mm;
+                margin-top: -69.85mm;
+            }
+            @media all{
+                div.saltopagina{
+                }
+            }
+
+            @media print{
+                div.saltopagina{
+                    display:block;
+                    page-break-before:always;
+                }
+            }
+            .invicible{
+                color: transparent;
+            }
+            .contenedor-derecho {
+                border-left-style: dashed;
+                border-width: 3px;
+            }
+            .barra-derecha{
+                font-size: 8pt;
+                margin-left: 3mm;
+            }
+            .code-derecho{
+                margin-top: 3mm;
+            }
+            .cliente-derecho{
+            }
+            .direccion-derecho{
+            }
+            .colector{
+                border-top-style: double;
+                border-width: 5px;
+                text-align: center;
+                margin-top: 22mm;
+            }
+            .logo-metro {
+                margin-top: 4mm;
+                margin-left: 3mm;
+            }
+            .indentificador{
+                margin-top: -4mm;
+                }
+            .datos {
+                margin-top: -1mm;
+                }
+        </style>
+    </head>
+    <body>
+        {% load i18n grp_tags log %}
+        {% for pa in paginas %}
+        <div class="saltopagina"></div>
+        <div class="pagina" numero={{pa.numero}}>
+
+            {% for p in pa.comprobantes %}
+            <div class="pod bordeado">
+            <table>
+            <tr><td>
+                <table class="campo">
+                    <tr>
+                        <td><p class="barra">*{{p.get_barra}}*</p></td>
+                        <td><img class="logo-metro" src="{{ STATIC_URL }}/metropolitana/logo-metro.jpg" border="0" width="150mm" height="35mm"></td>
+                    </td>
+            </tr>
+        </table>
+        <table class="campo indentificador">
+                    <tr>
+                        <td><p class="code_per">CODE {{p.name_file}}</p></td>
+                        <td><p class="code_per">{{p.factura}}</p></td>
+                    </td>
+            </tr>
+        </table>
+
+
+            <table class="campo izquierdo campo-tabla datos">
+                <tr>
+                    <td class="bordeado">ZONA</td>
+                    <td class="bordeado">CONSECUTIVO</td>
+                    <td class="bordeado">CONTRATO</td>
+                    <td class="bordeado">DEPARTAMENTO</td>
+                </tr>
+                <tr>
+                    <td class="valor bordeado">{{ p.lote.numero }}</td>
+                    <td class="valor bordeado">{{ p.consecutivo }}</td>
+                    <td class="valor bordeado">{{ p.contrato }}</td>
+                    <td class="valor bordeado">{{ p.departamento }}</td>
+                </tr>
+        </table>
+        <p class="campo izquierdo cliente">CLIENTE : {{p.cliente}}</p>
+        <p class="campo izquierdo direccion">DIRECCION : {{p.barrio}}, {{p.direccion}}, {{p.municipio}}.</p>
+
+        <p>
+        <p class="campo izquierdo recibido">Recibido Por :_________________________________________________________________</p>
+        <p class="campo izquierdo">Parentezco :___________________________ Fecha Rec.:_____________________________</p>
+
+        <table class="campo campo-tabla izquierdo">
+            <tr>
+                <td>Cambio</td> <td class="bordeado invicible">XX</td>
+                <td>No existe</td> <td class="bordeado invicible">XX</td>
+                <td>Direccion mala</td> <td class="bordeado invicible">XX</td>
+                <td>Rechazada</td> <td class="bordeado invicible">XX</td>
+                <td>Sin Cobertura</td> <td class="bordeado invicible">XX</td>
+            </tr>
+        </table>
+        </td>
+        <td class="contenedor-derecho">
+                <p class="campo derecho barra barra-derecha">*{{p.get_barra}}*</p>
+                <p class="campo derecho code-derecho">{{ p.contrato }} -- {{p.ciclo}} -- {{ p.mes }}</p>
+                <p class="campo derecho cliente-derecho">{{p.cliente}} -- {{p.get_telefono}}</p>
+                <p class="campo derecho direccion-derecho">{{p.direccion}}</p>
+                <div class="campo derecho colector"><p>Firma del Colector</p></div>
+        </td>
+    </tr>
+    </table>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+</body>
+<script>
+$('.pagina:first').css("margin-top", "-2mm");
+$('.saltopagina:first').remove();
+</script>
+</html>
+
+

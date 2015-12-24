@@ -1,0 +1,4 @@
+*.pyc
+*.pyo
+/metro/media
+/metro/static

@@ -1,0 +1,35 @@
+{% extends "admin/app_index.html" %}
+{% load i18n %}
+
+
+{% block content %}
+{% load estadisticas %}
+{% get_estadisticas_all as sts %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1.1", {packages:["bar"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Ciclo', 'Total', 'Entregados', 'Pendientes'],
+        {% for e in sts %}
+            ['{{e.code}}', {{e.total}}, {{e.entregados}}, {{e.pendientes}}],
+
+        {% endfor %}
+        ]);
+
+        var options = {
+          chart: {
+            title: '',
+            subtitle: 'Estadisticas de Entregas',
+          }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <div id="columnchart_material" style="width: 1200px; height: 600px;"></div>
+
+{% endblock %}

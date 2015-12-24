@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "Metropolitana Distribucion">
+<html style="margin-top: -1px;">
+	<head>
+		<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+		<link href="/static/css/fonts.css" rel="stylesheet" type="text/css"/>
+		<link href='http://fonts.googleapis.com/css?family=Tinos' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+		{% if id_unico %}
+		{% for l in queryset %}
+		<title>Comprobantes de Entrega Lote {{ l.numero }}</title>
+		{% endfor %}
+		{% endif %}
+		
+		<style>
+			.bordeado {
+			border-color:#000000;
+			border-style:solid;
+			border-width:1px;
+			}
+			.pod {
+			width: 115mm;
+			height: 99.75mm;
+			}
+			.pos {
+			width: 99mm;
+			height: 86mm;
+			float: left;
+			margin-left: -2px;
+			}
+        </style>
+	</head>
+	<body>
+	<div style="width: 198mm; margin-top: 3mm;">
+		{% load i18n grp_tags log %}
+        {% for pa in paginas %}
+        {% for p in pa.comprobantes %}
+		<div class="pos bordeado">
+			#1
+		</div>
+		{% endfor %}
+		<div class="saltopagina"></div>
+		{% endfor %}
+	</div>
+	</body>
+</html>
+
