@@ -90,8 +90,8 @@ DATABASES = {
 'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': 'django',
-    'USER': 'dev',
-    'PASSWORD': 'multipagos',
+    'USER': 'postgres',
+    'PASSWORD': 'postgres',
     'HOST': 'localhost',
     'PORT': '5432',
 }
@@ -126,8 +126,11 @@ TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + CUS
 
 
 RUTA_PROYECTO = os.path.dirname(os.path.realpath(__file__))
-MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), 'media/'))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_URL = '/static/'
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
-STATIC_ROOT = ''
 
 GRAPPELLI_ADMIN_TITLE = 'Multi Pagos'
