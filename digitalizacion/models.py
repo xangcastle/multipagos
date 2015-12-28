@@ -212,6 +212,7 @@ class Indexacion(models.Model):
         data = self.pendientes()
         return '<a href="/digitalizacion/carga_manual/%s/" target="blank">%s comprobantes</a>' % (self.id ,len(data))
     carga_manual.allow_tags = True
+    carga_manual.short_description = "Archivos Pendientes"
 
     class Meta:
         verbose_name_plural = "carga de imagenes masiva"

@@ -49,15 +49,12 @@ def extract_code(content):
 
 
 def comprobacion(contrato, ciclo, mes, ano=2015):
-    #msj = "contrato = %s | ciclo = %s | mes = %s" % (contrato, ciclo, mes)
-    #print(msj)
     p = None
     queryset = Paquete.objects.filter(contrato=contrato, ciclo=ciclo, mes=mes,
         ano=ano)
     if queryset.count() > 0:
         p = queryset[0]
     if p:
-        print p.cliente.encode('ascii', 'ignore')
         return p
     else:
         return None

@@ -76,9 +76,14 @@ class indexacion_admin(ImportExportModelAdmin):
     date_hierarchy = "fecha"
     list_display = ('fecha', 'total', 'resumen_por_ciclo', 'carga_manual')
     fields = ('archivos', 'make_ocr')
+    actions = ['action_indexar']
 
-    def save_model(self, request, obj, form, change):
-        indexar_carpeta(obj)
+    def action_indexar(self, request, queryset):
+        for obj in queryset:
+            indexar_carpeta(obj)
+    action_indexar.short_description = \
+    'Iniciar proceso de indexacion automatica'
+
 admin.site.register(Indexacion, indexacion_admin)
 
 
