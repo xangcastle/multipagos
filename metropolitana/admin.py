@@ -202,6 +202,7 @@ class estadistica_ciclo(admin.ModelAdmin):
     actions = ['crear_rendicion', 'action_integrar', 'corregir_media',
         'generar_rendicion', 'generar_pods']
     inlines = [estadistica_departamento]
+    list_per_page = 10
 
     def crear_rendicion(self, request, queryset):
         mensaje = ""
