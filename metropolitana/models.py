@@ -893,7 +893,7 @@ def lista_distribucion(comprobantes):
     data = []
     ds = comprobantes.order_by('archivo').distinct('archivo')
     for d in ds:
-        cantidad = ds.filter(archivo=d.archivo).count()
+        cantidad = comprobantes.filter(archivo=d.archivo).count()
         archivo = {'archivo': d.archivo, 'cantidad': cantidad}
         data.append(archivo)
     return data
