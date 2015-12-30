@@ -700,6 +700,9 @@ class EstadisticaCiclo(base_vista):
     def generar_rendicion(self, numero):
         ps = self.paquetes().filter(entrega_numero=numero)
         p = ps[0]
+        if os.path.exists(p.export_path):
+            cm1 = "rm -rf %s" % p.export_path
+            os.system(cm1)
         crear_rendicion(ps)
         return p.codificacion_ciclo()
 
