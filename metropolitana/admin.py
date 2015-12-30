@@ -253,9 +253,13 @@ class estadistica_ciclo(admin.ModelAdmin):
                     for n in numero:
                         nombre = c.generar_rendicion(n)
                         temp_path = os.path.join(settings.MEDIA_ROOT, 'TEMP')
+                        carpeta = os.path.join(temp_path, nombre)
                         archivo = os.path.join(temp_path, nombre + '.tar.gz')
                         if os.path.exists(archivo):
                             cm1 = "rm -rf %s" % archivo
+                            os.system(cm1)
+                        if os.path.exists(carpeta):
+                            cm1 = "rm -rf %s" % carpeta
                             os.system(cm1)
                         cmd = "cd %s && tar -czvf %s.tar.gz %s" % (temp_path,
                             nombre, nombre)
