@@ -216,7 +216,7 @@ class estadistica_ciclo(admin.ModelAdmin):
     readonly_fields = ('ano', 'ciclo', 'mes', 'total', 'entregados',
         'pendientes')
     actions = ['crear_rendicion', 'action_integrar', 'corregir_media',
-        'generar_rendicion', 'generar_pods']
+        'generar_rendicion', 'generar_pods', 'generar_lista_distribucion']
     inlines = [estadistica_departamento]
     list_per_page = 10
 
@@ -310,6 +310,15 @@ class estadistica_ciclo(admin.ModelAdmin):
         class Media:
             js = ("/static/metropolitana/js/estadistica.js",)
 
+    def generar_lista_distribucion(self, request, queryset):
+        for object in queryset:
+            comprobantes = object.paquetes()
+            data = lista_distribucion(comprobantes)
+            ctx = {'data': data}
+            response = render_to_response(
+                'metropolitana/lista_distribucion.html', ctx,
+                context_instance=RequestContext(request))
+            return response
 
 
 class tipificacion_admin(ImportExportModelAdmin):

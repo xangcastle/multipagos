@@ -889,16 +889,14 @@ def integrar(ps):
     return message
 
 
-def lista_distribucion(ciclo):
-    texto = ''
-    ps = Paquete.objects.filter(ciclo=ciclo.ciclo, mes=ciclo.mes, ano=ciclo.ano)
-    ds = ps.order_by('departamento').distinct('departamento')
+def lista_distribucion(comprobantes):
+    data = []
+    ds = comprobantes.order_by('archivo').distinct('archivo')
     for d in ds:
-        queryset = ps.filter(departamento=d.departamento
-        ).order_by('consecutivo')
-        texto += d.departamento + ' = %s - %s' % (str(queryset[0].consecutivo),
-        str(queryset[queryset.count() -1].consecutivo)) + '\n'
-    return texto
+        cantidad = ds.filter(archivo=d.archivo).count()
+        archivo = {'archivo': d.archivo, 'cantidad': cantidad}
+        data.append(archivo)
+    return data
 
 
 # rename -v 's/\.$/\.pdf/' *.*
