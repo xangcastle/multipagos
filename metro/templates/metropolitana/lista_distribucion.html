@@ -7,8 +7,17 @@
         <script src="http://code.jquery.com/jquery-latest.js"></script>
     </head>
     <body>
-    {% for d in data %}
-    <p>{{d.archivo}}|{{d.cantidad}}</p>
-    {% endfor %}
+        <div class="well">
+            <table class="table table-hober table-striped">
+                <tbody>
+                {% for d in data %}
+                <tr>
+                    <td>{{d.archivo}}</td>
+                    <td>{{d.cantidad}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </body>
 </html>
