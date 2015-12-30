@@ -3,8 +3,11 @@ import json
 from django.http.response import HttpResponse
 from .models import *
 from digitalizacion.models import *
-#    from django.shortcuts import render_to_response
-#from django.forms.models import model_to_dict
+from django.http import HttpResponseRedirect
+
+
+def home(request):
+    return HttpResponseRedirect("/admin")
 
 
 class indexar(TemplateView):
