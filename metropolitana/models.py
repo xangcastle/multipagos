@@ -1,6 +1,6 @@
 # -*- coding: latin-1 -*-
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Min
 import os
 import shutil
 from django.conf import settings
@@ -893,8 +893,12 @@ def lista_distribucion(comprobantes):
     data = []
     ds = comprobantes.order_by('archivo').distinct('archivo')
     for d in ds:
-        cantidad = comprobantes.filter(archivo=d.archivo).count()
-        archivo = {'archivo': d.archivo, 'cantidad': cantidad}
+        qs = comprobantes.filter(archivo=d.archivo)
+        cantidad = qs.count()
+        inicia = qs.aggregate(Min('consecutivo'))['consecutivo__min']
+        termina = qs.aggregate(Max('consecutivo'))['consecutivo__max']
+        archivo = {'archivo': d.archivo, 'cantidad': cantidad, 'inicia': inicia,
+            'termina': termina}
         data.append(archivo)
     return data
 
