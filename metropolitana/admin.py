@@ -11,7 +11,23 @@ from digitalizacion.models import *
 from django import forms
 from django.core.context_processors import csrf
 from digitalizacion.api import generar_paginas
+from django.conf import settings
+import os
+from django.http.response import HttpResponse
+from django.core.servers.basehttp import FileWrapper
 actions.add_to_site(site)
+
+
+def download_file(path):
+    if not os.path.exists(path):
+        return HttpResponse('Sorry. This file is not available.')
+    else:
+        response = HttpResponse(FileWrapper(file(path)),
+            content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename=%s' % \
+        os.path.basename(path)
+        return response
+
 
 
 class entidad_admin(ImportExportModelAdmin):
@@ -188,8 +204,8 @@ class estadistica_departamento(base_tabular):
 
 class estadistica_ciclo(admin.ModelAdmin):
     list_display = ('code', 'ano', 'mes', 'ciclo', 'total', 'entregados',
-        'en_carpeta', 'pendientes', 'rendidos', 'rendiciones', 'por_rendir',
-        'cumplimiento', 'alertas')
+        'pendientes', 'rendidos', 'rendiciones', 'por_rendir',
+        'cumplimiento')
     list_filter = ('ano', 'mes')
     ordering = ['-ano', '-mes', 'ciclo']
     fieldsets = (
@@ -234,11 +250,17 @@ class estadistica_ciclo(admin.ModelAdmin):
             if form.is_valid():
                 numero = form.cleaned_data['numero']
                 for c in queryset:
-                    crear_rendicion(c.paquetes().filter(
-                        entrega_numero__in=numero))
-
-                self.message_user(request, "rendiciones generadas")
-                return HttpResponseRedirect(request.get_full_path())
+                    for n in numero:
+                        nombre = c.generar_rendicion(n)
+                        temp_path = os.path.join(settings.MEDIA_ROOT, 'TEMP')
+                        archivo = os.path.join(temp_path, nombre + '.tar.gz')
+                        if os.path.exists(archivo):
+                            cm1 = "rm -rf %s" % archivo
+                            os.system(cm1)
+                        cmd = "cd %s && tar -czvf %s.tar.gz %s" % (temp_path,
+                            nombre, nombre)
+                        os.system(cmd)
+                        return download_file(archivo)
         if not form:
             form = self.numero_rendicion(
                 initial={
@@ -284,23 +306,6 @@ class estadistica_ciclo(admin.ModelAdmin):
             response = render_to_response('metropolitana/comprobante.html',
                 ctx, context_instance=RequestContext(request))
             return response
-            #response = PDFTemplateResponse(request=request,
-                                   #template='metropolitana/comprobante.html',
-                                   #filename="comprobantes.pdf",
-                                   #context=ctx,
-                                   #show_content_in_browser=False,
-                                   #)
-            #return render_to_pdf_response(request,
-                #'metropolitana/comprobante.html', ctx)
-            #template = loader.get_template('metropolitana/comprobante.html')
-            #html = template.render(Context(ctx))
-            #html.encode("UTF-8")
-            #result = StringIO.StringIO()
-            #pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result, path= settings.RUTA_PROYECTO)
-
-        #if not pdf.err:
-            #return HttpResponse(result.getvalue(), content_type='application/pdf')
-        #return HttpResponse('<pre>%s</pre>' % escape(html))
 
         class Media:
             js = ("/static/metropolitana/js/estadistica.js",)

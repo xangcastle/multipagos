@@ -699,7 +699,9 @@ class EstadisticaCiclo(base_vista):
 
     def generar_rendicion(self, numero):
         ps = self.paquetes().filter(entrega_numero=numero)
+        p = ps[0]
         crear_rendicion(ps)
+        return p.codificacion_ciclo()
 
     def carpeta(self):
         carpeta = str(self.ano)[2:] + str(self.mes).zfill(2) \
@@ -846,7 +848,7 @@ def crear_index(comprobantes):
     mr = settings.MEDIA_ROOT
     for c in comprobantes:
         f = open(os.path.join(mr, c.export_path_index()), 'a')
-        f.write("%s|%s|%s|D:\CargasDip\Claro_Nicaragua\Acuses\%s\%s.pdf\n" %
+        f.write("%s|%s|%s|D:\CargasDip\Claro_Nicaragua\Acuses\%s\%s.pdf\r\n" %
         (c.contrato, c.factura, c.cliente.encode('ascii', 'ignore'),
             get_servicio(c.ciclo), c.name_file()))
         f.close()
