@@ -48,7 +48,7 @@ def extract_code(content):
     return code
 
 
-def comprobacion(contrato, ciclo, mes, ano=2015):
+def comprobacion(contrato, ciclo, mes, ano):
     p = None
     queryset = Paquete.objects.filter(contrato=contrato, ciclo=ciclo, mes=mes,
         ano=ano)
@@ -106,7 +106,7 @@ def indexar(path, indexacion):
     content = extract_content(pdf)
     code = extract_code(content)
     for c in code:
-        p = comprobacion(c[:-6], c[-6:-4], c[-4:-2])
+        p = comprobacion(c[:-6], c[-6:-4], c[-4:-2], '20' + c[-2:])
         if p:
             p.indexacion = indexacion.id
             p.exportado = False

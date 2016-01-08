@@ -519,10 +519,10 @@ class Zona(Entidad):
                 zb, create = zona_barrio.objects.get_or_create(zona=self,
                     barrio=b)
 
-    def save(self, *args, **kwargs):
-        super(Zona, self).save()
-        if not self.barrios():
-            self.autoasignar()
+    #def save(self, *args, **kwargs):
+        #super(Zona, self).save()
+        #if not self.barrios():
+            #self.autoasignar()
 
 
 class zona_barrio(models.Model):
@@ -897,9 +897,9 @@ def lista_distribucion(comprobantes):
         cantidad = qs.count()
         inicia = qs.aggregate(Min('consecutivo'))['consecutivo__min']
         termina = qs.aggregate(Max('consecutivo'))['consecutivo__max']
-        archivo = {'archivo': d.archivo, 'cantidad': cantidad, 'inicia': inicia,
+        item = {'archivo': d.archivo, 'cantidad': cantidad, 'inicia': inicia,
             'termina': termina}
-        data.append(archivo)
+        data.append(item)
     return data
 
 
