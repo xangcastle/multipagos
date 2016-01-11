@@ -7,7 +7,6 @@ from django.http.response import HttpResponse
 from metropolitana.indexacion import *
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from django.utils.encoding import smart_str
 
 
 @csrf_exempt
@@ -15,7 +14,7 @@ def cargar_pod(request):
     data = {'mensaje': "carga correcta"}
     c = request.GET.get('code', '00000000000')
     #print str(c)
-    p = comprobacion(c[:-6], c[-6:-4], c[-4:-2])
+    p = comprobacion(c[:-6], c[-6:-4], c[-4:-2], '20' + c[:-2])
     #print p
     if p:
         path = settings.MEDIA_ROOT + str(
