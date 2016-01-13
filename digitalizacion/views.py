@@ -13,13 +13,13 @@ from django.conf import settings
 def cargar_pod(request):
     data = {'mensaje': "carga correcta"}
     c = request.GET.get('code', '00000000000')
-    print str(c)
+    #print str(c)
     p = comprobacion(c[:-6], c[-6:-4], c[-4:-2], '20' + c[-2:])
-    print p
+    #print p
     if p:
         path = settings.MEDIA_ROOT + str(
             request.GET.get('path', '')).replace('media/', '')
-        print path
+        #print path
         p = cargar_comprobante(p, path)
         p.indexacion = int(request.GET.get('id', ''))
         p.exportado = False

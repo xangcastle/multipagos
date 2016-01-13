@@ -183,6 +183,7 @@ def get_paquete(request):
     obj_json['Parentezco'] = request.POST.get('Parentezco')
     obj_json['Recibe'] = request.POST.get('Recibe')
     obj_json['Imagen'] = request.POST.get('Imagen')
+    obj_json['Position'] = request.POST.get('Position')
     obj_json['Mensaje'] = ''
     try:
         u = User.objects.get(username=obj_json['Usuario'])
@@ -206,6 +207,7 @@ def get_paquete(request):
             p.parentezco = obj_json['Parentezco']
             p.recibe = obj_json['Recibe']
             p.imagen = obj_json['Imagen']
+            p.position = obj_json['Position']
             obj_json['Mensaje'] = "Paquete cargado Correctamente"
             p.save()
     data = json.dumps(obj_json)
