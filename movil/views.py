@@ -9,7 +9,7 @@ from django.core import serializers
 from metropolitana.models import Paquete, Tipificacion
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-import Geoposition
+from geoposition.models import Geoposition
 
 try:
     # Django 1.5 and higher supports overriding the default User model
