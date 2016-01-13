@@ -176,14 +176,14 @@ def get_paquetes(request):
 
 def get_paquete(request):
     obj_json = {}
-    obj_json['Usuario'] = request.POST.get('Usuario')
-    obj_json['Motivo'] = request.POST.get('Motivo')
-    obj_json['Barra'] = request.POST.get('Barra')
-    obj_json['Fecha'] = request.POST.get('Fecha')
-    obj_json['Parentezco'] = request.POST.get('Parentezco')
-    obj_json['Recibe'] = request.POST.get('Recibe')
-    obj_json['Imagen'] = request.POST.get('Imagen')
-    obj_json['Position'] = request.POST.get('Position')
+    obj_json['Usuario'] = request.POST.get('Usuario', '')
+    obj_json['Motivo'] = request.POST.get('Motivo', '')
+    obj_json['Barra'] = request.POST.get('Barra', '')
+    obj_json['Fecha'] = request.POST.get('Fecha', '')
+    obj_json['Parentezco'] = request.POST.get('Parentezco', '')
+    obj_json['Recibe'] = request.POST.get('Recibe', '')
+    obj_json['Imagen'] = request.POST.get('Imagen', '')
+    obj_json['Position'] = request.POST.get('Position', '')
     obj_json['Mensaje'] = ''
     try:
         u = User.objects.get(username=obj_json['Usuario'])
@@ -198,7 +198,7 @@ def get_paquete(request):
     except:
         p = None
     if p:
-        if p.imagen:
+        if p.imagen or p.position:
             obj_json['Mensaje'] = "Este paquete ya fue cargado"
         else:
             p.user = u
