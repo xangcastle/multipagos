@@ -9,7 +9,6 @@ from django.core import serializers
 from metropolitana.models import Paquete, Tipificacion
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-from geoposition.models import Geoposition
 
 try:
     # Django 1.5 and higher supports overriding the default User model
@@ -216,8 +215,8 @@ def get_paquete(request):
             p.fecha_entrega = obj_json['Fecha']
             p.parentezco = obj_json['Parentezco']
             p.recibe = obj_json['Recibe']
-            p.position = Geoposition(obj_json['Latitude'],
-                obj_json['Longitude'])
+            p.position.latitude = obj_json['Latitude']
+            p.position.longitude = obj_json['Longitude']
             obj_json['Mensaje'] = "Paquete cargado Correctamente"
             p.save()
     data = json.dumps(obj_json)
