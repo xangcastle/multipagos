@@ -186,6 +186,7 @@ def get_paquete(request):
     obj_json['Recibe'] = request.POST.get('Recibe', '')
     obj_json['Latitude'] = request.POST.get('Latitude', '')
     obj_json['Longitude'] = request.POST.get('Longitude', '')
+    obj_json['Filename'] = request.POST.get('Filename', '')
     obj_json['Mensaje'] = ''
     try:
         u = User.objects.get(username=obj_json['Usuario'])
@@ -218,7 +219,7 @@ def get_paquete(request):
             p.recibe = obj_json['Recibe']
             p.position = Geoposition(obj_json['Latitude'],
                 obj_json['Longitude'])
-            p.imagen = request.FILES['docfile']
+            p.imagen = request.FILES[obj_json['Filename']]
             obj_json['Mensaje'] = "Paquete cargado Correctamente"
             p.save()
     data = json.dumps(obj_json)
