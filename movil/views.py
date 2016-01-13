@@ -200,6 +200,14 @@ def get_paquete(request):
         p = None
     if p:
         if p.imagen or p.position:
+            obj_json['Usuario'] = p.user
+            obj_json['Motivo'] = p.motivo
+            obj_json['Barra'] = p.barra
+            obj_json['Fecha'] = p.fecha_entrega
+            obj_json['Parentezco'] = p.parentezco
+            obj_json['Recibe'] = p.recibe
+            obj_json['Imagen'] = p.imagen
+            obj_json['Position'] = p.position
             obj_json['Mensaje'] = "Este paquete ya fue cargado"
         else:
             p.user = u
