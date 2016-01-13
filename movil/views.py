@@ -216,10 +216,9 @@ def get_paquete(request):
             p.fecha_entrega = obj_json['Fecha']
             p.parentezco = obj_json['Parentezco']
             p.recibe = obj_json['Recibe']
-            #p.position.latitude = obj_json['Latitude']
-            #p.position.longitude = obj_json['Longitude']
             p.position = Geoposition(obj_json['Latitude'],
                 obj_json['Longitude'])
+            p.imagen = request.FILES['docfile']
             obj_json['Mensaje'] = "Paquete cargado Correctamente"
             p.save()
     data = json.dumps(obj_json)

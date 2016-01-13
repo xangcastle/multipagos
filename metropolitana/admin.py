@@ -81,7 +81,7 @@ class paquete_admin(ImportExportModelAdmin):
                 'fields': (('comprobante', 'colector'),
                             ('archivo', 'consecutivo'),
                             ('parentezco', 'recibe', 'fecha_entrega'),
-                            'position')}))
+                            'position', 'imagen')}))
     raw_id_fields = ('iddepartamento', 'idmunicipio')
     autocomplete_lookup_fields = {
         'fk': ['iddepartamento', 'idmunicipio'],
