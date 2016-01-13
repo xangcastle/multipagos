@@ -206,8 +206,8 @@ def get_paquete(request):
             obj_json['Fecha'] = p.fecha_entrega
             obj_json['Parentezco'] = p.parentezco
             obj_json['Recibe'] = p.recibe
-            obj_json['Latitude'] = p.position.latitude
-            obj_json['Longitude'] = p.position.longitude
+            obj_json['Latitude'] = float(p.position.latitude)
+            obj_json['Longitude'] = float(p.position.longitude)
             obj_json['Mensaje'] = "Este paquete ya fue cargado"
         else:
             p.user = u
