@@ -32,7 +32,7 @@ def cargar_pod(request):
 def carga_manual(request, id):
     i = Indexacion.objects.get(id=id)
     base = i.url()
-    archivos = i.pendientes()[:50]
+    archivos = i.pendientes()[:30]
     data = []
     for a in archivos:
         p = os.path.join(base, a)
