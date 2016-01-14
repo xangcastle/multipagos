@@ -10,7 +10,6 @@ from metropolitana.models import Paquete, Tipificacion
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
-from bson import json_util
 
 try:
     # Django 1.5 and higher supports overriding the default User model
@@ -223,5 +222,5 @@ def get_paquete(request):
             p.imagen = request.FILES['Imagen']
             obj_json['Mensaje'] = "Paquete cargado Correctamente"
             p.save()
-    data = json.dumps(obj_json, default=json_util.default)
+    data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
