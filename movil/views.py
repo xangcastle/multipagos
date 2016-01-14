@@ -189,7 +189,7 @@ def get_paquete(request):
     obj_json['Filename'] = request.POST.get('Filename', '')
     obj_json['Mensaje'] = ''
     try:
-        u = User.objects.get(username=obj_json['Usuario'])
+        u = User.objects.get(id=obj_json['Usuario'])
     except:
         u = None
     try:
