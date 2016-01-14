@@ -181,7 +181,7 @@ def get_paquete(request):
     obj_json['Usuario'] = request.POST.get('Usuario', '')
     obj_json['Motivo'] = request.POST.get('Motivo', '')
     obj_json['Barra'] = request.POST.get('Barra', '')
-    obj_json['Fecha'] = request.POST.get('Fecha', '')
+    obj_json['Fecha'] = str(request.POST.get('Fecha', ''))
     obj_json['Parentezco'] = request.POST.get('Parentezco', '')
     obj_json['Recibe'] = request.POST.get('Recibe', '')
     obj_json['Latitude'] = request.POST.get('Latitude', '')
@@ -205,7 +205,7 @@ def get_paquete(request):
             obj_json['Usuario'] = p.user
             obj_json['Motivo'] = p.tipificacion
             obj_json['Barra'] = p.barra
-            obj_json['Fecha'] = p.fecha_entrega
+            obj_json['Fecha'] = str(p.fecha_entrega)
             obj_json['Parentezco'] = p.parentezco
             obj_json['Recibe'] = p.recibe
             obj_json['Latitude'] = float(p.position.latitude)
