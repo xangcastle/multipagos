@@ -201,8 +201,14 @@ def get_paquete(request):
         p = None
     if p:
         if p.imagen or p.position:
-            obj_json['Usuario'] = p.user.id
-            obj_json['Motivo'] = p.tipificacion.id
+            m = None
+            if p.tipificacion:
+                m = p.tipificacion.id
+            u = None
+            if p.user:
+                u = p.user.id
+            obj_json['Usuario'] = u
+            obj_json['Motivo'] = m
             obj_json['Barra'] = p.barra
             obj_json['Fecha'] = str(p.fecha_entrega)
             obj_json['Parentezco'] = p.parentezco

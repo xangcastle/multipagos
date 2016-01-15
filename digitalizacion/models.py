@@ -5,10 +5,9 @@ from metropolitana.models import Paquete, importar_media
 from django.db.models import Max
 from datetime import datetime
 from multifilefield.models import MultiFileField
-from metropolitana.indexacion import id_generator
+from metropolitana.indexacion import id_generator, preparar_carpeta
 import os
 from django.conf import settings
-import ast
 
 
 class Pod(models.Model):
@@ -219,7 +218,11 @@ class Indexacion(models.Model):
         verbose_name = "archivos pdf"
 
     def __unicode__(self):
-        return str(self.fecha)
+        return str(self.fecha) + " - " + str(self.carpeta)
+
+    def save(self, *args, **kwargs):
+        super(Indexacion, self).save()
+        preparar_carpeta(self.path())
 
 
 class Tar(models.Model):
