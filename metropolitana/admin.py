@@ -58,7 +58,7 @@ class paquete_admin(ImportExportModelAdmin):
 
     list_display = ('factura', 'contrato', 'cliente', 'iddepartamento',
         'idmunicipio', 'idbarrio', 'exportado', 'entrega',
-        'ciclo', 'mes', 'ano', 'link_comprobante')
+        'ciclo', 'mes', 'ano', 'user', 'link_comprobante')
 
     list_filter = ('iddepartamento', 'idmunicipio', 'exportado', 'entrega',
         'ciclo', 'mes', 'ano', 'entrega_numero', 'user')
