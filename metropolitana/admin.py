@@ -61,7 +61,7 @@ class paquete_admin(ImportExportModelAdmin):
         'ciclo', 'mes', 'ano', 'link_comprobante')
 
     list_filter = ('iddepartamento', 'idmunicipio', 'exportado', 'entrega',
-        'ciclo', 'mes', 'ano', 'entrega_numero')
+        'ciclo', 'mes', 'ano', 'entrega_numero', 'user')
 
     #list_editable = ('comprobante',)
     fieldsets = (('Datos Generales', {
