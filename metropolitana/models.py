@@ -195,8 +195,8 @@ class Paquete(base):
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
-    parentezco = models.CharField(max_length=25, null=True, blank=True)
-    recibe = models.CharField(max_length=25, null=True, blank=True)
+    parentezco = models.CharField(max_length=75, null=True, blank=True)
+    recibe = models.CharField(max_length=75, null=True, blank=True)
     imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)
 
     def get_telefono(self):
