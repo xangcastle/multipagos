@@ -224,7 +224,10 @@ def get_paquete(request):
             p.recibe = obj_json['Recibe']
             p.position = Geoposition(obj_json['Latitude'],
                 obj_json['Longitude'])
-            p.imagen = request.FILES['Imagen']
+            try:
+                p.imagen = request.FILES['Imagen']
+            except:
+                pass
             p.exportado = True
             obj_json['Mensaje'] = "Paquete cargado Correctamente"
             p.save()
