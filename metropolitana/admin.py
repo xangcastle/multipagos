@@ -61,7 +61,7 @@ class paquete_admin(ImportExportModelAdmin):
         'idmunicipio', 'idbarrio', 'estado', 'ciclo', 'mes', 'ano', 'user',
         'fecha_entrega', 'link_comprobante')
 
-    list_filter = ('iddepartamento', 'idmunicipio', 'exportado', 'entrega',
+    list_filter = ('iddepartamento', 'idmunicipio', 'estado',
         'ciclo', 'mes', 'ano', 'entrega_numero', 'user', )
 
     #list_editable = ('comprobante',)
