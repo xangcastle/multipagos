@@ -58,8 +58,8 @@ class paquete_admin(ImportExportModelAdmin):
     search_fields = ('factura', 'contrato', 'cliente', 'barra')
 
     list_display = ('factura', 'contrato', 'cliente', 'iddepartamento',
-        'idmunicipio', 'idbarrio', 'exportado', 'entrega',
-        'ciclo', 'mes', 'ano', 'user', 'fecha_entrega', 'link_comprobante')
+        'idmunicipio', 'idbarrio', 'estado', 'ciclo', 'mes', 'ano', 'user',
+        'fecha_entrega', 'link_comprobante')
 
     list_filter = ('iddepartamento', 'idmunicipio', 'exportado', 'entrega',
         'ciclo', 'mes', 'ano', 'entrega_numero', 'user', )

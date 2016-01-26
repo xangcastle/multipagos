@@ -200,6 +200,24 @@ class Paquete(base):
     parentezco = models.CharField(max_length=75, null=True, blank=True)
     recibe = models.CharField(max_length=75, null=True, blank=True)
     imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)
+    ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
+                          ('PENDIENTE', 'PENDIENTE'),
+                          ('REZAGADO', 'REZAGADO'),
+                         )
+    estado = models.CharField(max_length=65, null=True, blank=True,
+        choices=ESTADOS_DE_ENTREGA)
+
+    def get_estado(self):
+        if self.comprobante:
+            return "ENTREGADO"
+        else:
+            if self.position and self.fecha_entrega and self.tipificacion:
+                if self.tipificacion == Tipificacion.objects.get(id=1):
+                    return "ENTREGADO"
+                else:
+                    return "REZAGADO"
+            else:
+                return "PENDIENTE"
 
     def get_telefono(self):
         telefonos = []
@@ -360,6 +378,7 @@ class Paquete(base):
     def save(self, *args, **kwargs):
         self.lotificado = self.get_lotificado()
         self.entrega = self.get_entregado()
+        self.estado = self.get_estado()
         if not self.cerrado:
             self.cerrado = False
         super(Paquete, self).save()
