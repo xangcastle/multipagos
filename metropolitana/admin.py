@@ -52,6 +52,7 @@ class base_tabular(admin.TabularInline):
 
 
 class paquete_admin(ImportExportModelAdmin):
+    date_hierarchy = "fecha_entrega"
     resource_class = paquete_resouce
 
     search_fields = ('factura', 'contrato', 'cliente', 'barra')
