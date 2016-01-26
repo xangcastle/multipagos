@@ -130,3 +130,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 MEDIA_URL = '/media/'
 
 GRAPPELLI_ADMIN_TITLE = 'Multi Pagos'
+
+
+DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
