@@ -53,7 +53,7 @@ class base_tabular(admin.TabularInline):
 
 class paquete_admin(ImportExportModelAdmin):
     date_hierarchy = "fecha_entrega"
-    resource_class = paquete_resouce
+    #resource_class = paquete_resouce
 
     search_fields = ('factura', 'contrato', 'cliente', 'barra')
 
@@ -62,7 +62,7 @@ class paquete_admin(ImportExportModelAdmin):
         'ciclo', 'mes', 'ano', 'user', 'fecha_entrega', 'link_comprobante')
 
     list_filter = ('iddepartamento', 'idmunicipio', 'exportado', 'entrega',
-        'ciclo', 'mes', 'ano', 'entrega_numero', 'user')
+        'ciclo', 'mes', 'ano', 'entrega_numero', 'user', )
 
     #list_editable = ('comprobante',)
     fieldsets = (('Datos Generales', {

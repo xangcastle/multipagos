@@ -176,7 +176,8 @@ class Paquete(base):
     numero_fiscal = models.PositiveIntegerField(null=True, blank=True)
     factura_interna = models.PositiveIntegerField(null=True, blank=True)
     telefono_contacto = models.CharField(max_length=70, null=True, blank=True)
-    entrega = models.NullBooleanField(default=False, verbose_name='entregada')
+    entrega = models.NullBooleanField(default=False,
+        verbose_name='Comprobante POD')
     comprobante = models.FileField(upload_to=generar_ruta_comprobante,
         null=True, blank=True)
     colector = models.ForeignKey('Colector', null=True, blank=True)
@@ -190,7 +191,8 @@ class Paquete(base):
     entrega_numero = models.IntegerField(null=True, blank=True,
         verbose_name='numero de rendicion')
     tipificacion = models.ForeignKey('Tipificacion', null=True, blank=True)
-    exportado = models.NullBooleanField(default=False, verbose_name='exportado')
+    exportado = models.NullBooleanField(default=False,
+        verbose_name='Aplicacion Movil')
     indexacion = models.IntegerField(null=True, blank=True)
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
