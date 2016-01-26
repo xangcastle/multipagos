@@ -133,3 +133,5 @@ GRAPPELLI_ADMIN_TITLE = 'Multi Pagos'
 
 
 DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
+
+DATE_FORMAT = '%d/%m/%Y'
