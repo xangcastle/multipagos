@@ -775,16 +775,10 @@ class EstadisticaCiclo(base_vista):
             alertas.append(alerta)
         return alertas
 
-    def estados(self):
-        return self.paquetes().order_by(
-            'estado').distinct('estado')
-
     def estadisticas(self):
         data = {}
-        if self.estados():
-            for e in self.estados():
-                data[str(e.estado)] = self.paquetes().filter(
-                    estado=e.estado).count()
+        for e in Paquete.ESTADOS_DE_ENTREGA:
+            data[str(e[0])] = self.paquetes().filter(estado=e[0]).count()
         return data
 
     class Meta:
