@@ -242,9 +242,9 @@ function dashboard(id, fData){
 <script>
 var freqData=[
     {% for e in sts %}
-        {ciclo:'{{e.code}}',esta:{entregado:{{ e.estadisticas.entregado }},
-        rezagado:{{ e.estadisticas.rezagado }},
-        pendiente:{{ e.estadisticas.pendiente }}}},
+        {ciclo:'{{ e.code }}',esta:{entregado:{{ e.estadisticas.ENTREGADO }},
+        rezagado:{{ e.estadisticas.REZAGADO }},
+        pendiente:{{ e.estadisticas.PENDIENTE }}}},
     {% endfor %}
 ];
 
