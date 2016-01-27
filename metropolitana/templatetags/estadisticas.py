@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from metropolitana.models import *
 from django import template
-from datetime import datetime
 
 register = template.Library()
 
@@ -14,8 +13,8 @@ class estadisticas_all_Node(template.Node):
         return "<GetEstadisticas Node>"
 
     def render(self, context):
-            context[self.varname] = EstadisticaCiclo.objects.filter(
-                mes=datetime.now().month)
+            context[self.varname] = EstadisticaCiclo.objects.all(
+                ).order_by('-ano', '-mes', 'ciclo')[:12]
             return ''
 
 
