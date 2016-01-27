@@ -92,7 +92,7 @@ class paquete_admin(ImportExportModelAdmin):
         'telefono_contacto', 'ruta', 'zona', 'segmento', 'tarifa', 'servicio',
         'cupon', 'total_mes_factura', 'valor_pagar', 'numero_fiscal',
         'factura_interna', 'entrega', 'lote', 'colector', 'tipificacion',
-        'archivo', 'consecutivo', 'position', 'parentezco', 'recibe',
+        'archivo', 'consecutivo', 'parentezco', 'recibe',
         'fecha_entrega')
     actions = ['action_integrar', 'action_lotificar', 'action_imprimir',
         'action_exportar', 'generar_pods']
