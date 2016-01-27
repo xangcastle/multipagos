@@ -241,16 +241,11 @@ function dashboard(id, fData){
 
 <script>
 var freqData=[
-{ciclo:'100116',esta:{entregado:79, rezagado:50, pendiente:824}}
-,{ciclo:'110116',esta:{entregado:272, rezagado:32, pendiente:28}}
-,{ciclo:'330116',esta:{entregado:4080, rezagado:1092, pendiente:5489}}
-,{ciclo:'510116',esta:{entregado:1294, rezagado:69, pendiente:240}}
-,{ciclo:'550116',esta:{entregado:3114, rezagado:825, pendiente:844}}
-,{ciclo:'650116',esta:{entregado:4321, rezagado:475, pendiente:289}}
-,{ciclo:'660116',esta:{entregado:2825, rezagado:917, pendiente:4205}}
-,{ciclo:'760116',esta:{entregado:2378, rezagado:1365, pendiente:1659}}
-,{ciclo:'770116',esta:{entregado:176, rezagado:11, pendiente:7}}
-,{ciclo:'880116',esta:{entregado:162, rezagado:379, pendiente:471}}
+    {% for e in sts %}
+        {ciclo:'{{e.code}}',esta:{entregado:{{ e.estadisticas.entregado }},
+        rezagado:{{ e.estadisticas.rezagado }},
+        pendiente:{{ e.estadisticas.pendiente }}}},
+    {% endfor %}
 ];
 
 dashboard('#dashboard',freqData);
