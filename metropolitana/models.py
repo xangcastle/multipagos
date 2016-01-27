@@ -775,6 +775,18 @@ class EstadisticaCiclo(base_vista):
             alertas.append(alerta)
         return alertas
 
+    def estados(self):
+        return self.paquetes().order_by(
+            'estado').distinct('estado')
+
+    def estadisticas(self):
+        data = {}
+        if self.estados():
+            for e in self.estados():
+                data[str(e.estado)] = self.paquetes().filter(
+                    estado=e.estado).count()
+        return data
+
     class Meta:
         managed = False
         db_table = 'metropolitana_estadistica_ciclo'
