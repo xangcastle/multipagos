@@ -80,7 +80,7 @@ class paquete_admin(ImportExportModelAdmin):
                 ('Entrega y Digitalizacion', {
                 'classes': ('grp-collapse grp-open',),
                 'fields': (('comprobante', 'colector'),
-                            ('archivo', 'consecutivo'),
+                            ('archivo', 'consecutivo', 'tipificacion'),
                             ('parentezco', 'recibe', 'fecha_entrega'),
                             'position', 'imagen')}))
     raw_id_fields = ('iddepartamento', 'idmunicipio')
@@ -91,7 +91,7 @@ class paquete_admin(ImportExportModelAdmin):
         'mes', 'ano', 'departamento', 'municipio', 'barrio', 'direccion',
         'telefono_contacto', 'ruta', 'zona', 'segmento', 'tarifa', 'servicio',
         'cupon', 'total_mes_factura', 'valor_pagar', 'numero_fiscal',
-        'factura_interna', 'entrega', 'lote', 'colector')
+        'factura_interna', 'entrega', 'lote', 'colector', 'tipificacion')
     actions = ['action_integrar', 'action_lotificar', 'action_imprimir',
         'action_exportar', 'generar_pods']
 
