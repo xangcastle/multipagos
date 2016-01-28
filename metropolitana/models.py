@@ -781,6 +781,17 @@ class EstadisticaCiclo(base_vista):
             data[str(e[0])] = self.paquetes().filter(estado=e[0]).count()
         return data
 
+    def estadisticas_departamentos(self):
+        data = {}
+        ds = Departamento.objects.all().order_by('name')
+        for d in ds:
+            data['departamento'] = d.name
+            for e in Paquete.ESTADOS_DE_ENTREGA:
+                esta = {str(e[0]): self.paquetes().filter(iddepartamento=d,
+                estado=e[0]).count()}
+            data['estadisticas'] = esta
+        return data
+
     class Meta:
         managed = False
         db_table = 'metropolitana_estadistica_ciclo'

@@ -244,7 +244,8 @@ var freqData=[
     {% for e in sts %}
         {ciclo:'{{ e.code }}',esta:{entregado:{{ e.estadisticas.ENTREGADO }},
         rezagado:{{ e.estadisticas.REZAGADO }},
-        pendiente:{{ e.estadisticas.PENDIENTE }}}},
+        pendiente:{{ e.estadisticas.PENDIENTE }}},
+            departamentos: e.estadisticas_departamentos},
     {% endfor %}
 ];
 
