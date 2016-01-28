@@ -785,11 +785,11 @@ class EstadisticaCiclo(base_vista):
         data = {}
         ds = Departamento.objects.all().order_by('name')
         for d in ds:
-            data['departamento'] = d.name
+            esta = {}
             for e in Paquete.ESTADOS_DE_ENTREGA:
-                esta = {str(e[0]): self.paquetes().filter(iddepartamento=d,
-                estado=e[0]).count()}
-            data['estadisticas'] = esta
+                esta[str(e[0])] = self.paquetes().filter(iddepartamento=d,
+                estado=e[0]).count()
+            data[d.name] = esta
         return data
 
     class Meta:
