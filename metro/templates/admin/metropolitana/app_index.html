@@ -250,7 +250,7 @@ var freqData=[
             {% for d in e.estadisticas_departamentos %}
             '{{ d.name }}': {'ENTREGADO': {{ d.ENTREGADO }},
                 'REZAGADO': {{ d.REZAGADO }},
-                'PENDIENTE': {{ d.PENDIENTE }}}
+                'PENDIENTE': {{ d.PENDIENTE }}},
             {% endfor %}
             }
         },
