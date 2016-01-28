@@ -248,7 +248,7 @@ var freqData=[
         pendiente: {{ e.estadisticas.PENDIENTE }}},
         departamentos: {
             {% for d in e.estadisticas_departamentos %}
-            depto: {{ d.name }}, entregado: {{ d.ENTREGADO }},
+            depto: '{{ d.name }}', entregado: {{ d.ENTREGADO }},
                 rezagado: {{ d.REZAGADO }},
                 pendiente: {{ d.PENDIENTE }},
             {% endfor %}
