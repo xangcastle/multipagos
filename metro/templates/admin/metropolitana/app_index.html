@@ -247,10 +247,10 @@ var freqData=[
         rezagado: {{ e.estadisticas.REZAGADO }},
         pendiente: {{ e.estadisticas.PENDIENTE }}},
         departamentos: [
+            ['', 'DEPARTAMENTO', 'ENTREGADO', 'REZAGADO', 'PENDIENTE'],
             {% for d in e.estadisticas_departamentos %}
-            {depto: '{{ d.name }}', entregado: {{ d.ENTREGADO }},
-                rezagado: {{ d.REZAGADO }},
-                pendiente: {{ d.PENDIENTE }}},
+            ['{{ d.name }}', {{ d.ENTREGADO }}, {{ d.REZAGADO }},
+                {{ d.PENDIENTE }}],
             {% endfor %}
             ]
         },
