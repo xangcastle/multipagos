@@ -40,6 +40,21 @@ rect:hover {  fill:blue; }
 <div id='dashboard'>
 </div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/tipsy/1.0/javascripts/jquery.tipsy.js"></script>
+<link rel="stylesheet" type="text/css" href="http://xliberation.com/parse/colortable/css/schemer.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/tipsy/1.0/stylesheets/tipsy.css">
+<style>
+            .tiptable TD
+                {
+                    color:white;
+                    background-color:green;
+                    font-size: 10px;
+                }
+             .tipsy-inner {
+				max-width: 300px;
+			 }
+        </style>
+
 <script>
 function dashboard(id, fData){
     var barColor = 'steelblue';
@@ -51,8 +66,8 @@ function dashboard(id, fData){
     // function to handle histogram.
     function histoGram(fD){
         var hG={},    hGDim = {t: 60, r: 0, b: 30, l: 0};
-        hGDim.w = 500 - hGDim.l - hGDim.r,
-        hGDim.h = 300 - hGDim.t - hGDim.b;
+        hGDim.w = 800 - hGDim.l - hGDim.r,
+        hGDim.h = 500 - hGDim.t - hGDim.b;
 
         //create svg for histogram.
         var hGsvg = d3.select(id).append("svg")
@@ -168,7 +183,8 @@ function dashboard(id, fData){
         function mouseout(d){
             // call the update function of histogram with all data.
             hG.update(fData.map(function(v){
-                return [v.ciclo,v.total];}), barColor);
+                return [v.ciclo,v.total,v.departamentos];}), barColor);
+
         }
         // Animating the pie-slice requiring a custom function which specifies
         // how the intermediate paths should be drawn.
@@ -231,7 +247,7 @@ function dashboard(id, fData){
     });
 
     // calculate total frequency by state for all segment.
-    var sF = fData.map(function(d){return [d.ciclo,d.total];});
+    var sF = fData.map(function(d){return [d.ciclo,d.total,d.departamentos];});
 
     var hG = histoGram(sF), // create the histogram.
         pC = pieChart(tF), // create the pie-chart.
@@ -260,4 +276,35 @@ var freqData=[
 dashboard('#dashboard',freqData);
 </script>
 
+<script>
+	
+	function makeTipsy(d) {
+			var html =  "<div> Estadisticas por Departamento</div>" +
+				"<table class='tiptable'><tbody>"
+				for (var i = 0; i < d.length; i++) {
+						html += makeATableRow (d[i][0],d[i][1],d[i][2],d[i][3])
+					}
+				html += "</tbody></table>";
+			return html
+                }
+
+                function makeATableRow() {
+                    var t= "<tr>";
+
+                    for (var i = 0; i < arguments.length; i++) {
+                        t += "<td>" + arguments[i] + "</td>";
+                    }
+                    return t + "</tr>";
+
+                }
+
+	
+	$('rect').tipsy({
+                        gravity: $.fn.tipsy.autoWE,
+                        html: true,
+                        delayIn: 1000,
+                        title: function() {
+                          return  makeTipsy(this.__data__[2]); }
+                      });
+</script>
 {% endblock %}
