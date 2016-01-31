@@ -49,13 +49,15 @@ rect:hover {  fill:blue; }
                     color:white;
                     background-color:green;
                     font-size: 9px;
-                    padding: 0;
+                    padding: 1px;
                     text-align: center;
                 }
              .tipsy-inner {
                 max-width: 300px;
                 }
-            table tr td {}
+                .tiptable-value {
+                    color:white;
+                }
         </style>
 
 <script>
@@ -332,7 +334,7 @@ dashboard('#dashboard',freqData);
 							var t= "<tr>";
 						
 							for (var i = 0; i < arguments.length; i++) {
-								t += "<td><a href='http://sys.multipagos.net/admin/metropolitana/paquete/?estado__exact=ENTREGADO' target='blank'>" + arguments[i] + "</a></td>";
+								t += "<td><a class='tiptable-value' href='http://sys.multipagos.net/admin/metropolitana/paquete/?estado__exact=ENTREGADO' target='blank'>" + arguments[i] + "</a></td>";
 							}
 							return t + "</tr>";
 							
@@ -343,7 +345,7 @@ dashboard('#dashboard',freqData);
                         gravity: $.fn.tipsy.autoNS,
                         html: true,
                         delayIn: 500,
-                        delayOut: 500,
+                        delayOut: 5000,
                         title: function() {
 							console.log(this.__data__);
                           return  makeTipsy(this.__data__[2]); }
