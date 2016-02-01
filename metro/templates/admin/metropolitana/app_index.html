@@ -249,18 +249,28 @@ function dashboard(id, fData){
     // calculate total frequency by segment for all state.
     var departamentos = fData[0]['departamentos'].map(function (d, i) { return {id:i, departamento:d[0]};});
 	var nr = departamentos.shift();
+	departamentos = departamentos.map( function (r, n) { return {id: r.id,
+			departamento: r.departamento,
+			entregado: d3.sum(fData.map(function (d) { return d.departamentos[r.id][1]; })),
+			rezagado: d3.sum(fData.map(function (d) { return d.departamentos[r.id][2]; })),
+			pendiente: d3.sum(fData.map(function (d) { return d.departamentos[r.id][3]; })),
+			asignado: d3.sum(fData.map(function (d) { return d.departamentos[r.id][1]; })) + d3.sum(fData.map(function (d) { return d.departamentos[r.id][2]; })) + d3.sum(fData.map(function (d) { return d.departamentos[r.id][3]; }))
+			};})
 	console.log(departamentos);
     var tF = ['entregado','rezagado','pendiente'].map(function(d, i){
         return {
 			type:d,
 			esta: d3.sum(fData.map(function(t){ return t.esta[d];})),
 			departamentos: departamentos.map(function (r) { return [r.departamento,
-				d3.sum(fData.map(function (d) { return d.departamentos[r.id][i+1]; }))];})
+				d3.sum(fData.map(function (d) { return d.departamentos[r.id][i+1]; })),
+				d3.format("%")(d3.sum(fData.map(function (d) { return d.departamentos[r.id][i+1]; }))/r.asignado),
+				r.asignado
+				];})
 			};
-    });
+    });																																																																																																																																																																																																																																					
     console.log(tF[0]);
 	
-
+																																																																												
      nr = departamentos.map(function (r) { return [r.departamento,
 		d3.sum(fData.map(function (d) { return d.departamentos[r.id][1]; })),
 		d3.sum(fData.map(function (d) { return d.departamentos[r.id][2]; })),
@@ -320,11 +330,11 @@ dashboard('#dashboard',freqData);
 
                 }
 
-		function makeTipsyPie(d) {
-					var html =  "<div> Estadisticas por Departamento</div>" +
+		function makeTipsyPie(d, top) {
+					var html =  "<div>" + top + "</div>" +
 						"<table class='tiptable'><tbody>"
 						for (var i = 0; i < d.length; i++) {
-								html += makeATableRow (d[i][0],d[i][1])
+								html += makeATableRow (d[i][0],d[i][1],d[i][2], d[i][3])
 							}
 						html += "</tbody></table>";
 					return html
@@ -334,7 +344,7 @@ dashboard('#dashboard',freqData);
 							var t= "<tr>";
 						
 							for (var i = 0; i < arguments.length; i++) {
-								t += "<td><a class='tiptable-value' href='http://sys.multipagos.net/admin/metropolitana/paquete/?estado__exact=ENTREGADO' target='blank'>" + arguments[i] + "</a></td>";
+								t += "<td><a href='http://sys.multipagos.net/admin/metropolitana/paquete/?estado__exact=ENTREGADO' target='blank'>" + arguments[i] + "</a></td>";
 							}
 							return t + "</tr>";
 							
@@ -344,8 +354,8 @@ dashboard('#dashboard',freqData);
 	$('rect').tipsy({
                         gravity: $.fn.tipsy.autoNS,
                         html: true,
-                        delayIn: 500,
-                        delayOut: 5000,
+                        delayIn: 1000,
+                        delayOut: 1000,
                         title: function() {
 							console.log(this.__data__);
                           return  makeTipsy(this.__data__[2]); }
@@ -353,11 +363,11 @@ dashboard('#dashboard',freqData);
     $('path').tipsy({
                         gravity: $.fn.tipsy.autoNS,
                         html: true,
-                        delayIn: 500,
-                        delayOut: 5000,
+                        delayIn: 1000,
+                        delayOut: 1000,
                         title: function() {
 							console.log(this.__data__.data);
-                          return  makeTipsyPie(this.__data__.data.departamentos); }
+                          return  makeTipsyPie(this.__data__.data.departamentos, this.__data__.data.type + " por departamentos"); }
                       });
 
 
