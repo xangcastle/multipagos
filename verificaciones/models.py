@@ -108,3 +108,6 @@ class Verificacion(models.Model):
         verbose_name="recibio visita de nuestro supervisor de ventas")
     comentarios = models.TextField(max_length=400, null=True, blank=True,
         verbose_name="comentarios y observaciones")
+
+    class Meta:
+        verbose_name_plural = "verificaciones"
