@@ -23,7 +23,7 @@ class Verificacion(models.Model):
     serial = models.CharField(max_length=65, null=True, blank=True)
     mac = models.CharField(max_length=65, null=True, blank=True)
     sim = models.CharField(max_length=65, null=True, blank=True)
-    solicitud = models.CharField(max_length=30,null=True, blank=True)
+    solicitud = models.IntegerField(null=True, blank=True)
     #OPCIONES DE RESPUESTAS
     TIPOS_VERIFICACIONES = (
             ('CORRECTA', 'CORRECTA'),
