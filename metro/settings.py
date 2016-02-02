@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'digitalizacion',
     'movil',
     'verificaciones',
+    'cartera',
 )
 
 MIDDLEWARE_CLASSES = (
