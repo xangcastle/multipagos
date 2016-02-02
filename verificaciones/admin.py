@@ -6,7 +6,7 @@ from .resources import *
 
 class verificacion_admin(ImportExportModelAdmin):
     resource_class = verificacion_resouce
-    list_display = ('contrato', 'solicitud', 'nombre_cliente', 'servicio',
+    list_display = ('id', 'contrato', 'solicitud', 'nombre_cliente', 'servicio',
         'categoria', 'departamento', 'municipio', 'barrio', 'direccion')
     list_filter = ('sucursal', 'departamento', 'servicio', 'categoria')
 
