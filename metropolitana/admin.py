@@ -5,7 +5,7 @@ from import_export.admin import ImportExportModelAdmin
 from .models import *
 from .resources import *
 from django.template.context import RequestContext
-from django.shortcuts import render_to_response, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from .views import *
 from digitalizacion.models import *
 from django import forms
@@ -27,7 +27,6 @@ def download_file(path):
         response['Content-Disposition'] = 'attachment; filename=%s' % \
         os.path.basename(path)
         return response
-
 
 
 class entidad_admin(ImportExportModelAdmin):

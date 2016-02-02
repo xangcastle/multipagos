@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'metropolitana',
     'digitalizacion',
     'movil',
+    'verificaciones',
 )
 
 MIDDLEWARE_CLASSES = (
