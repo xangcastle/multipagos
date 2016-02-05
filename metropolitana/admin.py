@@ -219,7 +219,8 @@ class estadistica_ciclo(admin.ModelAdmin):
     readonly_fields = ('ano', 'ciclo', 'mes', 'total', 'entregados',
         'pendientes')
     actions = ['crear_rendicion', 'action_integrar', 'corregir_media',
-        'generar_rendicion', 'generar_pods', 'generar_lista_distribucion']
+        'generar_rendicion', 'generar_pods', 'generar_lista_distribucion',
+        'cerrar_ciclo']
     inlines = [estadistica_departamento]
     list_per_page = 10
 
