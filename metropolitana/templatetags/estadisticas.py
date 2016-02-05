@@ -15,7 +15,7 @@ class estadisticas_all_Node(template.Node):
     def render(self, context):
             context[self.varname] = EstadisticaCiclo.objects.exclude(
                 code__in=CicloCierre.objects.all().values_list('code',
-                    flat=True))
+                    flat=True)).order_by('ciclo')
             return ''
 
 
