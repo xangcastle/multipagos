@@ -245,10 +245,10 @@ def estadisticasDepartamento(request):
     estadisticas = c.estadisticas_departamentos()
     for e in estadisticas:
         obj_json = {}
-        obj_json['departamento'] = e.name
-        obj_json['entregado'] = e.entregado
-        obj_json['rezagado'] = e.rezagado
-        obj_json['pendiente'] = e.pendiente
+        obj_json['departamento'] = e['name']
+        obj_json['entregado'] = e['ENTREGADO']
+        obj_json['rezagado'] = e['REZAGADO']
+        obj_json['pendiente'] = e['PENDIENTE']
         data.append(obj_json)
     data = json.dumps(data)
     return HttpResponse(data, content_type='application/json')
