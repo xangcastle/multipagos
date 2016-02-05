@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseForbidden, \
 HttpResponseBadRequest
 from django.views.generic import View
 from django.core import serializers
-from metropolitana.models import Paquete, Tipificacion
+from metropolitana.models import Paquete, Tipificacion, EstadisticaCiclo
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
@@ -232,4 +232,23 @@ def get_paquete(request):
             obj_json['Mensaje'] = "Paquete cargado Correctamente"
             p.save()
     data = json.dumps(obj_json)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def estadisticasDepartamento(request):
+    data = []
+    ciclo = request.POST.get('ciclo', '')
+    mes = request.POST.get('mes', '')
+    ano = request.POST.get('ano', '')
+    c = EstadisticaCiclo.objects.get(ciclo=ciclo, mes=mes, ano=ano)
+    estadisticas = c.estadisticas_departamentos()
+    for e in estadisticas:
+        obj_json = {}
+        obj_json['departamento'] = e.name
+        obj_json['entregado'] = e.entregado
+        obj_json['rezagado'] = e.rezagado
+        obj_json['pendiente'] = e.pendiente
+        data.append(obj_json)
+    data = json.dumps(data)
     return HttpResponse(data, content_type='application/json')
