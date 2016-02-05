@@ -798,6 +798,12 @@ class EstadisticaCiclo(base_vista):
         verbose_name = 'estadistica'
 
 
+class CicloCierre(models.Model):
+    code = models.CharField(max_length=6, null=True, blank=True)
+    fecha_cierre = models.DateField(null=True, blank=True)
+    cerrado = models.BooleanField(default=False)
+
+
 def estado(paquete):
     clase = ""
     valor = ""

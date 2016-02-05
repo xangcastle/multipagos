@@ -16,6 +16,7 @@ import os
 from django.http.response import HttpResponse
 from django.core.servers.basehttp import FileWrapper
 actions.add_to_site(site)
+from datetime import datetime
 
 
 def download_file(path):
@@ -321,6 +322,13 @@ class estadistica_ciclo(admin.ModelAdmin):
                 'metropolitana/lista_distribucion.html', ctx,
                 context_instance=RequestContext(request))
             return response
+
+    def cerrar_ciclo(self, request, queryset):
+        for o in queryset:
+            cierre, create = CierreCiclo.objects.get_or_create(code=self.code)
+            cierre.cerrado = True
+            cierre.fecha_cierre = datetime.now()
+            cierre.save()
 
 
 class tipificacion_admin(ImportExportModelAdmin):
