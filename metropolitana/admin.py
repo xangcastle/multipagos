@@ -326,7 +326,7 @@ class estadistica_ciclo(admin.ModelAdmin):
 
     def cerrar_ciclo(self, request, queryset):
         for o in queryset:
-            cierre, create = CierreCiclo.objects.get_or_create(code=self.code)
+            cierre, create = CicloCierre.objects.get_or_create(code=self.code)
             cierre.cerrado = True
             cierre.fecha_cierre = datetime.now()
             cierre.save()
