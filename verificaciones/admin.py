@@ -30,7 +30,7 @@ class verificacion_admin(ImportExportModelAdmin):
                             )}),
                 ('Verificacion de datos del Servicio', {
                 'classes': ('grp-collapse grp-open',),
-                'fields': (('direccion_corr',), 'colector',
+                'fields': (('direccion_ver',), 'direccion_corr',
                             ('servicio_contratado', 'pago_instalacion',
                                 'costo_instalacion_corr'),
                             ('conoce_tarifa', 'copia_contratos',
