@@ -61,39 +61,39 @@ class Verificacion(models.Model):
     telefono_ver = models.CharField(max_length=50, null=True,
         blank=True, choices=TIPOS_VERIFICACIONES,
         verbose_name="verificacion de numero de telefono")
-    telefono_corr = models.TextField(max_length=25, null=True, blank=True,
+    telefono_corr = models.CharField(max_length=25, null=True, blank=True,
         verbose_name="nueva numero de telefono")
     celular_ver = models.CharField(max_length=50, null=True,
         blank=True, choices=TIPOS_VERIFICACIONES,
         verbose_name="verificacion de numero de celular")
-    celular_corr = models.TextField(max_length=25, null=True, blank=True,
+    celular_corr = models.CharField(max_length=25, null=True, blank=True,
         verbose_name="nuevo numero de celular")
-    telefono_trabajo = models.TextField(max_length=25, null=True, blank=True,
+    telefono_trabajo = models.CharField(max_length=25, null=True, blank=True,
         verbose_name="telefono del trabajo")
     #DATOS DE SERVICIO
     servicio_contratado = models.CharField(max_length=4, null=True,
         blank=True, choices=ASEVERACIONES,
-        verbose_name="tiene el servicio contratado")
+        verbose_name="tiene el servicio contratado?")
     pago_instalacion = models.CharField(max_length=4, null=True,
         blank=True, choices=ASEVERACIONES,
-        verbose_name="pago algun costo por instalacion del servicio")
+        verbose_name="pago algun costo por instalacion del servicio?")
     costo_instalacion_corr = models.FloatField(
         max_length=25, null=True, blank=True)
     conoce_tarifa = models.CharField(max_length=4, null=True,
         blank=True, choices=ASEVERACIONES,
-        verbose_name="conoce la tarifa mensual del servicio")
+        verbose_name="conoce la tarifa mensual del servicio?")
     copia_contratos = models.CharField(max_length=4, null=True,
         blank=True, choices=ASEVERACIONES,
-        verbose_name="posee copia de sus contratos")
+        verbose_name="posee copia de sus contratos?")
     satisfecho_servicio = models.CharField(max_length=4, null=True,
         blank=True, choices=ASEVERACIONES,
-        verbose_name="esta satisfecho con el servicio contratado")
+        verbose_name="esta satisfecho con el servicio contratado?")
     producto_malo = models.NullBooleanField(
-        verbose_name="el producto es malo")
+        verbose_name="el producto es malo?")
     mala_atencion = models.NullBooleanField(
-        verbose_name="hay constantes problemas con la atencion al cliente")
+        verbose_name="hay constantes problemas con la atencion al cliente?")
     sin_promosiones = models.NullBooleanField(
-        verbose_name="la promociones no las recibo")
+        verbose_name="la promociones no las recibe?")
     otros = models.TextField(max_length=400, null=True, blank=True)
     #VERIFICACION DE DATOS DE EQUIPOS
     equipo_corr = models.CharField(max_length=65, null=True, blank=True)
@@ -108,6 +108,9 @@ class Verificacion(models.Model):
         verbose_name="recibio visita de nuestro supervisor de ventas")
     comentarios = models.TextField(max_length=400, null=True, blank=True,
         verbose_name="comentarios y observaciones")
+
+    def __unicode__(self):
+        return self.nombre_cliente
 
     class Meta:
         verbose_name_plural = "verificaciones"

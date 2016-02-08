@@ -10,5 +10,42 @@ class verificacion_admin(ImportExportModelAdmin):
         'categoria', 'departamento', 'municipio', 'barrio', 'direccion')
     list_filter = ('sucursal', 'departamento', 'servicio', 'categoria')
 
+    fieldsets = (('Datos Generales', {
+                'classes': ('grp-collapse grp-open',),
+                'fields': (('contrato', 'nombre_cliente', 'fecha_alta'),
+                            ('cedula', 'plan', 'servicio'),
+                            ('sucursal', 'departamento', 'municipio'),
+                            ('barrio', 'celular'), 'direccion',
+                            ('telefono', 'costo_instalacion'),
+                            ('equipo', 'serial', 'mac'),
+                            ('sim', 'solicitud')
+                            )}),
+                ('Verificacion de datos del Cliente', {
+                'classes': ('grp-collapse grp-open',),
+                'fields': (('direccion_corr',), 'direccion_ver',
+                            ('tipo_vivienda', 'reside'),
+                            ('telefono_ver', 'telefono_corr'),
+                            ('celular_ver', 'celular_corr'),
+                            ('telefono_trabajo',),
+                            )}),
+                ('Verificacion de datos del Servicio', {
+                'classes': ('grp-collapse grp-open',),
+                'fields': (('direccion_corr',), 'colector'
+                            ('servicio_contratado', 'pago_instalacion',
+                                'costo_instalacion_corr'),
+                            ('conoce_tarifa', 'copia_contratos',
+                                'satisfecho_servicio'),
+                            ('producto_malo', 'mala_atencion',
+                                'sin_promosiones'), 'otros',
+                            ('equipo_corr', 'serial_corr', 'mac_corr'),
+                            ('sim_corr', 'estado_equipos', 'visita_supervisor'),
+                            'comentarios'
+                            )}))
+
+    readonly_fields = ('contrato', 'nombre_cliente', 'fecha_alta',
+        'cedula', 'plan', 'servicio', 'sucursal', 'departamento', 'municipio',
+        'barrio', 'celular', 'direccion', 'telefono', 'costo_instalacion',
+        'equipo', 'serial', 'mac', 'sim', 'solicitud')
+
 
 admin.site.register(Verificacion, verificacion_admin)
