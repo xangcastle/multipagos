@@ -28,7 +28,11 @@ def get_user(request):
 def get_paquetes(request):
     ciclo = request.POST.get('ciclo', '')
     mes = request.POST.get('mes', '')
-    queryset = Paquete.objects.filter(ciclo=ciclo, mes=mes)
+    ano = request.POST.get('ano', '')
+    d = request.POST.get('departamento', '')
+    departamento = Departamento.objects.get(id=d)
+    queryset = Paquete.objects.filter(ciclo=ciclo, mes=mes, ano=ano,
+        iddepartamento=departamento)
     if queryset:
         data = serializers.serialize('json', queryset)
         struct = json.loads(data)
