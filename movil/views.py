@@ -120,7 +120,9 @@ def estadisticasDepartamento(request):
 @csrf_exempt
 def get_departamentos(request):
     ds = Departamento.objects.all().order_by('name')
-    data = json.dumps(ds)
+    data = serializers.serialize('json', ds)
+    struct = json.loads(data)
+    data = json.dumps(struct)
     return HttpResponse(data, content_type='application/json')
 
 
