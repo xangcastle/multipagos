@@ -11,5 +11,7 @@ urlpatterns = patterns('',
         name='get_departamentos'),
     url(r'^get_estadisticas_by_user/$', 'movil.views.estadisticas_by_user',
         name='get_estadisticas_by_user'),
+    url(r'^get_verificacion/$', 'movil.views.get_verificacion',
+        name='get_verificacion'),
 )
 

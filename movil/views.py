@@ -7,6 +7,7 @@ from metropolitana.models import Paquete, Tipificacion, EstadisticaCiclo, \
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
+from verificaciones.models import Verificacion
 
 
 @csrf_exempt
@@ -132,4 +133,40 @@ def estadisticas_by_user(request):
     departamento = Departamento.objects.get(id=d)
     data = estadisticas_por_departamento(ciclo, mes, ano, departamento)
     data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_verificacion(request):
+    obj_json = {}
+    obj_json['Usuario'] = request.POST.get('Usuario', '')
+    obj_json['Solicitud'] = request.POST.get('Solicitud', '')
+    obj_json['Fecha'] = str(request.POST.get('Fecha', ''))
+    obj_json['Latitude'] = request.POST.get('Latitude', '')
+    obj_json['Longitude'] = request.POST.get('Longitude', '')
+    obj_json['Mensaje'] = ''
+    try:
+        u = User.objects.get(id=int(obj_json['Usuario']))
+    except:
+        u = None
+    try:
+        v = Verificacion.objects.get(solicitud=obj_json['Solicitud'])
+    except:
+        v = None
+    if v:
+        if v.position:
+            obj_json['Usuario'] = u
+            obj_json['Solicitud'] = v.solicitud
+            obj_json['Fecha'] = str(v.fecha_entrega)
+            obj_json['Latitude'] = float(v.position.latitude)
+            obj_json['Longitude'] = float(v.position.longitude)
+            obj_json['Mensaje'] = "Esta verificacion ya fue cargada"
+        else:
+            v.user = u
+            v.fecha_entrega = obj_json['Fecha']
+            v.position = Geoposition(obj_json['Latitude'],
+                obj_json['Longitude'])
+            obj_json['Mensaje'] = "Verificacion cargada Correctamente"
+            v.save()
+    data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
