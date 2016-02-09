@@ -1,4 +1,7 @@
 from django.db import models
+from geoposition.fields import GeopositionField
+from django.contrib.auth.models import User
+from metropolitana.models import get_media_url
 
 
 class Verificacion(models.Model):
@@ -108,6 +111,18 @@ class Verificacion(models.Model):
         verbose_name="recibio visita de nuestro supervisor de ventas")
     comentarios = models.TextField(max_length=400, null=True, blank=True,
         verbose_name="comentarios y observaciones")
+    position = GeopositionField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
+    parentezco = models.CharField(max_length=75, null=True, blank=True)
+    recibe = models.CharField(max_length=75, null=True, blank=True)
+    imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)
+    ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
+                          ('PENDIENTE', 'PENDIENTE'),
+                          ('REZAGADO', 'REZAGADO'),
+                         )
+    estado = models.CharField(max_length=65, null=True, blank=True,
+        choices=ESTADOS_DE_ENTREGA)
 
     def __unicode__(self):
         return self.nombre_cliente

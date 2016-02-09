@@ -947,4 +947,15 @@ def lista_distribucion(comprobantes):
     return data
 
 
-# rename -v 's/\.$/\.pdf/' *.*
+def estadisticas_por_departamento(ciclo, mes, ano, departamento):
+    data = []
+    ps = Paquete.objects.filter(ciclo=ciclo, mes=mes, ano=ano,
+        iddepartamento=departamento)
+    users = ps.distinct('user').order_by('user')
+    for u in users:
+        d = {'user': u.username}
+        d['entregado'] = ps.filter(user=u, estado='ENTREGADO')
+        d['rezagado'] = ps.filter(user=u, estado='REZAGADO')
+        d['pendiente'] = ps.filter(user=u, estado='PENDIENTE')
+        data.append(d)
+    return data
