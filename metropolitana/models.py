@@ -961,8 +961,8 @@ def estadisticas_por_departamento(ciclo, mes, ano, departamento):
     users = ps.distinct('user').order_by('user')
     for u in users:
         d = {'user': get_username(u)}
-        d['entregado'] = ps.filter(user=u.user, estado='ENTREGADO')
-        d['rezagado'] = ps.filter(user=u.user, estado='REZAGADO')
-        d['pendiente'] = ps.filter(user=u.user, estado='PENDIENTE')
+        d['entregado'] = ps.filter(user=u.user, estado='ENTREGADO').count()
+        d['rezagado'] = ps.filter(user=u.user, estado='REZAGADO').count()
+        d['pendiente'] = ps.filter(user=u.user, estado='PENDIENTE').count()
         data.append(d)
     return data
