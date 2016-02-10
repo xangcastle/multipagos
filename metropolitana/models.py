@@ -947,13 +947,20 @@ def lista_distribucion(comprobantes):
     return data
 
 
+def get_username(p):
+    name = ''
+    if p.user:
+        name = p.user.username
+    return name
+
+
 def estadisticas_por_departamento(ciclo, mes, ano, departamento):
     data = []
     ps = Paquete.objects.filter(ciclo=ciclo, mes=mes, ano=ano,
         iddepartamento=departamento)
     users = ps.distinct('user').order_by('user')
     for u in users:
-        d = {'user': u.user.username}
+        d = {'user': get_username(u)}
         d['entregado'] = ps.filter(user=u.user, estado='ENTREGADO')
         d['rezagado'] = ps.filter(user=u.user, estado='REZAGADO')
         d['pendiente'] = ps.filter(user=u.user, estado='PENDIENTE')
