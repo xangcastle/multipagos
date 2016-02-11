@@ -1,7 +1,8 @@
 from django.db import models
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
-from metropolitana.models import get_media_url
+from metropolitana.models import get_media_url, Departamento, Municipio, \
+Barrio
 
 
 class Verificacion(models.Model):
@@ -123,9 +124,68 @@ class Verificacion(models.Model):
                          )
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
+    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True)
+    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True)
+    idbarrio = models.ForeignKey(Barrio, null=True, blank=True)
+
+    def get_departamento(self):
+        d = None
+        if self.departamento:
+            try:
+                d = Departamento.objects.get(name_alt=self.departamento)
+            except:
+                d, created = Departamento.objects.get_or_create(
+                    name=self.departamento)
+        return d
+
+    def get_municipio(self):
+        m = None
+        try:
+            if self.municipio and self.iddepartamento:
+                m = Municipio.objects.get(departamento=self.iddepartamento,
+                    name_alt=self.municipio)
+        except:
+            m, created = Municipio.objects.get_or_create(
+                departamento=self.iddepartamento, name=self.municipio)
+        return m
+
+    def get_barrio(self):
+        b = None
+        try:
+            if self.barrio and self.idmunicipio and self.iddepartamento:
+                b, created = Barrio.objects.get_or_create(
+                departamento=self.iddepartamento,
+                municipio=self.idmunicipio, name=self.barrio)
+        except:
+            b = Barrio.objects.filter(departamento=self.iddepartamento,
+                municipio=self.idmunicipio, name=self.barrio)[0]
+        return b
 
     def __unicode__(self):
         return self.nombre_cliente
 
     class Meta:
         verbose_name_plural = "verificaciones"
+
+
+def integrar(ps):
+    message = ""
+    ds = ps.order_by('departamento').distinct('departamento')
+    for d in ds:
+        qs = ps.filter(departamento=d.departamento)
+        qs.update(iddepartamento=d.get_departamento().id)
+    ms = ps.order_by('departamento', 'municipio').distinct(
+        'departamento', 'municipio')
+    for m in ms:
+        qs = ps.filter(departamento=m.departamento,
+            municipio=m.municipio)
+        qs.update(idmunicipio=m.get_municipio().id)
+    bs = ps.order_by('departamento', 'municipio', 'barrio').distinct(
+        'departamento', 'municipio', 'barrio')
+    for b in bs:
+        qs = ps.filter(departamento=b.departamento,
+            municipio=b.municipio, barrio=b.barrio)
+        qs.update(idbarrio=b.get_barrio().id)
+    message += "integrado, total de verificaciones = %s end %s departamentos" \
+    % (str(ps.count()), str(ds.count()))
+    return message

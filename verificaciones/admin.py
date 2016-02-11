@@ -47,5 +47,10 @@ class verificacion_admin(ImportExportModelAdmin):
         'barrio', 'celular', 'direccion', 'telefono', 'costo_instalacion',
         'equipo', 'serial', 'mac', 'sim', 'solicitud')
 
+    def action_integrar(self, request, queryset):
+        msj = integrar(queryset)
+        self.message_user(request, msj)
+    action_integrar.short_description = 'integrar verificaciones seleccionadas'
+
 
 admin.site.register(Verificacion, verificacion_admin)

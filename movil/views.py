@@ -176,3 +176,17 @@ def get_verificacion(request):
             v.save()
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_verificaciones(request):
+    d = request.POST.get('departamento', '')
+    departamento = Departamento.objects.get(id=d)
+    queryset = Verificacion.objects.filter(iddepartamento=departamento)
+    if queryset:
+        data = serializers.serialize('json', queryset)
+        struct = json.loads(data)
+        data = json.dumps(struct)
+    else:
+        data = None
+    return HttpResponse(data, content_type='application/json')

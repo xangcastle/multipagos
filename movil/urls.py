@@ -13,5 +13,7 @@ urlpatterns = patterns('',
         name='get_estadisticas_by_user'),
     url(r'^get_verificacion/$', 'movil.views.get_verificacion',
         name='get_verificacion'),
+    url(r'^get_verificaciones/$', 'movil.views.get_verificaciones',
+        name='get_verificaciones'),
 )
 
