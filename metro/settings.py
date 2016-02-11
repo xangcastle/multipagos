@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'grappelli',
     'import_export',
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

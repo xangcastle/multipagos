@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls'))
     url(r'^admin/lookups/', include(ajax_select_urls)),
     url(r'^adminactions/', include('adminactions.urls')),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
