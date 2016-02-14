@@ -969,8 +969,7 @@ def estadisticas_por_departamento(ciclo, mes, ano, departamento):
 
 
 class uPaquete(models.Model):
-    factura = models.CharField(max_length=70, null=True, blank=True,
-        primary_key=True)
+    factura = models.CharField(max_length=70, primary_key=True)
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
