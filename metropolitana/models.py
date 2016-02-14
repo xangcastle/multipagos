@@ -968,11 +968,20 @@ def estadisticas_por_departamento(ciclo, mes, ano, departamento):
     return data
 
 
+class upmanager(models.Manager):
+    def get_queryset(self):
+        return uPaquete.objects.filter(factura__in=
+        Paquete.objects.filter(ciclo=77, mes=2, ano=2016).values_list('factura',
+            flat=True))
+
+
 class uPaquete(models.Model):
     factura = models.CharField(max_length=70, primary_key=True)
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
+    objects = models.Manager()
+    objects = upmanager()
 
     class Meta:
         db_table = 'metropolitana_paquete'

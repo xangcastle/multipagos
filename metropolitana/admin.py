@@ -365,6 +365,10 @@ class zona_admin(admin.ModelAdmin):
     fields = (('code', 'name'), ('departamento', 'municipio'))
 
 
+class up_admin(ImportExportModelAdmin):
+    list_display = ('factura', 'user', 'fecha_entrega')
+
+
 admin.site.register(Paquete, paquete_admin)
 admin.site.register(Lote, lote_admin)
 admin.site.register(EstadisticaCiclo, estadistica_ciclo)
@@ -373,5 +377,5 @@ admin.site.register(Barrio, barrio_admin)
 admin.site.register(Municipio, municipio_admin)
 admin.site.register(Departamento, entidad_admin)
 admin.site.register(Zona, zona_admin)
-admin.site.register(uPaquete, ImportExportModelAdmin)
+admin.site.register(uPaquete, up_admin)
 
