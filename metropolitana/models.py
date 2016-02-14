@@ -980,8 +980,6 @@ class uPaquete(models.Model):
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
-    objects = models.Manager()
-    objects = upmanager()
 
     class Meta:
         db_table = 'metropolitana_paquete'
