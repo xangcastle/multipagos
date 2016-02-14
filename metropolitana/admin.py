@@ -373,3 +373,5 @@ admin.site.register(Barrio, barrio_admin)
 admin.site.register(Municipio, municipio_admin)
 admin.site.register(Departamento, entidad_admin)
 admin.site.register(Zona, zona_admin)
+admin.site.register(uPaquete)
+

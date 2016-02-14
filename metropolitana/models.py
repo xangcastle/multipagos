@@ -966,3 +966,15 @@ def estadisticas_por_departamento(ciclo, mes, ano, departamento):
         d['pendiente'] = ps.filter(user=u.user, estado='PENDIENTE').count()
         data.append(d)
     return data
+
+
+class uPaquete(models.Model):
+    factura = models.CharField(max_length=70, null=True, blank=True,
+        primary_key=True)
+    position = GeopositionField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = 'metropolitana_paquete'
+        manage = False
