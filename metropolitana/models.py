@@ -971,7 +971,7 @@ def estadisticas_por_departamento(ciclo, mes, ano, departamento):
 class upmanager(models.Manager):
     def get_queryset(self):
         return uPaquete.objects.filter(factura__in=
-        Paquete.objects.filter(ciclo=77, mes=2, ano=2016).values_list('factura',
+        Paquete.objects.filter(ciclo=77, mes=2, ano=2016)[:100].values_list('factura',
             flat=True))
 
 
