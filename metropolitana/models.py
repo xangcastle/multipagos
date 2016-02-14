@@ -977,4 +977,4 @@ class uPaquete(models.Model):
 
     class Meta:
         db_table = 'metropolitana_paquete'
-        manage = False
+        managed = False
