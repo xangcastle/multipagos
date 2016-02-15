@@ -25,7 +25,7 @@
     data.addColumn('number', 'Rezago');
     data.addRows([
     {% for d in datos %}
-      ['{{ d.username }}',  new Date ({{ d.fecha }}), {{ d.departamento }}, {{ d.entregas }}, {{ d.rezago }}],
+      ['{{ d.username }}',  new Date ({{ d.fecha }}), '{{ d.departamento }}', {{ d.entregas }}, {{ d.rezago }}],
     {% endfor %}
     ]);
     var chart = new google.visualization.MotionChart(document.getElementById('chart_div'));
