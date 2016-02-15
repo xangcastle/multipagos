@@ -7,6 +7,7 @@ from django.conf import settings
 import subprocess
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
+import time
 
 
 def get_code(entidad):
@@ -990,3 +991,18 @@ class uPaquete(models.Model):
     class Meta:
         db_table = 'metropolitana_paquete'
         managed = False
+
+
+class entrega_diaria(models.Model):
+    dia = models.DateField()
+    username = models.CharField(max_length=75)
+    departamento = models.CharField(max_length=75)
+    entregas = models.IntegerField()
+    rezago = models.IntegerField()
+
+    def fecha(self):
+        return str(1000*time.mktime(self.dia.timetuple()))
+
+    class Meta:
+        managed = False
+        db_table = "entrega_diaria"
