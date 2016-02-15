@@ -976,7 +976,7 @@ class upmanager(models.Manager):
 
 
 class uPaquete(models.Model):
-    factura = models.CharField(max_length=70, primary_key=True)
+    id = models.CharField(max_length=70, primary_key=True, db_column='factura')
     #position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
