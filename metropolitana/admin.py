@@ -366,7 +366,7 @@ class zona_admin(admin.ModelAdmin):
 
 
 class up_admin(ImportExportModelAdmin):
-    list_display = ('factura', 'user', 'fecha_entrega')
+    list_display = ('id', 'user', 'fecha_entrega')
 
 
 admin.site.register(Paquete, paquete_admin)
