@@ -386,7 +386,7 @@ class Paquete(base):
 
     class Meta:
         verbose_name = 'factura'
-        ordering = ['cliente']
+        ordering = ['-fecha_entrega']
 
 
 class Tipificacion(models.Model):
