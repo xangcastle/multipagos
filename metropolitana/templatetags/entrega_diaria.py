@@ -14,7 +14,7 @@ class entrega_diaria_Node(template.Node):
 
     def render(self, context):
             context[self.varname] = entrega_diaria.objects.all().order_by(
-                '-dia')[:100]
+                '-dia')[:200]
             return ''
 
 

@@ -3,8 +3,8 @@
 
 
 {% block content %}
-<div id="chart_div"></div>
 <div id='dashboard'></div>
+<div id="chart_div"></div>
 {% load estadisticas %}
 {% get_estadisticas_all as sts %}
 {% load entrega_diaria %}
@@ -15,8 +15,8 @@
   google.setOnLoadCallback(drawChart);
   function drawChart() {
   var options = {}
-    options['width'] = "100%"
-    options['height'] = "99%"
+    options['width'] = "600px"
+    options['height'] = "400px"
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Nombre');
     data.addColumn('date', 'Dia');
