@@ -977,9 +977,15 @@ class upmanager(models.Manager):
 
 class uPaquete(models.Model):
     factura = models.CharField(max_length=70, primary_key=True)
-    position = GeopositionField(null=True, blank=True)
+    #position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
+    ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
+                          ('PENDIENTE', 'PENDIENTE'),
+                          ('REZAGADO', 'REZAGADO'),
+                         )
+    estado = models.CharField(max_length=65, null=True, blank=True,
+        choices=ESTADOS_DE_ENTREGA)
 
     class Meta:
         db_table = 'metropolitana_paquete'
