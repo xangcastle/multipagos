@@ -338,7 +338,13 @@ class tipificacion_admin(ImportExportModelAdmin):
 
 class barrio_admin(entidad_admin):
     list_display = ('code', 'name', 'municipio', 'departamento')
-    list_filter = ('departamento', 'municipio')
+    list_filter = ('departamento', 'municipio', 'revizado')
+    fieldsets = (('', {
+                'classes': ('grp-collapse grp-open',),
+                'fields': (('code', 'revizado'),
+                            ('name', ), ('departamento', 'municipio'),
+                            'relative_position')}),)
+    readonly_fields = ('code', 'revizado', 'name', 'departamento', 'municipio')
 
 
 class municipio_admin(entidad_admin):

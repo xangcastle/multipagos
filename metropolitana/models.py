@@ -516,10 +516,22 @@ class Municipio(Entidad):
 class Barrio(Entidad):
     departamento = models.ForeignKey(Departamento, null=True, blank=True)
     municipio = models.ForeignKey(Municipio, null=True, blank=True)
+    relative_position = GeopositionField(null=True, blank=True)
+    revizado = models.NullBooleanField()
 
     def __unicode__(self):
         return '%s-%s %s %s' % (self.code, self.name,
             self.municipio.name, self.departamento.name)
+
+    def get_revizado(self):
+        if self.relative_position:
+            return True
+        else:
+            return False
+
+    def save(self, *args, **kwargs):
+        self.revizado = self.get_revizado()
+        super(Barrio, self).save()
 
 
 class Zona(Entidad):
