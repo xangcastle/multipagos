@@ -115,8 +115,6 @@ class Verificacion(models.Model):
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
-    parentezco = models.CharField(max_length=75, null=True, blank=True)
-    recibe = models.CharField(max_length=75, null=True, blank=True)
     imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)
     ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
                           ('PENDIENTE', 'PENDIENTE'),
