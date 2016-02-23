@@ -7,9 +7,9 @@ class UserProfile(models.Model):
     '''
     esta clase es la utilizada para guardar los perfiles de usuario
     '''
-    user = models.OneToOneField(User, help_text="el usuaro que anda el movil",
+    user = models.OneToOneField(User, help_text="el usuaro que anda el movil")
+    foto = models.ImageField(upload_to=get_media_url,
         null=True, blank=True)
-    foto = models.ImageField(upload_to=get_media_url)
     zonas = models.ManyToManyField(Zona)
     celular = models.CharField(max_length=14, null=True)
 
