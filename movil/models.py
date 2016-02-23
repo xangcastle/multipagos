@@ -4,7 +4,11 @@ from metropolitana.models import get_media_url, Zona
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    '''
+    esta clase es la utilizada para guardar los perfiles de usuario
+    '''
+    user = models.OneToOneField(User, help_text="el usuaro que anda el movil",
+        null=True, blank=True)
     foto = models.ImageField(upload_to=get_media_url)
     zonas = models.ManyToManyField(Zona)
     celular = models.CharField(max_length=14, null=True)
