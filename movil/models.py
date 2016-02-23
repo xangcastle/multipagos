@@ -10,8 +10,11 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, help_text="el usuaro que anda el movil")
     foto = models.ImageField(upload_to=get_media_url,
         null=True, blank=True)
-    zonas = models.ManyToManyField(Zona)
+    zonas = models.ManyToManyField(Zona, null=True, blank=True)
     celular = models.CharField(max_length=14, null=True)
+
+    def __unicode__(self):
+        return "user " + self.user.username
 
     class Meta:
         verbose_name = 'usuario'
