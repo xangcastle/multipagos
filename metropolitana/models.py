@@ -378,9 +378,14 @@ class Paquete(base):
 
     def autoasignar(self):
         if self.idbarrio:
-            zb = zona_barrio.objects.get(barrio=self.idbarrio)
-            self.zona = zb.zona.id
-            self.save()
+            zb = None
+            try:
+                zb = zona_barrio.objects.get(barrio=self.idbarrio)
+            except:
+                pass
+            if zb:
+                self.zona = zb.zona.id
+                self.save()
 
     def save(self, *args, **kwargs):
         self.lotificado = self.get_lotificado()
