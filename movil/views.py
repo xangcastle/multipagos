@@ -156,7 +156,7 @@ def get_verificacion(request):
     except:
         u = None
     try:
-        v = Verificacion.objects.get(solicitud=obj_json['Solicitud'])
+        v = Verificacion.objects.get(id=int(obj_json['Solicitud']))
     except:
         v = None
     if v:
