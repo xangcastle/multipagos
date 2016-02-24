@@ -379,7 +379,7 @@ class Paquete(base):
     def autoasignar(self):
         if self.idbarrio:
             zb = zona_barrio.objects.get(barrio=self.idbarrio)
-            self.zona = zb.zona
+            self.zona = zb.zona.id
             self.save()
 
     def save(self, *args, **kwargs):
