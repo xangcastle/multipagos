@@ -376,6 +376,12 @@ class Paquete(base):
         return os.path.join(carpeta, 'ci' + self.codificacion_ciclo() +
         '_rec_im.txt')
 
+    def autoasignar(self):
+        if self.idbarrio:
+            zb = zona_barrio.objects.get(barrio=self.idbarrio)
+            self.zona = zb.zona
+            self.save()
+
     def save(self, *args, **kwargs):
         self.lotificado = self.get_lotificado()
         self.entrega = self.get_entregado()
