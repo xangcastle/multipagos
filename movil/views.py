@@ -151,6 +151,23 @@ def get_verificacion(request):
     obj_json['Latitude'] = request.POST.get('Latitude', '')
     obj_json['Longitude'] = request.POST.get('Longitude', '')
     obj_json['Estado'] = request.POST.get('Estado', '')
+
+    obj_json['direccion_corr'] = request.POST.get('direccion_corr', None)
+    obj_json['tipo_vivienda'] = request.POST.get('tipo_vivienda', None)
+    obj_json['reside'] = request.POST.get('reside', None)
+    obj_json['telefono_corr'] = request.POST.get('telefono_corr', None)
+    obj_json['celular_corr'] = request.POST.get('celular_corr', None)
+    obj_json['telefono_trabajo'] = request.POST.get('telefono_trabajo', None)
+    obj_json['servicio_contratado'] = request.POST.get('servicio_contratado', None)
+    obj_json['pago_instalacion'] = request.POST.get('pago_instalacion', None)
+    obj_json['costo_instalacion_corr'] = request.POST.get('costo_instalacion_corr', None)
+    obj_json['conoce_tarifa'] = request.POST.get('conoce_tarifa', None)
+    obj_json['copia_contratos'] = request.POST.get('copia_contratos', None)
+    obj_json['satisfecho_servicio'] = request.POST.get('satisfecho_servicio', None)
+    obj_json['producto_malo'] = request.POST.get('producto_malo', None)
+    obj_json['mala_atencion'] = request.POST.get('mala_atencion', None)
+    obj_json['sin_promosiones'] = request.POST.get('sin_promosiones', None)
+
     obj_json['Mensaje'] = ''
     try:
         u = User.objects.get(id=int(obj_json['IdUsuario']))
@@ -174,6 +191,22 @@ def get_verificacion(request):
             v.position = Geoposition(obj_json['Latitude'],
                 obj_json['Longitude'])
             v.estado = obj_json['Estado']
+            v.direccion_corr = obj_json['direccion_corr']
+            v.tipo_vivienda = obj_json['tipo_vivienda']
+            v.reside = obj_json['reside']
+            v.telefono_corr = obj_json['telefono_corr']
+            v.celular_corr = obj_json['celular_corr']
+            v.telefono_trabajo = obj_json['telefono_trabajo']
+            v.servicio_contratado = obj_json['servicio_contratado']
+            v.pago_instalacion = obj_json['pago_instalacion']
+            v.costo_instalacion_corr = obj_json['costo_instalacion_corr']
+            v.conoce_tarifa = obj_json['conoce_tarifa']
+            v.copia_contratos = obj_json['copia_contratos']
+            v.satisfecho_servicio = obj_json['satisfecho_servicio']
+            v.producto_malo = obj_json['producto_malo']
+            v.mala_atencion = obj_json['mala_atencion']
+            v.sin_promosiones = obj_json['sin_promosiones']
+
             obj_json['Mensaje'] = "Verificacion cargada Correctamente"
             v.save()
     data = json.dumps(obj_json)
