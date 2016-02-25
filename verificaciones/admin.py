@@ -46,6 +46,7 @@ class verificacion_admin(ImportExportModelAdmin):
         'cedula', 'plan', 'servicio', 'sucursal', 'departamento', 'municipio',
         'barrio', 'celular', 'direccion', 'telefono', 'costo_instalacion',
         'equipo', 'serial', 'mac', 'sim', 'solicitud')
+    search_fields = ('contrato', 'nombre_cliente', 'cedula', 'solicitud')
     actions = ['action_integrar']
 
     def action_integrar(self, request, queryset):
