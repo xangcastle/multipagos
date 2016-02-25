@@ -167,6 +167,13 @@ def get_verificacion(request):
     obj_json['producto_malo'] = request.POST.get('producto_malo', None)
     obj_json['mala_atencion'] = request.POST.get('mala_atencion', None)
     obj_json['sin_promosiones'] = request.POST.get('sin_promosiones', None)
+    obj_json['equipo_corr'] = request.POST.get('equipo_corr', None)
+    obj_json['serial_corr'] = request.POST.get('serial_corr', None)
+    obj_json['mac_corr'] = request.POST.get('mac_corr', None)
+    obj_json['sim_corr'] = request.POST.get('sim_corr', None)
+    obj_json['estado_equipos'] = request.POST.get('estado_equipos', None)
+    obj_json['visita_supervisor'] = request.POST.get('visita_supervisor', None)
+    obj_json['comentarios'] = request.POST.get('comentarios', None)
 
     obj_json['Mensaje'] = ''
     try:
@@ -206,6 +213,13 @@ def get_verificacion(request):
             v.producto_malo = obj_json['producto_malo']
             v.mala_atencion = obj_json['mala_atencion']
             v.sin_promosiones = obj_json['sin_promosiones']
+            v.equipo_corr = obj_json['equipo_corr']
+            v.serial_corr = obj_json['serial_corr']
+            v.mac_corr = obj_json['mac_corr']
+            v.sim_corr = obj_json['sim_corr']
+            v.estado_equipos = obj_json['estado_equipos']
+            v.visita_supervisor = obj_json['visita_supervisor']
+            v.comentarios = obj_json['comentarios']
 
             obj_json['Mensaje'] = "Verificacion cargada Correctamente"
             v.save()
