@@ -117,10 +117,10 @@ class Verificacion(models.Model):
     fecha_entrega = models.DateTimeField(null=True, blank=True,
         verbose_name="fecha de ejecucion")
     imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)
-    ESTADOS_DE_ENTREGA = (('VERIFICADO', 'VERIFICADO'),
-                          ('NO VERIFICADO', 'NO VERIFICADO'),
+    ESTADOS_DE_ENTREGA = (('VERIFICADA', 'VERIFICADA'),
+                          ('NO VERIFICADA', 'NO VERIFICADA'),
                           ('PENDIENTE', 'PENDIENTE'),
-                          ('VENCIDO', 'VENCIDO'),
+                          ('VENCIDA', 'VENCIDA'),
                          )
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
