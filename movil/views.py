@@ -185,44 +185,36 @@ def get_verificacion(request):
     except:
         v = None
     if v:
-        if v.position:
-            obj_json['IdUsuario'] = u
-            obj_json['Pk'] = v.solicitud
-            obj_json['Fecha'] = str(v.fecha_entrega)
-            obj_json['Latitude'] = float(v.position.latitude)
-            obj_json['Longitude'] = float(v.position.longitude)
-            obj_json['Mensaje'] = "Esta verificacion ya fue cargada"
-        else:
-            v.user = u
-            v.fecha_entrega = obj_json['Fecha']
-            v.position = Geoposition(obj_json['Latitude'],
-                obj_json['Longitude'])
-            v.estado = obj_json['Estado']
-            v.direccion_corr = obj_json['direccion_corr']
-            v.tipo_vivienda = obj_json['tipo_vivienda']
-            v.reside = obj_json['reside']
-            v.telefono_corr = obj_json['telefono_corr']
-            v.celular_corr = obj_json['celular_corr']
-            v.telefono_trabajo = obj_json['telefono_trabajo']
-            v.servicio_contratado = obj_json['servicio_contratado']
-            v.pago_instalacion = obj_json['pago_instalacion']
-            v.costo_instalacion_corr = obj_json['costo_instalacion_corr']
-            v.conoce_tarifa = obj_json['conoce_tarifa']
-            v.copia_contratos = obj_json['copia_contratos']
-            v.satisfecho_servicio = obj_json['satisfecho_servicio']
-            v.producto_malo = obj_json['producto_malo']
-            v.mala_atencion = obj_json['mala_atencion']
-            v.sin_promosiones = obj_json['sin_promosiones']
-            v.equipo_corr = obj_json['equipo_corr']
-            v.serial_corr = obj_json['serial_corr']
-            v.mac_corr = obj_json['mac_corr']
-            v.sim_corr = obj_json['sim_corr']
-            v.estado_equipos = obj_json['estado_equipos']
-            v.visita_supervisor = obj_json['visita_supervisor']
-            v.comentarios = obj_json['comentarios']
+        v.user = u
+        v.fecha_entrega = obj_json['Fecha']
+        v.position = Geoposition(obj_json['Latitude'],
+            obj_json['Longitude'])
+        v.estado = obj_json['Estado']
+        v.direccion_corr = obj_json['direccion_corr']
+        v.tipo_vivienda = obj_json['tipo_vivienda']
+        v.reside = obj_json['reside']
+        v.telefono_corr = obj_json['telefono_corr']
+        v.celular_corr = obj_json['celular_corr']
+        v.telefono_trabajo = obj_json['telefono_trabajo']
+        v.servicio_contratado = obj_json['servicio_contratado']
+        v.pago_instalacion = obj_json['pago_instalacion']
+        v.costo_instalacion_corr = obj_json['costo_instalacion_corr']
+        v.conoce_tarifa = obj_json['conoce_tarifa']
+        v.copia_contratos = obj_json['copia_contratos']
+        v.satisfecho_servicio = obj_json['satisfecho_servicio']
+        v.producto_malo = obj_json['producto_malo']
+        v.mala_atencion = obj_json['mala_atencion']
+        v.sin_promosiones = obj_json['sin_promosiones']
+        v.equipo_corr = obj_json['equipo_corr']
+        v.serial_corr = obj_json['serial_corr']
+        v.mac_corr = obj_json['mac_corr']
+        v.sim_corr = obj_json['sim_corr']
+        v.estado_equipos = obj_json['estado_equipos']
+        v.visita_supervisor = obj_json['visita_supervisor']
+        v.comentarios = obj_json['comentarios']
 
-            obj_json['Mensaje'] = "Verificacion cargada Correctamente"
-            v.save()
+        obj_json['Mensaje'] = "Verificacion cargada Correctamente"
+        v.save()
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
 
@@ -231,7 +223,8 @@ def get_verificacion(request):
 def get_verificaciones(request):
     d = request.POST.get('departamento', '')
     departamento = Departamento.objects.get(id=d)
-    queryset = Verificacion.objects.filter(iddepartamento=departamento)
+    queryset = Verificacion.objects.filter(iddepartamento=departamento).exclude(
+        estado='VENCIDA')
     if queryset:
         data = serializers.serialize('json', queryset)
         struct = json.loads(data)

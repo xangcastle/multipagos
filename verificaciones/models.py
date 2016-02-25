@@ -3,6 +3,7 @@ from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 from metropolitana.models import get_media_url, Departamento, Municipio, \
 Barrio
+from datetime import datetime
 
 
 class Verificacion(models.Model):
@@ -114,8 +115,10 @@ class Verificacion(models.Model):
         verbose_name="comentarios y observaciones")
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
+    fecha_asignacion = models.DateField(null=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True,
         verbose_name="fecha de ejecucion")
+    fecha_vencimiento = models.DateField(null=True)
     imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)
     ESTADOS_DE_ENTREGA = (('VERIFICADA', 'VERIFICADA'),
                           ('NO VERIFICADA', 'NO VERIFICADA'),
@@ -163,6 +166,11 @@ class Verificacion(models.Model):
 
     def __unicode__(self):
         return self.nombre_cliente
+
+    def get_estado(self):
+        if self.fecha_vencimiento and self.fecha_vencimiento > datetime.now():
+            self.estado = 'VENCIDA'
+            self.save()
 
     class Meta:
         verbose_name_plural = "verificaciones"
