@@ -8,8 +8,9 @@ class verificacion_admin(ImportExportModelAdmin):
     resource_class = verificacion_resouce
     list_display = ('contrato', 'solicitud', 'nombre_cliente', 'servicio',
         'categoria', 'departamento', 'municipio', 'barrio', 'direccion',
-        'fecha_entrega', 'user')
-    list_filter = ('sucursal', 'departamento', 'servicio', 'categoria', 'user')
+        'fecha_entrega', 'user', 'estado')
+    list_filter = ('sucursal', 'departamento', 'servicio', 'categoria',
+        'user', 'estado')
 
     fieldsets = (('Datos Generales', {
                 'classes': ('grp-collapse grp-open',),
@@ -27,7 +28,7 @@ class verificacion_admin(ImportExportModelAdmin):
                             ('tipo_vivienda', 'reside'),
                             ('telefono_ver', 'telefono_corr'),
                             ('celular_ver', 'celular_corr'),
-                            ('telefono_trabajo',),
+                            ('telefono_trabajo',), 'position'
                             )}),
                 ('Verificacion de datos del Servicio', {
                 'classes': ('grp-collapse grp-open',),
