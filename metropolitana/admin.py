@@ -208,7 +208,7 @@ class estadistica_departamento(base_tabular):
 class estadistica_ciclo(admin.ModelAdmin):
     list_display = ('code', 'ano', 'mes', 'ciclo', 'total', 'entregados',
         'pendientes', 'rendidos', 'rendiciones', 'por_rendir',
-        'cumplimiento')
+        'cumplimiento', 'estado')
     list_filter = ('ano', 'mes')
     ordering = ['-ano', '-mes', 'ciclo']
     fieldsets = (

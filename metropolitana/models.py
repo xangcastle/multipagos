@@ -816,6 +816,17 @@ class EstadisticaCiclo(base_vista):
             data.append(esta)
         return data
 
+    def estado(self):
+        cc = None
+        try:
+            cc = CicloCierre.objects.get(code=self.code)
+            if cc:
+                return "CERRADO"
+            else:
+                return "EN EJECUCION"
+        except:
+            pass
+
     class Meta:
         managed = False
         db_table = 'metropolitana_estadistica_ciclo'
