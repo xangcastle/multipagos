@@ -825,7 +825,7 @@ class EstadisticaCiclo(base_vista):
             else:
                 return "EN EJECUCION"
         except:
-            pass
+            return "EN EJECUCION"
 
     class Meta:
         managed = False
