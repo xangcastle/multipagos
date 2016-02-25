@@ -7,8 +7,9 @@ from .resources import *
 class verificacion_admin(ImportExportModelAdmin):
     resource_class = verificacion_resouce
     list_display = ('contrato', 'solicitud', 'nombre_cliente', 'servicio',
-        'categoria', 'departamento', 'municipio', 'barrio', 'direccion')
-    list_filter = ('sucursal', 'departamento', 'servicio', 'categoria')
+        'categoria', 'departamento', 'municipio', 'barrio', 'direccion',
+        'fecha_entrega', 'user')
+    list_filter = ('sucursal', 'departamento', 'servicio', 'categoria', 'user')
 
     fieldsets = (('Datos Generales', {
                 'classes': ('grp-collapse grp-open',),
@@ -30,8 +31,7 @@ class verificacion_admin(ImportExportModelAdmin):
                             )}),
                 ('Verificacion de datos del Servicio', {
                 'classes': ('grp-collapse grp-open',),
-                'fields': (('direccion_ver',), 'direccion_corr',
-                            ('servicio_contratado', 'pago_instalacion',
+                'fields': (('servicio_contratado', 'pago_instalacion',
                                 'costo_instalacion_corr'),
                             ('conoce_tarifa', 'copia_contratos',
                                 'satisfecho_servicio'),

@@ -2,6 +2,6 @@
 from django.apps import AppConfig
 
 
-class MetropolitanaConfig(AppConfig):
-    name = 'metropolitana'
-    verbose_name = "Distribucion y Entregas"
+class QuickdocConfig(AppConfig):
+    name = 'quickdoc'
+    verbose_name = "Control de Expedientes"
