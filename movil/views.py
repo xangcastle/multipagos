@@ -145,24 +145,25 @@ def estadisticas_by_user(request):
 @csrf_exempt
 def get_verificacion(request):
     obj_json = {}
-    obj_json['Usuario'] = request.POST.get('Usuario', '')
-    obj_json['Solicitud'] = request.POST.get('Solicitud', '')
+    obj_json['Pk'] = request.POST.get('Pk', '')
+    obj_json['IdUsuario'] = request.POST.get('IdUsuario', '')
     obj_json['Fecha'] = str(request.POST.get('Fecha', ''))
     obj_json['Latitude'] = request.POST.get('Latitude', '')
     obj_json['Longitude'] = request.POST.get('Longitude', '')
+    obj_json['Estado'] = request.POST.get('Estado', '')
     obj_json['Mensaje'] = ''
     try:
-        u = User.objects.get(id=int(obj_json['Usuario']))
+        u = User.objects.get(id=int(obj_json['IdUsuario']))
     except:
         u = None
     try:
-        v = Verificacion.objects.get(id=int(obj_json['Solicitud']))
+        v = Verificacion.objects.get(id=int(obj_json['Pk']))
     except:
         v = None
     if v:
         if v.position:
-            obj_json['Usuario'] = u
-            obj_json['Solicitud'] = v.solicitud
+            obj_json['IdUsuario'] = u
+            obj_json['Pk'] = v.solicitud
             obj_json['Fecha'] = str(v.fecha_entrega)
             obj_json['Latitude'] = float(v.position.latitude)
             obj_json['Longitude'] = float(v.position.longitude)
@@ -172,6 +173,7 @@ def get_verificacion(request):
             v.fecha_entrega = obj_json['Fecha']
             v.position = Geoposition(obj_json['Latitude'],
                 obj_json['Longitude'])
+            v.estado = obj_json['Estado']
             obj_json['Mensaje'] = "Verificacion cargada Correctamente"
             v.save()
     data = json.dumps(obj_json)
