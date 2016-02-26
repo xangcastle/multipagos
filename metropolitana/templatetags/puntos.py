@@ -14,7 +14,9 @@ class puntos_Node(template.Node):
 
     def render(self, context):
         data = []
-        for p in Paquete.objects.filter(mes=2, estado='ENTREGADO'):
+        for p in Paquete.objects.filter(fecha_entrega__day=26,
+            fecha_entrega__month=2,
+            fecha_entrega__year=2016):
             if p.position:
                 data.append(p)
         context[self.varname] = data
