@@ -68,7 +68,7 @@
 
     var data = {
         {% for f in facturas %}
-    "{{ f.hora_entrega }}": [{{ f.position.longitude }},{{ f.position.latitude }},"{{ f.cliente }}"],
+    "{{ f.user.username }}-{{ f.hora_entrega }}": [{{ f.position.longitude }},{{ f.position.latitude }},"{{ f.cliente }}"],
         {% endfor %}
     }
 
