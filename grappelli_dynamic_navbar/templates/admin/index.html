@@ -78,8 +78,9 @@
 
     var overlay = new google.maps.OverlayView();
 
+
     overlay.onAdd = function() {
-        var layer = d3.select(this.getPanes().overlayLayer).append("div")
+        var layer = d3.select(this.getPanes().overlayMouseTarget).append("div")
         .attr("class", "stations");
 
         overlay.draw = function() {
