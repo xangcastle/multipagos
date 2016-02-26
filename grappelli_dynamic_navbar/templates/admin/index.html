@@ -27,7 +27,7 @@
 <!-- CONTENT -->
 {% block content %}
 {% load puntos %}
-{% get_puntos as puntos %}
+{% get_puntos as facturas %}
 <style>
 
 #map {
@@ -68,8 +68,8 @@ var map = new google.maps.Map(d3.select("#map").node(), {
 });
 
 var data = {
-{% for p in puntos %}
-    "{{ p.factura }}": [{{ p.position.latitude }},{{ p.position.longitude }},"{{ p.cliente }}",[28,1,1,1,6,10,5,3,2,4,14,21,7]],
+{% for f in facturas %}
+    "{{ f.factura }}": [{{ f.position.latitude }},{{ f.position.longitude }},"{{ f.cliente }}",[28,1,1,1,6,10,5,3,2,4,14,21,7]],
 {% endfor %}
 }
 
