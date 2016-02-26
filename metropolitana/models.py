@@ -395,6 +395,12 @@ class Paquete(base):
             self.cerrado = False
         super(Paquete, self).save()
 
+    def hora_entrega(self):
+        if self.fecha_entrega:
+            return self.fecha_entrega.strftime("%X")
+        else:
+            return None
+
     class Meta:
         verbose_name = 'factura'
         ordering = ['-fecha_entrega']

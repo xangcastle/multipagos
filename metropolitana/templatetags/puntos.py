@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from metropolitana.models import *
+from datetime import datetime
 from django import template
 
 register = template.Library()
@@ -14,9 +15,9 @@ class puntos_Node(template.Node):
 
     def render(self, context):
         data = []
-        for p in Paquete.objects.filter(fecha_entrega__day=26,
-            fecha_entrega__month=2,
-            fecha_entrega__year=2016):
+        for p in Paquete.objects.filter(fecha_entrega__day=datetime.now().day,
+            fecha_entrega__month=datetime.now().month,
+            fecha_entrega__year=datetime.now().year):
             if p.position:
                 data.append(p)
         context[self.varname] = data
