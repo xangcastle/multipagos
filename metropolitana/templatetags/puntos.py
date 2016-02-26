@@ -38,5 +38,5 @@ def get_puntos(parser, token):
         raise template.TemplateSyntaxError(
             "'get_puntos' requiere que el primer argumento sea 'as'")
 
-    return entrega_diaria_Node(varname=tokens[2])
+    return puntos_Node(varname=tokens[2])
 
