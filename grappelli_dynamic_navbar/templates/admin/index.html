@@ -118,6 +118,9 @@
     overlay.setMap(map);
 
 
+    google.maps.event.addListener(marker1, "click", function (e) { iw1.open(map, this); });
+
+
     $('circle').tipsy({
         gravity: $.fn.tipsy.autoNS,
         html: true,
