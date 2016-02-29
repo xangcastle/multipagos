@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
+from cartera.models import Detalle
 
 
 @csrf_exempt
@@ -224,6 +225,21 @@ def get_verificaciones(request):
     d = request.POST.get('departamento', '')
     departamento = Departamento.objects.get(id=d)
     queryset = Verificacion.objects.filter(iddepartamento=departamento).exclude(
+        estado='VENCIDA')
+    if queryset:
+        data = serializers.serialize('json', queryset)
+        struct = json.loads(data)
+        data = json.dumps(struct)
+    else:
+        data = None
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_cartera(request):
+    d = request.POST.get('departamento', '')
+    departamento = Departamento.objects.get(id=d)
+    queryset = Detalle.objects.filter(iddepartamento=departamento).exclude(
         estado='VENCIDA')
     if queryset:
         data = serializers.serialize('json', queryset)

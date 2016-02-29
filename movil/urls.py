@@ -15,5 +15,7 @@ urlpatterns = patterns('',
         name='get_verificacion'),
     url(r'^get_verificaciones/$', 'movil.views.get_verificaciones',
         name='get_verificaciones'),
+    url(r'^get_cartera/$', 'movil.views.get_cartera',
+        name='get_cartera'),
 )
 

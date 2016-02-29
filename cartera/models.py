@@ -1,4 +1,5 @@
 from django.db import models
+from metropolitana.models import Departamento, Municipio, Barrio
 
 
 class Detalle(models.Model):
@@ -41,4 +42,14 @@ class Detalle(models.Model):
     fecha_asignacion = models.DateField(null=True, blank=True)
     codigo = models.CharField(max_length=125, null=True, blank=True)
     comentario = models.CharField(max_length=125, null=True, blank=True)
+    ESTADOS_DE_ENTREGA = (('VERIFICADA', 'VERIFICADA'),
+                          ('NO VERIFICADA', 'NO VERIFICADA'),
+                          ('PENDIENTE', 'PENDIENTE'),
+                          ('VENCIDA', 'VENCIDA'),
+                         )
+    estado = models.CharField(max_length=65, null=True, blank=True,
+        choices=ESTADOS_DE_ENTREGA)
+    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True)
+    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True)
+    idbarrio = models.ForeignKey(Barrio, null=True, blank=True)
 
