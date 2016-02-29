@@ -20,7 +20,7 @@ class detalle_admin(ImportExportModelAdmin):
 
     def action_integrar(self, request, queryset):
         for d in queryset:
-            d.intengrar()
+            d.integrar()
     action_integrar.short_description = \
     "integrar clientes de los registros selecionados"
 
