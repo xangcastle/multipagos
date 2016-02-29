@@ -125,7 +125,7 @@ class Detalle(models.Model):
         return c
 
     def integrar(self):
-        self.departamento = self.get_departamento()
+        self.iddepartamento = self.get_departamento()
         self.idcliente = self.get_cliente()
         self.integrado = True
         self.save()
