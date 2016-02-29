@@ -18,6 +18,14 @@ class detalle_admin(ImportExportModelAdmin):
         'saldo_pend_factura')
     list_filter = ('categoria', 'departamento', 'estado_corte')
 
+    def action_integrar(self, request, queryset):
+        for d in queryset:
+            d.intengrar()
+    action_integrar.short_description = \
+    "integrar clientes de los registros selecionados"
+
+    actions = [action_integrar]
+
 
 admin.site.register(Detalle, detalle_admin)
 
