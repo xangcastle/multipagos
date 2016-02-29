@@ -1,5 +1,5 @@
 from django.db import models
-from metropolitana.models import Departamento, Municipio, Barrio
+from metropolitana.models import Departamento
 
 
 class Detalle(models.Model):
@@ -50,6 +50,18 @@ class Detalle(models.Model):
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
     iddepartamento = models.ForeignKey(Departamento, null=True, blank=True)
-    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True)
-    idbarrio = models.ForeignKey(Barrio, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.cliente
+
+    def get_departamento(self):
+        d = None
+        if self.departamento:
+            try:
+                d = Departamento.objects.get(name_alt=self.departamento)
+            except:
+                d, created = Departamento.objects.get_or_create(
+                    name=self.departamento)
+        return d
+
 
