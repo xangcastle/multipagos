@@ -1,5 +1,7 @@
 from django.db import models
 from metropolitana.models import Departamento
+from geoposition.fields import GeopositionField
+from django.contrib.auth.models import User
 
 
 class Detalle(models.Model):
@@ -50,6 +52,10 @@ class Detalle(models.Model):
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
     iddepartamento = models.ForeignKey(Departamento, null=True, blank=True)
+    position = GeopositionField(null=True, blank=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
+    monto = models.FloatField(null=True, blank=True)
 
     def __unicode__(self):
         return self.cliente

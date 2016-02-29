@@ -248,3 +248,26 @@ def get_cartera(request):
     else:
         data = None
     return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_detalle(request):
+    obj_json = {'Mensaje': ''}
+    try:
+        d = Detalle.objects.get(id=int(request.POST.get('Pk')))
+    except:
+        d = None
+    try:
+        u = User.objects.get(id=int(request.POST.get('Usuario')))
+    except:
+        pass
+    if d:
+        d.position = Geoposition(request.POST.get('Latitude', ''),
+                    request.POST.get('Longitude', ''))
+        d.user = u
+        d.fecha_entrega = request.POST.get('Fecha', '')
+        d.monto = request.POST.get('Monto', '')
+        d.save()
+        obj_json['Mensaje'] = 'Registro grabado con exito'
+    data = json.dumps(obj_json)
+    return HttpResponse(data, content_type='application/json')
