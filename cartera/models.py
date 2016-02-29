@@ -30,9 +30,12 @@ def get_or_create_entidad(instance, name):
 class Cliente(Entidad):
     identificacion = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
-    departamento = models.ForeignKey(Departamento, null=True, blank=True)
-    municipio = models.ForeignKey(Municipio, null=True, blank=True)
-    barrio = models.ForeignKey(Barrio, null=True, blank=True)
+    departamento = models.ForeignKey(Departamento, null=True, blank=True,
+        related_name="cartera_cliente_departamento")
+    municipio = models.ForeignKey(Municipio, null=True, blank=True,
+        related_name="cartera_cliente_municipio")
+    barrio = models.ForeignKey(Barrio, null=True, blank=True,
+        related_name="cartera_cliente_barrio")
     position = GeopositionField(null=True, blank=True)
 
     def __unicode__(self):
