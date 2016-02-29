@@ -1,7 +1,42 @@
 from django.db import models
-from metropolitana.models import Departamento
+from metropolitana.models import Departamento, Municipio, Barrio, Entidad
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
+
+
+def get_by_code(instance, code):
+    model = type(instance)
+    try:
+        return model.objects.get(code=code)
+    except:
+        return instance
+
+
+def get_by_name(instance, name):
+    model = type(instance)
+    try:
+        return model.objects.get(name=name)
+    except:
+        return instance
+
+
+def get_or_create_entidad(instance, name):
+    model = type(instance)
+    o, created = model.objects.get_or_create(name=name)
+    o.save()
+    return o
+
+
+class Cliente(Entidad):
+    identificacion = models.CharField(max_length=65, null=True, blank=True)
+    contrato = models.CharField(max_length=65, null=True, blank=True)
+    departamento = models.ForeignKey(Departamento, null=True, blank=True)
+    municipio = models.ForeignKey(Municipio, null=True, blank=True)
+    barrio = models.ForeignKey(Barrio, null=True, blank=True)
+    position = GeopositionField(null=True, blank=True)
+
+    def __unicode__(self):
+        return self.codigo + ' ' + self.nombre
 
 
 class Detalle(models.Model):
@@ -56,6 +91,8 @@ class Detalle(models.Model):
     fecha_entrega = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     monto = models.FloatField(null=True, blank=True)
+    idcliente = models.ForeignKey(Cliente, null=True, blank=True)
+    integrado = models.NullBooleanField()
 
     def __unicode__(self):
         return self.cliente
@@ -69,5 +106,25 @@ class Detalle(models.Model):
                 d, created = Departamento.objects.get_or_create(
                     name=self.departamento)
         return d
+
+    def get_cliente(self):
+        c = None
+        if self.contrato:
+            try:
+                c, create = Cliente.objects.get_or_create(code=self.cliente,
+                    contrato=self.contrato)
+                c.name = self.suscriptor
+                if self.iddepartamento:
+                    c.departamento = self.iddepartamento
+                c.save()
+            except:
+                c = None
+        return c
+
+    def integrar(self):
+        self.departamento = self.get_departamento()
+        self.idcliente = self.get_cliente()
+        self.integrado = True
+        self.save()
 
 
