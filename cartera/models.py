@@ -114,6 +114,7 @@ class Detalle(models.Model):
                 c, create = Cliente.objects.get_or_create(code=self.cliente,
                     contrato=self.contrato)
                 c.name = self.suscriptor
+                c.identificacion = self.nit
                 if self.iddepartamento:
                     c.departamento = self.iddepartamento
                 c.save()

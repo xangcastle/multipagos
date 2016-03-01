@@ -26,13 +26,18 @@ class detalle_cartera(admin.TabularInline):
     model = Detalle
     extra = 0
     fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
-        'fecha_venc', 'tipo_mora', 'saldo_pend_factura')
+        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion')
+    readonly_fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
+        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion')
+    classes = ('grp-collapse grp-open',)
 
 
 class cliente_admin(admin.ModelAdmin):
     list_display = ('code', 'name', 'identificacion')
     list_filter = ('departamento', 'municipio')
     search_fields = ('code', 'name', 'identificacion')
+    fields = ('code', 'name', 'identificacion', 'departamento', 'municipio',
+        'barrio')
     inlines = [detalle_cartera]
 
 admin.site.register(Cliente, cliente_admin)
