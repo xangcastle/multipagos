@@ -262,8 +262,7 @@ def get_cartera(request):
             facs.append(fac_json)
         obj_json['facturas'] = facs
         data.append(obj_json)
-    struct = json.loads(data)
-    data = json.dumps(struct)
+    data = json.dumps(data)
     return HttpResponse(data, content_type='application/json')
 
 
