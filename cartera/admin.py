@@ -33,6 +33,6 @@ class cliente_admin(admin.ModelAdmin):
     list_display = ('code', 'name', 'identificacion')
     list_filter = ('departamento', 'municipio')
     search_fields = ('code', 'name', 'identificacion')
-    tabular_inlines = [detalle_cartera]
+    inlines = [detalle_cartera]
 
 admin.site.register(Cliente, cliente_admin)
