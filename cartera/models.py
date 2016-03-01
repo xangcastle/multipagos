@@ -38,9 +38,6 @@ class Cliente(Entidad):
         related_name="cartera_cliente_barrio")
     position = GeopositionField(null=True, blank=True)
 
-    def __unicode__(self):
-        return self.codigo + ' ' + self.nombre
-
 
 class Detalle(models.Model):
     cliente = models.CharField(max_length=65, null=True, blank=True)

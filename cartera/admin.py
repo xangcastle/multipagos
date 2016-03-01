@@ -1,14 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from .models import *
-#from .resources import *
-
-
-class mipropioadminclass(admin.ModelAdmin):
-
-    def get_total_fiels(self):
-        if self.total_fields:
-            return self.total_fields
 
 
 class detalle_admin(ImportExportModelAdmin):
@@ -30,9 +22,17 @@ class detalle_admin(ImportExportModelAdmin):
 admin.site.register(Detalle, detalle_admin)
 
 
-class cliente_admin(mipropioadminclass):
+class detalle_cartera(admin.TabularInline):
+    model = Detalle
+    extra = 0
+    fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
+        'fecha_venc', 'tipo_mora', 'saldo_pend_factura')
+
+
+class cliente_admin(admin.ModelAdmin):
     list_display = ('code', 'name', 'identificacion')
     list_filter = ('departamento', 'municipio')
     search_fields = ('code', 'name', 'identificacion')
+    tabular_inlines = [detalle_cartera]
 
 admin.site.register(Cliente, cliente_admin)
