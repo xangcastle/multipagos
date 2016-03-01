@@ -188,4 +188,9 @@ class Detalle(models.Model):
         super(Detalle, self).save()
 
     def telefonos(self):
-        return ', '.join([self.tel_contacto, self.telefono_cliente])
+        dt = []
+        if self.tel_contacto:
+            dt.append(self.tel_contacto)
+        if self.tel_contacto_cliente:
+            dt.append(self.tel_contacto_cliente)
+        return ', '.join(dt)
