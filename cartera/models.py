@@ -72,6 +72,7 @@ class Cliente(Entidad):
         o.direccion = self.direccion
         o.telefonos = self.telefonos
         o.save()
+        return o
 
 
 class Detalle(models.Model):

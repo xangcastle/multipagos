@@ -306,3 +306,15 @@ def get_cortes(request):
     else:
         data = None
     return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def put_corte(request):
+    data = {'Mensaje': ''}
+    c = request.POST.get('Cliente', '')
+    cliente = Departamento.objects.get(id=c)
+    orden = cliente.generar_orden_corte()
+    data['Numero'] = orden.numero
+    data['Mensaje'] = 'orden generada con exito'
+    data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')

@@ -21,5 +21,7 @@ urlpatterns = patterns('',
         name='get_detalle'),
     url(r'^get_cortes/$', 'movil.views.get_cortes',
         name='get_cortes')
+    url(r'^put_corte/$', 'movil.views.put_corte',
+        name='put_corte')
 )
 
