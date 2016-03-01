@@ -20,8 +20,10 @@ urlpatterns = patterns('',
     url(r'^get_detalle/$', 'movil.views.get_detalle',
         name='get_detalle'),
     url(r'^get_cortes/$', 'movil.views.get_cortes',
-        name='get_cortes')
+        name='get_cortes'),
     url(r'^put_corte/$', 'movil.views.put_corte',
-        name='put_corte')
+        name='put_corte'),
+    url(r'^get_corte/$', 'movil.views.get_corte',
+        name='get_corte'),
 )
 

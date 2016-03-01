@@ -223,6 +223,8 @@ class Detalle(models.Model):
 class Corte(models.Model):
     cliente = models.ForeignKey(Cliente)
     fecha_asignacion = models.DateTimeField(null=True)
+    user_solicita = models.ForeignKey(User, null=True,
+        related_name='usuario_que_solicita')
     user = models.ForeignKey(User, null=True)
     fecha = models.DateTimeField(null=True)
     numero = models.IntegerField(null=True)

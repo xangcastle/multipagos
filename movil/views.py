@@ -312,9 +312,28 @@ def get_cortes(request):
 def put_corte(request):
     data = {'Mensaje': ''}
     c = request.POST.get('Cliente', '')
-    cliente = Departamento.objects.get(id=c)
+    u = request.POST.get('Cliente', '')
+    cliente = Departamento.objects.get(id=int(c))
+    user = User.objects.get(id=int(u))
     orden = cliente.generar_orden_corte()
+    orden.user_solicita = user
+    orden.save()
     data['Numero'] = orden.numero
     data['Mensaje'] = 'orden generada con exito'
+    data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_corte(request):
+    o = Corte.objects.get(id=int(request.POST.get('Pk', '')))
+    o.fecha = request.POST.get('Fecha', '')
+    o.fecha = request.POST.get('Fecha', '')
+    o.user = User.objects.get(id=int(request.POST.get('Usuario', '')))
+    o.position = Geoposition(request.POST.get('Latitude', ''),
+                    request.POST.get('Longitude', ''))
+    o.estado = 'CORTADO'
+    o.save()
+    data = {'Mensaje': 'orden grabada con exito'}
     data = json.dumps(data)
     return HttpResponse(data, content_type='application/json')
