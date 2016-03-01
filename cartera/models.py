@@ -47,7 +47,7 @@ class Cliente(Entidad):
         if self.facturas():
             por_pago = self.facturas().filter(pagado=False)
             for f in por_pago:
-                if self.comentario == 'COBRO Y CORTE':
+                if f.comentario == 'COBRO Y CORTE':
                     self.comentario = 'COBRO Y CORTE'
                     self.save()
 
