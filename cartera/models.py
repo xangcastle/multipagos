@@ -37,6 +37,7 @@ class Cliente(Entidad):
     barrio = models.ForeignKey(Barrio, null=True, blank=True,
         related_name="cartera_cliente_barrio")
     position = GeopositionField(null=True, blank=True)
+    comentario = models.CharField(max_length=125, null=True, blank=True)
 
 
 class Detalle(models.Model):
@@ -93,6 +94,7 @@ class Detalle(models.Model):
     monto = models.FloatField(null=True, blank=True)
     idcliente = models.ForeignKey(Cliente, null=True, blank=True)
     integrado = models.NullBooleanField()
+    pagado = models.NullBooleanField()
 
     def __unicode__(self):
         return self.cliente
@@ -128,4 +130,12 @@ class Detalle(models.Model):
         self.integrado = True
         self.save()
 
+    def get_pagado(self):
+        if self.monto and self.monto >= self.saldo_pend_factura:
+            return True
+        else:
+            False
 
+    def save(self, *args, **kwargs):
+        self.pagado = self.get_pagado()
+        super(Detalle, self).super()

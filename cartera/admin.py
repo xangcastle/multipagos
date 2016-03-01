@@ -26,9 +26,11 @@ class detalle_cartera(admin.TabularInline):
     model = Detalle
     extra = 0
     fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
-        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion')
+        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion',
+        'comentario', 'pagado')
     readonly_fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
-        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion')
+        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion',
+        'comentario', 'pagado')
     classes = ('grp-collapse grp-open',)
 
 
