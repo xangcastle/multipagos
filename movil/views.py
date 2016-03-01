@@ -312,11 +312,12 @@ def get_cortes(request):
 def put_corte(request):
     data = {'Mensaje': ''}
     c = request.POST.get('Cliente', '')
-    u = request.POST.get('Cliente', '')
-    cliente = Departamento.objects.get(id=int(c))
+    u = request.POST.get('Usuario', '')
+    cliente = Cliente.objects.get(id=int(c))
     user = User.objects.get(id=int(u))
     orden = cliente.generar_orden_corte()
     orden.user_solicita = user
+    orden.fecha = request.POST.get('Fecha', '')
     orden.save()
     data['Numero'] = orden.numero
     data['Mensaje'] = 'orden generada con exito'
@@ -327,7 +328,6 @@ def put_corte(request):
 @csrf_exempt
 def get_corte(request):
     o = Corte.objects.get(id=int(request.POST.get('Pk', '')))
-    o.fecha = request.POST.get('Fecha', '')
     o.fecha = request.POST.get('Fecha', '')
     o.user = User.objects.get(id=int(request.POST.get('Usuario', '')))
     o.position = Geoposition(request.POST.get('Latitude', ''),
