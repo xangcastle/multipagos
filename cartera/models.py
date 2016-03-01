@@ -39,6 +39,17 @@ class Cliente(Entidad):
     position = GeopositionField(null=True, blank=True)
     comentario = models.CharField(max_length=125, null=True, blank=True)
 
+    def facturas(self):
+        return Detalle.objects.filter(idcliente=self)
+
+    def get_estado_corte(self):
+        if self.facturas():
+            por_pago = self.facturas().filter(pagado=False)
+            for f in por_pago:
+                if self.comentario == 'COBRO Y CORTE':
+                    self.comentario = 'COBRO Y CORTE'
+                    self.save()
+
 
 class Detalle(models.Model):
     cliente = models.CharField(max_length=65, null=True, blank=True)
