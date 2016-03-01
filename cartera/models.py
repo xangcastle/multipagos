@@ -140,7 +140,7 @@ class Detalle(models.Model):
     def get_barrio(self):
         b = None
         try:
-            if self.barrio and self.idmunicipio and self.iddepartamento:
+            if self.barr_contacto and self.idmunicipio and self.iddepartamento:
                 b, created = Barrio.objects.get_or_create(
                 departamento=self.iddepartamento,
                 municipio=self.idmunicipio, name=self.barr_contacto)
