@@ -256,8 +256,8 @@ def get_cartera(request):
             fac_json['factura_interna'] = f.factura_interna
             fac_json['no_cupon'] = f.no_cupon
             fac_json['saldo_pend_factura'] = f.saldo_pend_factura
-            fac_json['fecha_fact'] = f.fecha_fact
-            fac_json['fecha_venc'] = f.fecha_venc
+            fac_json['fecha_fact'] = str(f.fecha_fact)
+            fac_json['fecha_venc'] = str(f.fecha_venc)
             fac_json['tipo_mora'] = f.tipo_mora
             facs.append(fac_json)
         obj_json['facturas'] = facs
