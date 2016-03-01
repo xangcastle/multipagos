@@ -243,7 +243,7 @@ def get_cartera(request):
     queryset = Cliente.objects.filter(departamento=departamento)
     for c in queryset:
         obj_json = {}
-        obj_json['code'] = c.code
+        obj_json['code'] = c.id
         obj_json['name'] = c.name
         obj_json['contrato'] = c.contrato
         obj_json['identificacion'] = c.identificacion
