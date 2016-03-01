@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Detalle
+from cartera.models import Detalle, Cliente
 
 
 @csrf_exempt
@@ -237,16 +237,33 @@ def get_verificaciones(request):
 
 @csrf_exempt
 def get_cartera(request):
+    data = []
     d = request.POST.get('departamento', '')
     departamento = Departamento.objects.get(id=d)
-    queryset = Detalle.objects.filter(iddepartamento=departamento).exclude(
-        estado='VENCIDA')
-    if queryset:
-        data = serializers.serialize('json', queryset)
-        struct = json.loads(data)
-        data = json.dumps(struct)
-    else:
-        data = None
+    queryset = Cliente.objects.filter(departamento=departamento)
+    for c in queryset:
+        obj_json = {}
+        obj_json['code'] = c.code
+        obj_json['name'] = c.name
+        obj_json['identificacion'] = c.identificacion
+        obj_json['departamento'] = c.departamento.name
+        obj_json['municipio'] = c.municipio.name
+        obj_json['barrio'] = c.barrio.name
+        facs = []
+        for f in c.facturas():
+            fac_json = {}
+            fac_json['Pk'] = f.id
+            fac_json['factura_interna'] = f.factura_interna
+            fac_json['no_cupon'] = f.no_cupon
+            fac_json['saldo_pend_factura'] = f.saldo_pend_factura
+            fac_json['fecha_fact'] = f.fecha_fact
+            fac_json['fecha_venc'] = f.fecha_venc
+            fac_json['tipo_mora'] = f.tipo_mora
+            facs.append(fac_json)
+        obj_json['facturas'] = facs
+        data.append(obj_json)
+    struct = json.loads(data)
+    data = json.dumps(struct)
     return HttpResponse(data, content_type='application/json')
 
 

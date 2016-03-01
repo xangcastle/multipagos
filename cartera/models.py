@@ -38,6 +38,7 @@ class Cliente(Entidad):
         related_name="cartera_cliente_barrio")
     position = GeopositionField(null=True, blank=True)
     comentario = models.CharField(max_length=125, null=True, blank=True)
+    telefonos = models.CharField(max_length=65, null=True, blank=True)
 
     def facturas(self):
         return Detalle.objects.filter(idcliente=self)
@@ -128,6 +129,7 @@ class Detalle(models.Model):
                     contrato=self.contrato)
                 c.name = self.suscriptor
                 c.identificacion = self.nit
+                c.telefonos = self.telefonos()
                 if self.iddepartamento:
                     c.departamento = self.iddepartamento
                 c.save()
@@ -150,3 +152,6 @@ class Detalle(models.Model):
     def save(self, *args, **kwargs):
         self.pagado = self.get_pagado()
         super(Detalle, self).save()
+
+    def telefonos(self):
+        return ', '.join([self.tel_contacto, self.telefono_cliente])
