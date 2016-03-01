@@ -39,6 +39,7 @@ class Cliente(Entidad):
     position = GeopositionField(null=True, blank=True)
     comentario = models.CharField(max_length=125, null=True, blank=True)
     telefonos = models.CharField(max_length=65, null=True, blank=True)
+    direccion = models.CharField(max_length=255, null=True, blank=True)
 
     def facturas(self):
         return Detalle.objects.filter(idcliente=self)
@@ -50,6 +51,12 @@ class Cliente(Entidad):
                 if f.comentario == 'COBRO Y CORTE':
                     self.comentario = 'COBRO Y CORTE'
                     self.save()
+
+    def get_direccion(self):
+        if self.facturas():
+            return self.facturas().order_by('-fecha_fact')[0].direccion
+        else:
+            return None
 
 
 class Detalle(models.Model):
@@ -164,6 +171,7 @@ class Detalle(models.Model):
                     c.municipio = self.idmunicipio
                 if self.idbarrio:
                     c.barrio = self.idbarrio
+                c.direccion = c.get_direccion()
                 c.save()
             except:
                 c = None
