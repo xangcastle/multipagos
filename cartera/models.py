@@ -2,6 +2,8 @@ from django.db import models
 from metropolitana.models import Departamento, Municipio, Barrio, Entidad
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
+from django.db.models import Max
+from datetime import datetime
 
 
 def get_by_code(instance, code):
@@ -57,6 +59,19 @@ class Cliente(Entidad):
             return self.facturas().order_by('-fecha_fact')[0].direccion
         else:
             return None
+
+    def generar_orden_corte(self):
+        o, create = Corte.objects.get_or_create(cliente=self,
+            estado='PENDIENTE')
+        o.fecha_asignacion = datetime.now()
+        if self.position:
+            o.position = self.position
+        o.departamento = self.departamento
+        o.municipio = self.municipio
+        o.barrio = self.barrio
+        o.direccion = self.direccion
+        o.telefonos = self.telefonos
+        o.save()
 
 
 class Detalle(models.Model):
@@ -202,3 +217,41 @@ class Detalle(models.Model):
         if self.tel_contacto_cliente:
             dt.append(self.tel_contacto_cliente)
         return ', '.join(dt)
+
+
+class Corte(models.Model):
+    cliente = models.ForeignKey(Cliente)
+    fecha_asignacion = models.DateTimeField(null=True)
+    user = models.ForeignKey(User, null=True)
+    fecha = models.DateTimeField(null=True)
+    numero = models.IntegerField(null=True)
+    position = GeopositionField(null=True)
+    departamento = models.ForeignKey(Departamento, null=True)
+    municipio = models.ForeignKey(Municipio, null=True)
+    barrio = models.ForeignKey(Barrio, null=True)
+    comentario = models.CharField(max_length=125, null=True, blank=True)
+    telefonos = models.CharField(max_length=65, null=True, blank=True)
+    direccion = models.CharField(max_length=255, null=True, blank=True)
+    ESTADOS_DE_CORTE = (
+        ('PENDIENTE', 'PENDIENTE'),
+        ('CORTADO', 'CORTADO'),
+        )
+    estado = models.CharField(max_length=50, choices=ESTADOS_DE_CORTE,
+        default='PENDIENTE')
+
+    def get_numero(self):
+        queryset = type(self).objects.all()
+        if queryset.count() > 0:
+            mayor = queryset.aggregate(Max('numero'))['numero__max']
+            return (mayor + 1)
+        else:
+            return 1
+
+    def save(self, *args, **kwargs):
+        if not self.numero:
+            self.numero = self.get_numero()
+        super(Corte, self).save()
+
+    class Meta:
+        verbose_name = 'orden'
+        verbose_name_plural = 'ordenes de corte'

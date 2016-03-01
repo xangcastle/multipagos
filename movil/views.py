@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Detalle, Cliente
+from cartera.models import Detalle, Cliente, Corte
 
 
 @csrf_exempt
@@ -290,4 +290,20 @@ def get_detalle(request):
         d.save()
         obj_json['Mensaje'] = 'Registro grabado con exito'
     data = json.dumps(obj_json)
+    return HttpResponse(data, content_type='application/json')
+
+
+
+@csrf_exempt
+def get_cortes(request):
+    d = request.POST.get('departamento', '')
+    departamento = Departamento.objects.get(id=d)
+    queryset = Verificacion.objects.filter(iddepartamento=departamento).exclude(
+        estado='VENCIDA')
+    if queryset:
+        data = serializers.serialize('json', queryset)
+        struct = json.loads(data)
+        data = json.dumps(struct)
+    else:
+        data = None
     return HttpResponse(data, content_type='application/json')
