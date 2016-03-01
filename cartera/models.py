@@ -101,9 +101,9 @@ class Detalle(models.Model):
         choices=ESTADOS_DE_ENTREGA)
     iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
         verbose_name='departamento')
-    idmunicipio = models.ForeignKey('Municipio', null=True, blank=True,
+    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True,
         verbose_name='municipio')
-    idbarrio = models.ForeignKey('Barrio', null=True, blank=True,
+    idbarrio = models.ForeignKey(Barrio, null=True, blank=True,
         verbose_name='barrio')
     position = GeopositionField(null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
