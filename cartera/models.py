@@ -99,7 +99,12 @@ class Detalle(models.Model):
                          )
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
-    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True)
+    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
+        verbose_name='departamento')
+    idmunicipio = models.ForeignKey('Municipio', null=True, blank=True,
+        verbose_name='municipio')
+    idbarrio = models.ForeignKey('Barrio', null=True, blank=True,
+        verbose_name='barrio')
     position = GeopositionField(null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
@@ -121,6 +126,29 @@ class Detalle(models.Model):
                     name=self.departamento)
         return d
 
+    def get_municipio(self):
+        m = None
+        try:
+            if self.localidad and self.iddepartamento:
+                m = Municipio.objects.get(departamento=self.iddepartamento,
+                    name_alt=self.localidad)
+        except:
+            m, created = Municipio.objects.get_or_create(
+                departamento=self.iddepartamento, name=self.localidad)
+        return m
+
+    def get_barrio(self):
+        b = None
+        try:
+            if self.barrio and self.idmunicipio and self.iddepartamento:
+                b, created = Barrio.objects.get_or_create(
+                departamento=self.iddepartamento,
+                municipio=self.idmunicipio, name=self.barr_contacto)
+        except:
+            b = Barrio.objects.filter(departamento=self.iddepartamento,
+                municipio=self.idmunicipio, name=self.barr_contacto)[0]
+        return b
+
     def get_cliente(self):
         c = None
         if self.contrato:
@@ -132,6 +160,10 @@ class Detalle(models.Model):
                 c.telefonos = self.telefonos()
                 if self.iddepartamento:
                     c.departamento = self.iddepartamento
+                if self.idmunicipio:
+                    c.municipio = self.idmunicipio
+                if self.idbarrio:
+                    c.barrio = self.idbarrio
                 c.save()
             except:
                 c = None
@@ -139,6 +171,8 @@ class Detalle(models.Model):
 
     def integrar(self):
         self.iddepartamento = self.get_departamento()
+        self.idmunicipio = self.get_municipio()
+        self.idbarrio = self.get_barrio()
         self.idcliente = self.get_cliente()
         self.integrado = True
         self.save()
