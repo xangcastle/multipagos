@@ -145,7 +145,7 @@ class Detalle(models.Model):
         if self.monto and self.monto >= self.saldo_pend_factura:
             return True
         else:
-            False
+            return False
 
     def save(self, *args, **kwargs):
         self.pagado = self.get_pagado()
