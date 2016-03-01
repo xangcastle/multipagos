@@ -35,7 +35,7 @@ class detalle_cartera(admin.TabularInline):
 
 
 class cliente_admin(admin.ModelAdmin):
-    list_display = ('code', 'name', 'identificacion')
+    list_display = ('code', 'name', 'identificacion', 'comentario')
     list_filter = ('departamento', 'municipio')
     search_fields = ('code', 'name', 'identificacion')
     fields = ('code', 'name', 'identificacion', 'departamento', 'municipio',
