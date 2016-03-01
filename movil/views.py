@@ -245,6 +245,7 @@ def get_cartera(request):
         obj_json = {}
         obj_json['code'] = c.code
         obj_json['name'] = c.name
+        obj_json['contrato'] = c.contrato
         obj_json['identificacion'] = c.identificacion
         obj_json['departamento'] = c.departamento.name
         obj_json['municipio'] = c.municipio.name
