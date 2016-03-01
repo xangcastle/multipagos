@@ -249,6 +249,8 @@ def get_cartera(request):
         obj_json['departamento'] = c.departamento.name
         obj_json['municipio'] = c.municipio.name
         obj_json['barrio'] = c.barrio.name
+        obj_json['telefonos'] = c.telefonos
+        obj_json['comentario'] = c.comentario
         facs = []
         for f in c.facturas():
             fac_json = {}
