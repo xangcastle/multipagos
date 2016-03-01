@@ -138,4 +138,4 @@ class Detalle(models.Model):
 
     def save(self, *args, **kwargs):
         self.pagado = self.get_pagado()
-        super(Detalle, self).super()
+        super(Detalle, self).save()
