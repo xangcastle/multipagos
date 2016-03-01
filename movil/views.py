@@ -297,7 +297,7 @@ def get_detalle(request):
 def get_cortes(request):
     d = request.POST.get('departamento', '')
     departamento = Departamento.objects.get(id=d)
-    queryset = Corte.objects.filter(iddepartamento=departamento).exclude(
+    queryset = Corte.objects.filter(departamento=departamento).exclude(
         estado='CORTADO')
     if queryset:
         data = serializers.serialize('json', queryset)
