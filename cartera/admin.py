@@ -5,7 +5,7 @@ from .models import *
 
 class detalle_admin(ImportExportModelAdmin):
     #resource_class = detalle_resouce
-    list_display = ('cliente', 'suscriptor', 'contrato', 'servicio',
+    list_display = ('suscriptor', 'contrato', 'servicio',
         'departamento', 'localidad', 'barr_contacto', 'servicio',
         'saldo_pend_factura', 'integrado')
     list_filter = ('categoria', 'departamento', 'estado_corte', 'integrado')
