@@ -56,7 +56,8 @@ class Entrega(models.Model):
                          )
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
-    idcliente = models.ForeignKey('Cliente', null=True, blank=True)
+    idcliente = models.ForeignKey('Cliente', null=True, blank=True,
+        db_column='idcliente')
 
     def get_departamento(self):
         d = None
