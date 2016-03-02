@@ -141,7 +141,7 @@ class Entidad(base_entidad):
 
     class Meta:
         abstract = True
-        ordering = ['code']
+        ordering = ['name']
 
 
 class Paquete(base):

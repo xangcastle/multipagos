@@ -7,8 +7,10 @@ class detalle_admin(ImportExportModelAdmin):
     #resource_class = detalle_resouce
     list_display = ('suscriptor', 'contrato', 'servicio',
         'departamento', 'localidad', 'barr_contacto', 'servicio',
-        'saldo_pend_factura', 'integrado')
-    list_filter = ('categoria', 'departamento', 'estado_corte', 'integrado')
+        'saldo_pend_factura', 'integrado', 'estado', 'user')
+    list_filter = ('categoria', 'departamento', 'municipio', 'barrio',
+        'estado_corte', 'integrado', 'estado', 'user')
+    list_editable = ('user', )
 
     def action_integrar(self, request, queryset):
         for d in queryset:
