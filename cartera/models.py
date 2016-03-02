@@ -167,6 +167,7 @@ class Cliente(Entidad):
 
 
 class Detalle(models.Model):
+    cliente = models.CharField(max_length=65, null=True, blank=True)
     producto = models.CharField(max_length=65, null=True, blank=True)
     categoria = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
