@@ -42,11 +42,12 @@ class promesas_cliente(base_tabular):
 
 
 class cliente_admin(admin.ModelAdmin):
-    list_display = ('code', 'name', 'identificacion', 'comentario')
-    list_filter = ('departamento', 'municipio')
+    list_display = ('code', 'name', 'identificacion', 'comentario',
+        'position_ver')
+    list_filter = ('departamento', 'municipio', 'position_ver')
     search_fields = ('code', 'name', 'identificacion')
     fields = ('code', 'name', 'identificacion', 'departamento', 'municipio',
-        'barrio')
+        'barrio', 'zona', 'comentario')
     inlines = [detalle_cartera, promesas_cliente]
 
 admin.site.register(Cliente, cliente_admin)

@@ -1,5 +1,6 @@
 from django.db import models
-from metropolitana.models import Departamento, Municipio, Barrio, Entidad
+from metropolitana.models import Departamento, Municipio, Barrio, Entidad, \
+Paquete, Zona
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 from django.db.models import Max
@@ -38,7 +39,11 @@ class Cliente(Entidad):
         related_name="cartera_cliente_municipio")
     barrio = models.ForeignKey(Barrio, null=True, blank=True,
         related_name="cartera_cliente_barrio")
+    zona = models.ForeignKey(Zona, null=True, blank=True,
+        related_name="cartera_cliente_zona")
     position = GeopositionField(null=True, blank=True)
+    position_ver = models.BooleanField(default=False,
+        verbose_name="con geoposicion verificada")
     comentario = models.CharField(max_length=125, null=True, blank=True)
     telefonos = models.CharField(max_length=65, null=True, blank=True)
     direccion = models.CharField(max_length=255, null=True, blank=True)
@@ -76,6 +81,34 @@ class Cliente(Entidad):
         o.telefonos = self.telefonos
         o.save()
         return o
+
+    def facturas_en_distribucion(self):
+        return Paquete.objects.filter(contrato=self.contrato)
+
+    def get_knowed_position(self):
+        if self.facturas_en_distribucion():
+            entregadas = self.facturas_en_distribucion().filter(
+                estado='ENTREGADO').order_by('-fecha_entrega')
+            data = []
+            for e in entregadas:
+                if e.position:
+                    data.append(e)
+            if len(data) > 0:
+                self.position = data[0].position
+                self.save()
+            return self.position
+        else:
+            return None
+
+    def get_position_verificada(self):
+        if self.position:
+            return True
+        else:
+            return False
+
+    def save(self, *args, **kwargs):
+        self.position_ver = self.get_position_verificada()
+        super(Cliente, self).save()
 
 
 class Detalle(models.Model):
@@ -245,6 +278,9 @@ class Corte(models.Model):
         )
     estado = models.CharField(max_length=50, choices=ESTADOS_DE_CORTE,
         default='PENDIENTE')
+
+    def __unicode__(self):
+        return 'orde de corte # %s' % self.numero
 
     def get_numero(self):
         queryset = type(self).objects.all()
