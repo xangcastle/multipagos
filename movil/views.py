@@ -254,6 +254,7 @@ def get_cartera(request):
         obj_json['telefonos'] = c.telefonos
         obj_json['comentario'] = c.comentario
         facs = []
+        pmsas = []
         for f in c.facturas():
             fac_json = {}
             fac_json['Pk'] = f.id
@@ -265,6 +266,14 @@ def get_cartera(request):
             fac_json['tipo_mora'] = f.tipo_mora
             facs.append(fac_json)
         obj_json['facturas'] = facs
+        for p in c.promesas():
+            prm_json = {}
+            prm_json['Pk'] = p.id
+            prm_json['user'] = p.user.username
+            prm_json['fecha_promesa'] = str(p.fecha_promesa)
+            prm_json['fecha_pago'] = str(p.fecha_pago)
+            pmsas.append(prm_json)
+        obj_json['promesas'] = pmsas
         data.append(obj_json)
     data = json.dumps(data)
     return HttpResponse(data, content_type='application/json')

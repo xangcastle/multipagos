@@ -46,6 +46,9 @@ class Cliente(Entidad):
     def facturas(self):
         return Detalle.objects.filter(idcliente=self)
 
+    def promesas(self):
+        return PromesaPago.objects.filter(cliente=self)
+
     def get_estado_corte(self):
         if self.facturas():
             por_pago = self.facturas().filter(pagado=False)
@@ -238,6 +241,7 @@ class Corte(models.Model):
     ESTADOS_DE_CORTE = (
         ('PENDIENTE', 'PENDIENTE'),
         ('CORTADO', 'CORTADO'),
+        ('ANULADO', 'ANULADO'),
         )
     estado = models.CharField(max_length=50, choices=ESTADOS_DE_CORTE,
         default='PENDIENTE')
@@ -272,3 +276,14 @@ class Corte(models.Model):
         obj['direccion'] = str(self.direccion)
         obj['telefonos'] = str(self.telefonos)
         return obj
+
+
+class PromesaPago(models.Model):
+
+    cliente = models.ForeignKey(Cliente)
+    user = models.ForeignKey(User)
+    fecha_promesa = models.DateTimeField(auto_now_add=True)
+    fecha_pago = models.DateField()
+
+    def __unicode__(self):
+        return '%s %s' % (self.cliente.name, str(self.fecha_pago))

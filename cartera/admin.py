@@ -22,16 +22,23 @@ class detalle_admin(ImportExportModelAdmin):
 admin.site.register(Detalle, detalle_admin)
 
 
-class detalle_cartera(admin.TabularInline):
-    model = Detalle
+class base_tabular(admin.TabularInline):
     extra = 0
+    classes = ('grp-collapse grp-open',)
+
+
+class detalle_cartera(base_tabular):
+    model = Detalle
     fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
         'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion',
         'comentario', 'pagado')
     readonly_fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
         'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion',
         'comentario', 'pagado')
-    classes = ('grp-collapse grp-open',)
+
+
+class promesas_cliente(base_tabular):
+    model = PromesaPago
 
 
 class cliente_admin(admin.ModelAdmin):
@@ -40,6 +47,6 @@ class cliente_admin(admin.ModelAdmin):
     search_fields = ('code', 'name', 'identificacion')
     fields = ('code', 'name', 'identificacion', 'departamento', 'municipio',
         'barrio')
-    inlines = [detalle_cartera]
+    inlines = [detalle_cartera, promesas_cliente]
 
 admin.site.register(Cliente, cliente_admin)
