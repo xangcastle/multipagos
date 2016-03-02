@@ -54,7 +54,7 @@ class cliente_admin(admin.ModelAdmin):
         'barrio', 'zona', 'comentario', 'direccion', 'position')
     inlines = [detalle_cartera, promesas_cliente]
 
-admin.site.register(Cliente, cliente_admin, cortes_cliente)
+admin.site.register(Cliente, cliente_admin)
 
 
 class cortes_admin(admin.ModelAdmin):
