@@ -72,11 +72,11 @@ class Entrega(models.Model):
                 c, created = Cliente.objects.get_or_create(name=self.cliente,
                     contrato=self.contrato, barrio=self.idbarrio,
                     municipio=self.idmunicipio,
-                    departamento=self.get_departamento)
+                    departamento=self.iddepartamento)
             except:
                 c = Cliente.objects.filter(name=self.cliente,
-                    contrato=self.contrato, barrio=self.get_barrio(),
-                    municipio=self.get_municipio(),
+                    contrato=self.contrato, barrio=self.idbarrio,
+                    municipio=self.idmunicipio,
                     departamento=self.iddepartamento)[0]
             c.direccion = self.direccion
             c.save(0)
