@@ -141,8 +141,8 @@ class Cliente(Entidad):
         return Entrega.objects.filter(contrato=self.contrato)
 
     def get_knowed_position(self):
-        if self.facturas_en_distribucion():
-            entregadas = self.facturas_en_distribucion().filter(
+        if self.entregas():
+            entregadas = self.entregas().filter(
                 estado='ENTREGADO').order_by('-fecha_entrega')
             data = []
             for e in entregadas:
