@@ -111,7 +111,7 @@ class Paquete(models.Model):
 
     class Meta:
         managed = False
-        db_table = "metropolitana_paquete""
+        db_table = "metropolitana_paquete"
 
 
 class Cliente(Entidad):
