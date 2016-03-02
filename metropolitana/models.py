@@ -188,7 +188,7 @@ class Paquete(base):
     cerrado = models.NullBooleanField(default=False)
     barra = models.CharField(max_length=30, null=True, blank=True)
     orden_impresion = models.PositiveIntegerField(null=True, blank=True)
-    idcliente = models.ForeignKey('Cliente', null=True, blank=True)
+    idcliente = models.IntegerField(null=True, blank=True)
     entrega_numero = models.IntegerField(null=True, blank=True,
         verbose_name='numero de rendicion')
     tipificacion = models.ForeignKey('Tipificacion', null=True, blank=True)

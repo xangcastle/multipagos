@@ -1,6 +1,6 @@
 from django.db import models
 from metropolitana.models import Departamento, Municipio, Barrio, Entidad, \
-Paquete, Zona
+Zona
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 from django.db.models import Max
@@ -30,9 +30,93 @@ def get_or_create_entidad(instance, name):
     return o
 
 
+class Paquete(models.Model):
+    factura = models.CharField(max_length=70, null=True, blank=True)
+    ciclo = models.PositiveIntegerField(null=True, blank=True)
+    mes = models.PositiveIntegerField(null=True, blank=True)
+    ano = models.PositiveIntegerField(null=True, blank=True)
+    barrio = models.CharField(max_length=150, null=True, blank=True)
+    municipio = models.CharField(max_length=150, null=True, blank=True)
+    departamento = models.CharField(max_length=150, null=True, blank=True)
+    direccion = models.TextField(max_length=250, null=True, blank=True)
+    cupon = models.PositiveIntegerField(null=True, blank=True)
+    total_mes_factura = models.FloatField(null=True, blank=True)
+    valor_pagar = models.FloatField(null=True, blank=True)
+    numero_fiscal = models.PositiveIntegerField(null=True, blank=True)
+    factura_interna = models.PositiveIntegerField(null=True, blank=True)
+    telefono_contacto = models.CharField(max_length=70, null=True, blank=True)
+    position = GeopositionField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
+    parentezco = models.CharField(max_length=75, null=True, blank=True)
+    recibe = models.CharField(max_length=75, null=True, blank=True)
+    ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
+                          ('PENDIENTE', 'PENDIENTE'),
+                          ('REZAGADO', 'REZAGADO'),
+                         )
+    estado = models.CharField(max_length=65, null=True, blank=True,
+        choices=ESTADOS_DE_ENTREGA)
+    idcliente = models.ForeignKey('Cliente', null=True, blank=True)
+
+    def get_departamento(self):
+        d = None
+        if self.departamento:
+            try:
+                d = Departamento.objects.get(name_alt=self.departamento)
+            except:
+                d, created = Departamento.objects.get_or_create(
+                    name=self.departamento)
+        return d
+
+    def get_municipio(self):
+        m = None
+        try:
+            if self.municipio and self.iddepartamento:
+                m = Municipio.objects.get(departamento=self.iddepartamento,
+                    name_alt=self.municipio)
+        except:
+            m, created = Municipio.objects.get_or_create(
+                departamento=self.iddepartamento, name=self.municipio)
+        return m
+
+    def get_barrio(self):
+        b = None
+        try:
+            if self.barrio and self.idmunicipio and self.iddepartamento:
+                b, created = Barrio.objects.get_or_create(
+                departamento=self.iddepartamento,
+                municipio=self.idmunicipio, name=self.barrio)
+        except:
+            b = Barrio.objects.filter(departamento=self.iddepartamento,
+                municipio=self.idmunicipio, name=self.barrio)[0]
+        return b
+
+    def get_cliente(self):
+        c = None
+        if self.cliente and self.contrato and self.barrio \
+        and self.municipio and self.departamento:
+            try:
+                c, created = Cliente.objects.get_or_create(name=self.cliente,
+                    contrato=self.contrato, barrio=self.get_barrio(),
+                    municipio=self.get_municipio(),
+                    departamento=self.get_departamento)
+            except:
+                c = Cliente.objects.filter(name=self.cliente,
+                    contrato=self.contrato, barrio=self.get_barrio(),
+                    municipio=self.get_municipio(),
+                    departamento=self.get_departamento())[0]
+            c.direccion = self.direccion
+            c.save(0)
+        return c
+
+    class Meta:
+        db_table = "metropolitana_paquete"
+
+
 class Cliente(Entidad):
     identificacion = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
+    cliente = models.CharField(max_length=150, null=True, blank=True)
     departamento = models.ForeignKey(Departamento, null=True, blank=True,
         related_name="cartera_cliente_departamento")
     municipio = models.ForeignKey(Municipio, null=True, blank=True,

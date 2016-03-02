@@ -41,6 +41,10 @@ class promesas_cliente(base_tabular):
     model = PromesaPago
 
 
+class cortes_cliente(base_tabular):
+    model = Cortes
+
+
 class cliente_admin(admin.ModelAdmin):
     list_display = ('code', 'name', 'identificacion', 'comentario',
         'position_ver')
@@ -50,4 +54,13 @@ class cliente_admin(admin.ModelAdmin):
         'barrio', 'zona', 'comentario', 'direccion', 'position')
     inlines = [detalle_cartera, promesas_cliente]
 
-admin.site.register(Cliente, cliente_admin)
+admin.site.register(Cliente, cliente_admin, cortes_cliente)
+
+
+class cortes_admin(admin.ModelAdmin):
+    list_display = ('numero', 'fecha_asignacion', 'departamento', 'municipio',
+        'barrio')
+    list_filter = ('departamento', 'municipio')
+    search_fields = ('numero',)
+
+admin.site.register(Cortes, cortes_admin)
