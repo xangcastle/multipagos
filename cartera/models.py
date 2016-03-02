@@ -264,6 +264,8 @@ class Corte(models.Model):
         obj['pk'] = self.id
         obj['fecha_asignacion'] = str(self.fecha_asignacion)
         obj['numero'] = str(self.numero)
+        obj['cliente_pk'] = str(self.cliente.id)
+        obj['cliente_nombre'] = str(self.cliente.name)
         obj['departamento'] = str(self.departamento.name)
         obj['municipio'] = str(self.municipio.name)
         obj['barrio'] = str(self.barrio.name)
