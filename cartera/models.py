@@ -30,7 +30,7 @@ def get_or_create_entidad(instance, name):
     return o
 
 
-class Paquete(models.Model):
+class Entrega(models.Model):
     factura = models.CharField(max_length=70, null=True, blank=True)
     ciclo = models.PositiveIntegerField(null=True, blank=True)
     mes = models.PositiveIntegerField(null=True, blank=True)
@@ -167,8 +167,8 @@ class Cliente(Entidad):
         o.save()
         return o
 
-    def facturas_en_distribucion(self):
-        return Paquete.objects.filter(contrato=self.contrato)
+    def entregas(self):
+        return Entrega.objects.filter(contrato=self.contrato)
 
     def get_knowed_position(self):
         if self.facturas_en_distribucion():
