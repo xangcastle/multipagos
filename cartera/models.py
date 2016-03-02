@@ -281,6 +281,7 @@ class Corte(models.Model):
 class PromesaPago(models.Model):
 
     cliente = models.ForeignKey(Cliente)
+    corte = models.ForeignKey(Corte)
     user = models.ForeignKey(User)
     fecha_promesa = models.DateTimeField(auto_now_add=True)
     fecha_pago = models.DateField()
