@@ -34,13 +34,16 @@ class Entrega(models.Model):
     factura = models.CharField(max_length=70, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
     cliente = models.CharField(max_length=150, null=True, blank=True)
+    direccion = models.TextField(null=True, blank=True)
     ciclo = models.PositiveIntegerField(null=True, blank=True)
     mes = models.PositiveIntegerField(null=True, blank=True)
     ano = models.PositiveIntegerField(null=True, blank=True)
-    barrio = models.CharField(max_length=150, null=True, blank=True)
-    municipio = models.CharField(max_length=150, null=True, blank=True)
-    departamento = models.CharField(max_length=150, null=True, blank=True)
-    direccion = models.TextField(max_length=250, null=True, blank=True)
+    idbarrio = models.ForeignKey('Barrio', null=True, blank=True,
+        db_column='idbarrio', verbose_name='barrio')
+    iddepartamento = models.ForeignKey('Departamento', null=True, blank=True,
+        db_column='iddepartamento', verbose_name='departamento')
+    idmunicipio = models.ForeignKey('Municipio', null=True, blank=True,
+        db_column='idmunicipio', verbose_name='municipio')
     cupon = models.PositiveIntegerField(null=True, blank=True)
     total_mes_factura = models.FloatField(null=True, blank=True)
     valor_pagar = models.FloatField(null=True, blank=True)
@@ -61,53 +64,20 @@ class Entrega(models.Model):
     idcliente = models.ForeignKey('Cliente', null=True, blank=True,
         db_column='idcliente')
 
-    def get_departamento(self):
-        d = None
-        if self.departamento:
-            try:
-                d = Departamento.objects.get(name_alt=self.departamento)
-            except:
-                d, created = Departamento.objects.get_or_create(
-                    name=self.departamento)
-        return d
-
-    def get_municipio(self):
-        m = None
-        try:
-            if self.municipio and self.iddepartamento:
-                m = Municipio.objects.get(departamento=self.iddepartamento,
-                    name_alt=self.municipio)
-        except:
-            m, created = Municipio.objects.get_or_create(
-                departamento=self.iddepartamento, name=self.municipio)
-        return m
-
-    def get_barrio(self):
-        b = None
-        try:
-            if self.barrio and self.idmunicipio and self.iddepartamento:
-                b, created = Barrio.objects.get_or_create(
-                departamento=self.iddepartamento,
-                municipio=self.idmunicipio, name=self.barrio)
-        except:
-            b = Barrio.objects.filter(departamento=self.iddepartamento,
-                municipio=self.idmunicipio, name=self.barrio)[0]
-        return b
-
     def get_cliente(self):
         c = None
-        if self.cliente and self.contrato and self.barrio \
-        and self.municipio and self.departamento:
+        if self.cliente and self.contrato and self.idbarrio \
+        and self.idmunicipio and self.iddepartamento:
             try:
                 c, created = Cliente.objects.get_or_create(name=self.cliente,
-                    contrato=self.contrato, barrio=self.get_barrio(),
-                    municipio=self.get_municipio(),
+                    contrato=self.contrato, barrio=self.idbarrio,
+                    municipio=self.idmunicipio,
                     departamento=self.get_departamento)
             except:
                 c = Cliente.objects.filter(name=self.cliente,
                     contrato=self.contrato, barrio=self.get_barrio(),
                     municipio=self.get_municipio(),
-                    departamento=self.get_departamento())[0]
+                    departamento=self.iddepartamento)[0]
             c.direccion = self.direccion
             c.save(0)
         return c
