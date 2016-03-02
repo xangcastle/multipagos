@@ -47,7 +47,7 @@ class cliente_admin(admin.ModelAdmin):
     list_filter = ('departamento', 'municipio', 'position_ver')
     search_fields = ('code', 'name', 'identificacion')
     fields = ('code', 'name', 'identificacion', 'departamento', 'municipio',
-        'barrio', 'zona', 'comentario', 'position')
+        'barrio', 'zona', 'comentario', 'direccion', 'position')
     inlines = [detalle_cartera, promesas_cliente]
 
 admin.site.register(Cliente, cliente_admin)
