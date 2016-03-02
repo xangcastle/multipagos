@@ -32,6 +32,8 @@ def get_or_create_entidad(instance, name):
 
 class Entrega(models.Model):
     factura = models.CharField(max_length=70, null=True, blank=True)
+    contrato = models.CharField(max_length=65, null=True, blank=True)
+    cliente = models.CharField(max_length=150, null=True, blank=True)
     ciclo = models.PositiveIntegerField(null=True, blank=True)
     mes = models.PositiveIntegerField(null=True, blank=True)
     ano = models.PositiveIntegerField(null=True, blank=True)
@@ -118,7 +120,6 @@ class Entrega(models.Model):
 class Cliente(Entidad):
     identificacion = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
-    cliente = models.CharField(max_length=150, null=True, blank=True)
     departamento = models.ForeignKey(Departamento, null=True, blank=True,
         related_name="cartera_cliente_departamento")
     municipio = models.ForeignKey(Municipio, null=True, blank=True,
