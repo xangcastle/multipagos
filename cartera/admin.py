@@ -6,9 +6,9 @@ from .models import *
 class detalle_admin(ImportExportModelAdmin):
     #resource_class = detalle_resouce
     list_display = ('suscriptor', 'contrato', 'servicio',
-        'departamento', 'localidad', 'barr_contacto', 'servicio',
+        'iddepartamento', 'idmunicipio', 'idbarrio', 'servicio',
         'saldo_pend_factura', 'integrado', 'estado', 'user')
-    list_filter = ('categoria', 'departamento', 'municipio', 'barrio',
+    list_filter = ('categoria', 'iddepartamento', 'idmunicipio', 'idbarrio',
         'estado_corte', 'integrado', 'estado', 'user')
     list_editable = ('user', )
 
