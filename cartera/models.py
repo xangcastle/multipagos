@@ -38,11 +38,11 @@ class Entrega(models.Model):
     ciclo = models.PositiveIntegerField(null=True, blank=True)
     mes = models.PositiveIntegerField(null=True, blank=True)
     ano = models.PositiveIntegerField(null=True, blank=True)
-    idbarrio = models.ForeignKey('Barrio', null=True, blank=True,
+    idbarrio = models.ForeignKey(Barrio, null=True, blank=True,
         db_column='idbarrio', verbose_name='barrio')
-    iddepartamento = models.ForeignKey('Departamento', null=True, blank=True,
+    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
         db_column='iddepartamento', verbose_name='departamento')
-    idmunicipio = models.ForeignKey('Municipio', null=True, blank=True,
+    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True,
         db_column='idmunicipio', verbose_name='municipio')
     cupon = models.PositiveIntegerField(null=True, blank=True)
     total_mes_factura = models.FloatField(null=True, blank=True)
