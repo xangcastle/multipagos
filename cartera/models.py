@@ -110,7 +110,8 @@ class Paquete(models.Model):
         return c
 
     class Meta:
-        db_table = "metropolitana_paquete"
+        managed = False
+        db_table = "metropolitana_paquete""
 
 
 class Cliente(Entidad):
