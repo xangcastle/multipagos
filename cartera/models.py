@@ -62,7 +62,7 @@ class Entrega(models.Model):
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
     idcliente = models.ForeignKey('Cliente', null=True, blank=True,
-        db_column='idcliente')
+        db_column='idcliente', on_delete=models.SET_NULL)
 
     def get_cliente(self):
         c = None
@@ -167,7 +167,6 @@ class Cliente(Entidad):
 
 
 class Detalle(models.Model):
-    cliente = models.CharField(max_length=65, null=True, blank=True)
     producto = models.CharField(max_length=65, null=True, blank=True)
     categoria = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
