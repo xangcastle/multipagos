@@ -66,20 +66,18 @@ class Entrega(models.Model):
 
     def get_cliente(self):
         c = None
-        if self.cliente and self.contrato and self.idbarrio \
-        and self.idmunicipio and self.iddepartamento:
+        if self.contrato:
             try:
-                c, created = Cliente.objects.get_or_create(name=self.cliente,
-                    contrato=self.contrato, barrio=self.idbarrio,
-                    municipio=self.idmunicipio,
-                    departamento=self.iddepartamento)
+                c, create = Cliente.objects.get_or_create(
+                    contrato=self.contrato)
+                c.name = self.cliente
+                c.departamento = self.iddepartamento
+                c.municipio = self.idmunicipio
+                c.barrio = self.idbarrio
+                c.direccion = self.direccion
+                c.save()
             except:
-                c = Cliente.objects.filter(name=self.cliente,
-                    contrato=self.contrato, barrio=self.idbarrio,
-                    municipio=self.idmunicipio,
-                    departamento=self.iddepartamento)[0]
-            c.direccion = self.direccion
-            c.save(0)
+                c = None
         return c
 
     class Meta:
@@ -269,8 +267,9 @@ class Detalle(models.Model):
         c = None
         if self.contrato:
             try:
-                c, create = Cliente.objects.get_or_create(code=self.cliente,
+                c, create = Cliente.objects.get_or_create(
                     contrato=self.contrato)
+                c.code = self.cliente
                 c.name = self.suscriptor
                 c.identificacion = self.nit
                 c.telefonos = self.telefonos()
