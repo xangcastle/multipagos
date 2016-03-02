@@ -42,7 +42,7 @@ class promesas_cliente(base_tabular):
 
 
 class cortes_cliente(base_tabular):
-    model = Cortes
+    model = Corte
 
 
 class cliente_admin(admin.ModelAdmin):
@@ -63,4 +63,4 @@ class cortes_admin(admin.ModelAdmin):
     list_filter = ('departamento', 'municipio')
     search_fields = ('numero',)
 
-admin.site.register(Cortes, cortes_admin)
+admin.site.register(Corte, cortes_admin)
