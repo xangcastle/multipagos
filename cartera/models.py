@@ -258,3 +258,15 @@ class Corte(models.Model):
     class Meta:
         verbose_name = 'orden'
         verbose_name_plural = 'ordenes de corte'
+
+    def to_json(self):
+        obj = {}
+        obj['pk'] = self.id
+        obj['fecha_asignacion'] = str(self.fecha_asignacion)
+        obj['numero'] = str(self.numero)
+        obj['departamento'] = str(self.departamento.name)
+        obj['municipio'] = str(self.municipio.name)
+        obj['barrio'] = str(self.barrio.name)
+        obj['direccion'] = str(self.direccion)
+        obj['telefonos'] = str(self.telefonos)
+        return obj

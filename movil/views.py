@@ -295,14 +295,15 @@ def get_detalle(request):
 
 @csrf_exempt
 def get_cortes(request):
+    data = []
     d = request.POST.get('departamento', '')
     departamento = Departamento.objects.get(id=d)
     queryset = Corte.objects.filter(departamento=departamento).exclude(
         estado='CORTADO')
     if queryset:
-        data = serializers.serialize('json', queryset)
-        struct = json.loads(data)
-        data = json.dumps(struct)
+        for c in queryset:
+            data.append(c.to_json())
+        data = json.dumps(data)
     else:
         data = None
     return HttpResponse(data, content_type='application/json')
