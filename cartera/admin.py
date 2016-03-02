@@ -53,7 +53,7 @@ class cliente_admin(admin.ModelAdmin):
     list_display = ('code', 'name', 'identificacion', 'comentario',
         'position_ver')
     list_filter = ('departamento', 'municipio', 'position_ver')
-    search_fields = ('code', 'name', 'identificacion')
+    search_fields = ('code', 'name', 'identificacion', 'contrato')
     fields = ('code', 'name', 'identificacion', 'departamento', 'municipio',
         'barrio', 'zona', 'comentario', 'direccion', 'position')
     inlines = [detalle_cartera, promesas_cliente]
