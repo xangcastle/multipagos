@@ -45,6 +45,10 @@ class cortes_cliente(base_tabular):
     model = Corte
 
 
+class entregas_cliente(base_tabular):
+    model = Entrega
+
+
 class cliente_admin(admin.ModelAdmin):
     list_display = ('code', 'name', 'identificacion', 'comentario',
         'position_ver')
