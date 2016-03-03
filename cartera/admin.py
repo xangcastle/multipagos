@@ -8,7 +8,10 @@ class detalle_admin(ImportExportModelAdmin):
     list_display = ('suscriptor', 'contrato', 'servicio',
         'iddepartamento', 'idmunicipio', 'idbarrio', 'servicio',
         'saldo_pend_factura', 'integrado', 'estado', 'user')
-    list_filter = ('categoria', 'iddepartamento', 'idmunicipio', 'idbarrio',
+    list_filter = ('categoria', ('iddepartamento',
+    admin.RelatedOnlyFieldListFilter),
+        ('idmunicipio', admin.RelatedOnlyFieldListFilter),
+        ('idbarrio', admin.RelatedOnlyFieldListFilter),
         'estado_corte', 'integrado', 'estado', 'user')
     list_editable = ('user', )
 
