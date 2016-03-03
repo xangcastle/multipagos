@@ -387,6 +387,7 @@ class Gestion(models.Model):
     user = models.ForeignKey(User)
     fecha = models.DateTimeField(auto_now_add=True)
     tipo_gestion = models.ForeignKey('TipoGestion', null=True)
+    observaciones = models.CharField(max_length=255, null=True)
 
 
 class TipoGestion(models.Model):

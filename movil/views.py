@@ -355,6 +355,7 @@ def get_gestion(request):
     obj_json['detalle'] = request.POST.get('detalle', '')
     obj_json['user'] = request.POST.get('user', '')
     obj_json['tipo_gestion'] = request.POST.get('tipo_gestion', '')
+    obj_json['observaciones'] = request.POST.get('observaciones', '')
     try:
         tg = TipoGestion.objects.get(signo=obj_json['tipo_gestion'])
     except:
@@ -368,7 +369,8 @@ def get_gestion(request):
     except:
         u = None
     if tg and dd and u:
-        g = Gestion(detalle=dd, user=u, tipo_gestion=tg)
+        g = Gestion(detalle=dd, user=u, tipo_gestion=tg,
+            observaciones=obj_json['observaciones'])
         g.save()
         obj_json['Mensaje'] = "gestion guardada con exito"
     data = json.dumps(obj_json)
