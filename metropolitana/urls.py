@@ -5,6 +5,8 @@ from .views import *
 urlpatterns = patterns('metropolitana.views',
     url(r'^verificacion/$', verificacion_paquete.as_view(),
         name='verificacion_paquete'),
+    url(r'^asignacion/$', asignacion_paquete.as_view(),
+        name='asignacion_paquete'),
     url(r'^entrega/$', entrega_paquete.as_view(),
         name='entrega_paquete'),
     url(r'^datospaquete/$', 'datos_paquete', name='datos_paquete'),

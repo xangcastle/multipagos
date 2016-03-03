@@ -1,0 +1,130 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="frm_asignaciones.aspx.cs" Inherits="Plantillas.frm_asignaciones" %>
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de asignaciones</title>
+
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+</head>
+<body>
+    <form runat="server">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+        
+        <div class="container body-content">
+            <div class="jumbotron">
+                <h1>Panel de asignaciones</h1>
+                <p class="lead">Desde esta sección usted podrá asignar cuotas de trabajo para cada una de las actividades de los gestores</p>
+                
+            </div>
+            <div class="row">
+                <div class="col-lg-2"><span class="label label-info">1</span> Seleccione la zona</div>
+                <div class="col-lg-4">
+                    <select id="zonas" runat="server" class="form-control">
+                        <option value="0">---</option>
+                        <option value="1">zona 1</option>
+                        <option value="2">zona 2</option>
+                        <option value="3">zona 3</option>
+                        <option value="4">zona 4</option>
+                    </select>
+
+                </div>
+                <div class="col-lg-2"><span class="label label-info">2</span> Seleccione el gestor</div>
+                <div class="col-lg-4">
+                    <select id="Select1" runat="server" class="form-control">
+                        <option value="0">---</option>
+                        <option value="1">Gestor 1</option>
+                        <option value="2">Gestor 2</option>
+                        <option value="3">Gestor 3</option>
+                        <option value="4">Gestor 4</option>
+                    </select>
+
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><div class=""></div>
+                        
+                         <div class="btn-group pull-right">
+                             <a class="btn btn-info btn-sm" data-toggle="collapse" data-target="#panelEntrega">Ver</a>
+                         </div>
+                        <h3 class="panel-title">Entregas</h3> 
+                        <br />
+                    </div>
+                    <div class="panel-body collapse" id="panelEntrega" >
+                        <div class="alert alert-info">En esta sección usted podrá asignar la cantidad de entregas del gestor hasta una cantidad maxima de x entregas
+
+                        </div>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Barrio</th>
+                                    <th>Entregado</th>
+                                    <th>Rezagado</th>
+                                    <th>Pendiente</th>
+                                    <th>Asignar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Villa fontanna</td>
+                                    <td>100</td>
+                                    <td>20</td>
+                                    <td>50</td>
+                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Los Robles</td>
+                                    <td>700</td>
+                                    <td>100</td>
+                                    <td>500</td>
+                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Altamira Este</td>
+                                    <td>800</td>
+                                    <td>120</td>
+                                    <td>540</td>
+                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Centroamerica</td>
+                                    <td>450</td>
+                                    <td>60</td>
+                                    <td>140</td>
+                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Santo domingo</td>
+                                    <td>300</td>
+                                    <td>20</td>
+                                    <td>250</td>
+                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ul class="nav nav-pills" role="tablist">
+                            <li role="presentation"><a>Asignación actual <span class="badge">40</span></a></li>
+                            <li role="presentation"><a>Asignación pendiente <span class="badge">3</span></a></li>
+                            <li role="presentation" class="active"><a> Asignación total<span class="badge">43</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <footer>
+                <p>&copy; - Multipagos </p>
+            </footer>
+        </div>
+    </form>
+</body>
+</html>

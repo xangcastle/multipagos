@@ -22,6 +22,10 @@ class entrega_paquete(TemplateView):
     template_name = "metropolitana/entrega.html"
 
 
+class asignacion_paquete(TemplateView):
+    template_name = "metropolitana/asignacion.html"
+
+
 def datos_paquete_(request):
 
     if request.method == 'GET':
