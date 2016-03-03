@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Detalle, Cliente, Corte
+from cartera.models import Detalle, Cliente, Corte, Gestion, TipoGestion
 
 
 @csrf_exempt
@@ -346,4 +346,30 @@ def get_corte(request):
     o.save()
     data = {'Mensaje': 'orden grabada con exito'}
     data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_gestion(request):
+    obj_json = {'Mensaje': ''}
+    obj_json['detalle'] = request.POST.get('detalle', '')
+    obj_json['user'] = request.POST.get('user', '')
+    obj_json['tipo_gestion'] = request.POST.get('tipo_gestion', '')
+    try:
+        tg = TipoGestion.objects.get(signo=obj_json['tipo_gestion'])
+    except:
+        tg = None
+    try:
+        dd = Detalle.objects.get(id=int(obj_json['detalle']))
+    except:
+        dd = None
+    try:
+        u = TipoGestion.objects.get(id=obj_json['user'])
+    except:
+        u = None
+    if tg and dd and u:
+        g = Gestion(detalle=dd, user=u, tipo_gestion=tg)
+        g.save()
+        obj_json['Mensaje'] = "gestion guardada con exito"
+    data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
