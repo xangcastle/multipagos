@@ -380,3 +380,27 @@ class PromesaPago(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.cliente.name, str(self.fecha_pago))
+
+
+class Gestion(models.Model):
+    detalle = models.ForeignKey(Detalle)
+    user = models.ForeignKey(User)
+    fecha = models.DateTimeField(auto_now_add=True)
+    tipo_gestion = models.ForeignKey('TipoGestion', null=True)
+
+
+class TipoGestion(models.Model):
+    signo = models.CharField(max_length=4)
+    descripcion = models.CharField(max_length=255)
+    RESULTADOS = (
+    ('RECLAMO', 'RECLAMO'),
+    ('PROMESA DE PAGO', 'PROMESA DE PAGO'),
+    ('PROBLEMAS ECONOMICOS', 'PROBLEMAS ECONOMICOS'),
+    ('CLIENTE NO CONTACTADO', 'CLIENTE NO CONTACTADO'),
+    ('NO EXISTEN PUNTOS DE PAGO', 'NO EXISTEN PUNTOS DE PAGO'),
+        )
+    resultado = models.CharField(max_length=60,
+        choices=RESULTADOS)
+
+    def __unicode__(self):
+        return '%s %s' % (self.signo, self.descripcion)

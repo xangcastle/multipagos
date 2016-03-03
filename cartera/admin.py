@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin import filters
 from import_export.admin import ImportExportModelAdmin
 from .models import *
 
@@ -71,3 +70,10 @@ class cortes_admin(admin.ModelAdmin):
     search_fields = ('numero',)
 
 admin.site.register(Corte, cortes_admin)
+
+
+class tipo_gestion_admin(admin.ModelAdmin):
+    list_display = ('signo', 'descripcion', 'resultado')
+
+
+admin.site.register(TipoGestion, tipo_gestion_admin)
