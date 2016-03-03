@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import filters
 from import_export.admin import ImportExportModelAdmin
 from .models import *
 
@@ -8,10 +9,10 @@ class detalle_admin(ImportExportModelAdmin):
     list_display = ('suscriptor', 'contrato', 'servicio',
         'iddepartamento', 'idmunicipio', 'idbarrio', 'servicio',
         'saldo_pend_factura', 'integrado', 'estado', 'user')
-    list_filter = ('categoria', ('iddepartamento',
-    admin.RelatedOnlyFieldListFilter),
-        ('idmunicipio', admin.RelatedOnlyFieldListFilter),
-        ('idbarrio', admin.RelatedOnlyFieldListFilter),
+    list_filter = ('categoria',
+        ('iddepartamento', filters.RelatedOnlyFieldListFilter),
+        ('idmunicipio', filters.RelatedOnlyFieldListFilter),
+        ('idbarrio', filters.RelatedOnlyFieldListFilter),
         'estado_corte', 'integrado', 'estado', 'user')
     list_editable = ('user', )
 
