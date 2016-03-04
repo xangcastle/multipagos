@@ -5,7 +5,7 @@ from .views import *
 urlpatterns = patterns('metropolitana.views',
     url(r'^verificacion/$', verificacion_paquete.as_view(),
         name='verificacion_paquete'),
-    url(r'^asignacion/$', asignacion_paquete.as_view(),
+    url(r'^asignacion/$', 'asignacion_paquete',
         name='asignacion_paquete'),
     url(r'^entrega/$', entrega_paquete.as_view(),
         name='entrega_paquete'),
