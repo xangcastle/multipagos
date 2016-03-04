@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from metropolitana.models import Zona
 from django import template
+from django.contrib.auth.decorators import login_required
 
 register = template.Library()
 
