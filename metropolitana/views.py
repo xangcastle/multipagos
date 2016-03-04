@@ -5,6 +5,7 @@ from .models import *
 from digitalizacion.models import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
