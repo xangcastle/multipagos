@@ -4,6 +4,7 @@ from django.http.response import HttpResponse
 from .models import *
 from digitalizacion.models import *
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -22,8 +23,15 @@ class entrega_paquete(TemplateView):
     template_name = "metropolitana/entrega.html"
 
 
-class asignacion_paquete(TemplateView):
+@login_required(login_url='/admin/login/')
+def asignacion_paquete(request):
+    context = RequestContext(request)
+    data = {'zonas': Zona.objects.all().order_by('name'),
+        'users': User.objects.all().order_by('username')}
     template_name = "metropolitana/asignacion.html"
+    if request.method == "POST":
+        pass
+    return render_to_response(template_name, data, context_instance=context)
 
 
 def datos_paquete_(request):

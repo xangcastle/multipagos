@@ -17,46 +17,13 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-        
-       <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" runat="server" href="~/">Nombre de la aplicación</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/">Inicio</a></li>
-                        <li><a runat="server" href="~/About">Acerca de</a></li>
-                        <li><a runat="server" href="~/Contact">Contacto</a></li>
-                    </ul>
-                    <asp:LoginView runat="server" ViewStateMode="Disabled">
-                        <AnonymousTemplate>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a runat="server" href="~/Account/Register">Registrarse</a></li>
-                                <li><a runat="server" href="~/Account/Login">Iniciar sesión</a></li>
-                            </ul>
-                        </AnonymousTemplate>
-                        <LoggedInTemplate>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello, Usuario !</a></li>
-                                <li>Cerrarsesion
-                                </li>
-                            </ul>
-                        </LoggedInTemplate>
-                    </asp:LoginView>
-                </div>
-            </div>
-        </div>
+
+
         <div class="container body-content">
             <div class="jumbotron">
                 <h1>Panel de asignaciones</h1>
                 <p class="lead">Desde esta sección usted podrá asignar cuotas de trabajo para cada una de las actividades de los gestores</p>
-                
+
             </div>
             <div class="row">
                 <div class="col-lg-2"><span class="label label-info">1</span> Seleccione la zona</div>
@@ -86,11 +53,11 @@
             <div>
                 <div class="panel panel-default">
                     <div class="panel-heading"><div class=""></div>
-                        
+
                          <div class="btn-group pull-right">
                              <a class="btn btn-info btn-sm" data-toggle="collapse" data-target="#panelEntrega">Ver</a>
                          </div>
-                        <h3 class="panel-title">Entregas</h3> 
+                        <h3 class="panel-title">Entregas</h3>
                         <br />
                     </div>
                     <div class="panel-body" id="panelEntrega" >
@@ -107,123 +74,34 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            {% load logistica %}
+                            {% get_barrios as barrios where_zona_is 22 %}
+                            {% for b in barrios %}
                                 <tr>
-                                    <td>Villa fontanna</td>
+                                    <td>{{ b.name }}<input type="hidden" name="barrio_id" value="{{ b.id }}"/></td>
                                     <td>
                                         <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">100</span>
+                                            <span class="input-group-addon">{{ b.entregas_pendiente }}</span>
                                             <input type="number" name="inputentrega" class="form-control tableinput">
                                             <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">20</span>
+                                            <span class="input-group-addon">{{ b.cobranza_pendiente }}</span>
                                             <input type="number" name="inputcobro" class="form-control tableinput" >
                                             <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">50</span>
-                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div></td>
-                                </tr>
-                                <tr>
-                                    <td>Los Robles</td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">70</span>
-                                            <input type="number" name="inputentrega" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">100</span>
-                                            <input type="number" name="inputcobro" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">50</span>
-                                            <input type="number" name="inputverificacion" class="form-control tableinput">
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Altamira Este</td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">800</span>
-                                            <input type="number" name="inputentrega" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">120</span>
-                                            <input type="number" name="inputcobro" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">240</span>
+                                            <span class="input-group-addon">{{ b.verificaciones_pendiente }}</span>
                                             <input type="number" name="inputverificacion" class="form-control tableinput" >
                                             <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>Centroamerica</td>
-                                    <td><div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">450</span>
-                                            <input type="number" name="inputentrega" class="form-control tableinput" >
-                                        <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div></td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">60</span>
-                                            <input type="number" name="inputcobro" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">140</span>
-                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Santo domingo</td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">300</span>
-                                            <input type="number" name="inputentrega" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">20</span>
-                                            <input type="number" name="inputcobro" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">250</span>
-                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                         <ul class="nav nav-pills" role="tablist">

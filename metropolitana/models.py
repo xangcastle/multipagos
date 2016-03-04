@@ -551,6 +551,15 @@ class Barrio(Entidad):
         self.revizado = self.get_revizado()
         super(Barrio, self).save()
 
+    def entregas_pendiente(self):
+        return 100
+
+    def cobranza_pendiente(self):
+        return 50
+
+    def verificaciones_pendiente(self):
+        return 25
+
 
 class Zona(Entidad):
     departamento = models.ForeignKey(Departamento)
