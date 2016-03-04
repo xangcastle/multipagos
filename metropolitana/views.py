@@ -1,6 +1,7 @@
 from django.views.generic.base import TemplateView
 import json
 from django.http.response import HttpResponse
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from .models import *
 from digitalizacion.models import *
