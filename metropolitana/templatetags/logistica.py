@@ -26,7 +26,7 @@ def get_barrios(parser, token):
     tokens = token.contents.split()
     args = len(tokens)
 
-    if not len(tokens) == 3:
+    if not len(tokens) == 5:
         raise template.TemplateSyntaxError(
             "'get_barrios' requiere de cinco argumentos y se dieron %s"
             % (args))
