@@ -1,4 +1,3 @@
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="frm_asignaciones.aspx.cs" Inherits="Plantillas.frm_asignaciones" %>
 
 <!DOCTYPE html>
 
@@ -19,6 +18,40 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
         
+       <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" runat="server" href="~/">Nombre de la aplicación</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a runat="server" href="~/">Inicio</a></li>
+                        <li><a runat="server" href="~/About">Acerca de</a></li>
+                        <li><a runat="server" href="~/Contact">Contacto</a></li>
+                    </ul>
+                    <asp:LoginView runat="server" ViewStateMode="Disabled">
+                        <AnonymousTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a runat="server" href="~/Account/Register">Registrarse</a></li>
+                                <li><a runat="server" href="~/Account/Login">Iniciar sesión</a></li>
+                            </ul>
+                        </AnonymousTemplate>
+                        <LoggedInTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello, Usuario !</a></li>
+                                <li>Cerrarsesion
+                                </li>
+                            </ul>
+                        </LoggedInTemplate>
+                    </asp:LoginView>
+                </div>
+            </div>
+        </div>
         <div class="container body-content">
             <div class="jumbotron">
                 <h1>Panel de asignaciones</h1>
@@ -60,7 +93,7 @@
                         <h3 class="panel-title">Entregas</h3> 
                         <br />
                     </div>
-                    <div class="panel-body collapse" id="panelEntrega" >
+                    <div class="panel-body" id="panelEntrega" >
                         <div class="alert alert-info">En esta sección usted podrá asignar la cantidad de entregas del gestor hasta una cantidad maxima de x entregas
 
                         </div>
@@ -68,54 +101,147 @@
                             <thead>
                                 <tr>
                                     <th>Barrio</th>
-                                    <th>Entregado</th>
-                                    <th>Rezagado</th>
-                                    <th>Pendiente</th>
-                                    <th>Asignar</th>
+                                    <th>Entregas</th>
+                                    <th>Cobros</th>
+                                    <th>Verificaciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>Villa fontanna</td>
-                                    <td>100</td>
-                                    <td>20</td>
-                                    <td>50</td>
-                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">100</span>
+                                            <input type="number" name="inputentrega" class="form-control tableinput">
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">20</span>
+                                            <input type="number" name="inputcobro" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">50</span>
+                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div></td>
                                 </tr>
                                 <tr>
                                     <td>Los Robles</td>
-                                    <td>700</td>
-                                    <td>100</td>
-                                    <td>500</td>
-                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">70</span>
+                                            <input type="number" name="inputentrega" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">100</span>
+                                            <input type="number" name="inputcobro" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">50</span>
+                                            <input type="number" name="inputverificacion" class="form-control tableinput">
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Altamira Este</td>
-                                    <td>800</td>
-                                    <td>120</td>
-                                    <td>540</td>
-                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">800</span>
+                                            <input type="number" name="inputentrega" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">120</span>
+                                            <input type="number" name="inputcobro" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">240</span>
+                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Centroamerica</td>
-                                    <td>450</td>
-                                    <td>60</td>
-                                    <td>140</td>
-                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                    <td><div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">450</span>
+                                            <input type="number" name="inputentrega" class="form-control tableinput" >
+                                        <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div></td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">60</span>
+                                            <input type="number" name="inputcobro" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">140</span>
+                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Santo domingo</td>
-                                    <td>300</td>
-                                    <td>20</td>
-                                    <td>250</td>
-                                    <td><input type="checkbox" name="asignar" value="select" /></td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">300</span>
+                                            <input type="number" name="inputentrega" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">20</span>
+                                            <input type="number" name="inputcobro" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-sm"  style="width:180px">
+                                            <span class="input-group-addon">250</span>
+                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
+                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                         <ul class="nav nav-pills" role="tablist">
-                            <li role="presentation"><a>Asignación actual <span class="badge">40</span></a></li>
-                            <li role="presentation"><a>Asignación pendiente <span class="badge">3</span></a></li>
-                            <li role="presentation" class="active"><a> Asignación total<span class="badge">43</span></a></li>
+                            <li role="presentation" style="width:200px"><a>Entrega actual <span class="badge" id="asignacionActual">0</span></a></li>
+                            <li role="presentation" style="width:200px"><a>Entrega pendiente <span class="badge" id="asignacionPendiente">3</span></a></li>
+                            <li role="presentation" style="width:200px" class="active"><a> Entrega total<span class="badge" id="asignacionTotal">3</span></a></li>
+                        </ul>
+                        <br />
+                        <ul class="nav nav-pills" role="tablist">
+                            <li role="presentation" style="width:200px"><a>Cobros actual <span class="badge" id="cobroActual">0</span></a></li>
+                            <li role="presentation" style="width:200px"><a>Cobros pendiente <span class="badge" id="cobroPendiente">3</span></a></li>
+                            <li role="presentation" style="width:200px" class="active"><a> Cobros total<span class="badge" id="cobroTotal">3</span></a></li>
+                        </ul>
+                        <br />
+                        <ul class="nav nav-pills" role="tablist">
+                            <li role="presentation" style="width:200px"><a>Verificación actual <span class="badge" id="verfiActual">0</span></a></li>
+                            <li role="presentation" style="width:200px"><a>Verificación pendiente <span class="badge" id="verfPendiente">3</span></a></li>
+                            <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">3</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -125,6 +251,65 @@
                 <p>&copy; - Multipagos </p>
             </footer>
         </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.tableinput').change(function () { sumValues(); });
+                $('.ckSelectAll').change(function () {
+                    if ($(this).is(':checked') == true) {
+                        var cant = $(this).closest('div').find('.input-group-addon').first().text();
+                        $(this).closest('div').find('input').first().val(cant);
+                        $(this).closest('div').find('input').first().prop('disabled', true);
+                    }
+                    else
+                        $(this).closest('div').find('input').first().prop('disabled', false);
+
+                    sumValues();
+                })
+            });
+
+            function sumValues() {
+
+                $('.table').each(function () {
+                    var totalasignacionActual = 0;
+                    var totalcobroActual = 0;
+                    var totalverifActual = 0;
+                    $(this).find('input[name=inputentrega]').each(function () {
+                        if (!isNaN($(this).val()) && $(this).val()!="")
+                            totalasignacionActual += parseInt($(this).val());
+                    });
+                    $(this).find('input[name=inputcobro]').each(function () {
+                        if (!isNaN($(this).val()) && $(this).val() != "")
+                            totalcobroActual += parseInt($(this).val());
+                    });
+                    $(this).find('input[name=inputverificacion]').each(function () {
+                        if (!isNaN($(this).val()) && $(this).val() != "")
+                            totalverifActual += parseInt($(this).val());
+                    });
+
+                    $('#asignacionActual').text(totalasignacionActual);
+                    $('#cobroActual').text(totalcobroActual);
+                    $('#verfiActual').text(totalverifActual);
+
+                    var asignacion=0;
+                    var cobro=0;
+                    var verif=0;
+
+                    asignacion = parseInt($('#asignacionPendiente').text());
+                    cobro = parseInt($('#cobroPendiente').text());
+                    verif = parseInt($('#verfPendiente').text());
+
+                    $('#asignacionTotal').text(totalasignacionActual+asignacion);
+                    $('#cobroTotal').text(totalcobroActual+cobro);
+                    $('#verfTotal').text(totalverifActual+verif);
+
+                });
+            }
+            function selectAll(control) {
+                if (control.checked) {
+                    alert("cheked");
+                }
+            }
+        </script>
     </form>
 </body>
 </html>
