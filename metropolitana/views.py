@@ -149,7 +149,7 @@ def get_users_zona(request):
 def asignacion_paquete(request):
     context = RequestContext(request)
     data = {'zonas': Zona.objects.all().order_by('name'),
-        'mensaje': 'En esta sección usted podrá asignar las distintas tareas en cada barrio al gestor hasta una cantidad maxima de x entregas'}
+        'mensaje': 'En esta seccion usted podra asignar las distintas tareas en cada barrio al gestor hasta una cantidad maxima de x entregas'}
     template_name = "metropolitana/asignacion.html"
     if request.method == "POST":
         user = User.objects.get(id=int(request.POST.get('usuario', '')))
