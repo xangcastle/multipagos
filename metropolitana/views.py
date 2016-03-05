@@ -159,32 +159,26 @@ def asignacion_paquete(request):
         fecha = request.POST.get('fecha', '')
         for n in range(0, t):
             idb = int(request.POST.getlist('barrio', '0')[n])
-            if idb != 0:
-                b = Barrio.objects.get(id=idb)
-            else:
-                b = None
-            ent = int(request.POST.getlist('entrega', '0')[n])
-            if ent != 0:
-                entregas = ent
-            else:
+            b = Barrio.objects.get(id=idb)
+            try:
+                entregas = int(request.POST.getlist('entrega', '0')[n])
+            except:
                 entregas = None
-            cob = int(request.POST.getlist('cobro', '0')[n])
-            if cob != 0:
-                cobros = cob
-            else:
+            try:
+                cobros = int(request.POST.getlist('cobro', '0')[n])
+            except:
                 cobros = None
-            ver = int(request.POST.getlist('verificacion', '0')[n])
-            if ver != 0:
-                verificaciones = ver
-            else:
+            try:
+                verificaciones = int(request.POST.getlist(
+                    'verificacion', '0')[n])
+            except:
                 verificaciones = None
-            if b and entregas and cobros and verificaciones:
-                if entregas > 0:
-                    asignar_facturas(b, u, entregas, fecha)
-                if cobros > 0:
-                    asignar_cobros(b, u, cobros, fecha)
-                if verificaciones > 0:
-                    asignar_verificaciones(b, u, verificaciones, fecha)
+            if entregas > 0:
+                asignar_facturas(b, u, entregas, fecha)
+            if cobros > 0:
+                asignar_cobros(b, u, cobros, fecha)
+            if verificaciones > 0:
+                asignar_verificaciones(b, u, verificaciones, fecha)
         data['mensaje'] = 'Tarea asignada con exito!'
         data['msgclass'] = 'success'
 
