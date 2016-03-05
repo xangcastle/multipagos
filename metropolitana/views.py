@@ -98,28 +98,27 @@ def calcular_verificaciones(barrio):
 
 
 def get_zonas(request):
+    zona_id = int(request.POST.get('zona_id', ''))
     data = []
-    zonas = Zona.objects.all()
-    for z in zonas:
-        obj_json = {}
-        obj_json['pk'] = z.id
-        obj_json['code'] = z.code
-        obj_json['name'] = z.name
-        barrios = []
-        for b in z.barrios():
-            bar_json = {}
-            bar_json['pk'] = b.id
-            bar_json['code'] = b.code
-            bar_json['name'] = b.name
-            bar_json['entregas'] = calcular_entregas(b)
-            bar_json['cobros'] = calcular_cobros(b)
-            bar_json['verificaciones'] = calcular_verificaciones(b)
-            barrios.append(bar_json)
-        obj_json['barrios'] = barrios
-        data.append(obj_json)
+    z = Zona.objects.get(id=zona_id)
+    obj_json = {}
+    obj_json['pk'] = z.id
+    obj_json['code'] = z.code
+    obj_json['name'] = z.name
+    barrios = []
+    for b in z.barrios():
+        bar_json = {}
+        bar_json['pk'] = b.id
+        bar_json['code'] = b.code
+        bar_json['name'] = b.name
+        bar_json['entregas'] = calcular_entregas(b)
+        bar_json['cobros'] = calcular_cobros(b)
+        bar_json['verificaciones'] = calcular_verificaciones(b)
+        barrios.append(bar_json)
+    obj_json['barrios'] = barrios
+    data.append(obj_json)
     data = json.dumps(data)
     return HttpResponse(data, content_type='application/json')
-
 
 
 @login_required(login_url='/admin/login/')

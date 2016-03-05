@@ -30,21 +30,19 @@
                 <div class="col-lg-4">
                     <select id="zonas" runat="server" class="form-control">
                         <option value="0">---</option>
-                        <option value="1">zona 1</option>
-                        <option value="2">zona 2</option>
-                        <option value="3">zona 3</option>
-                        <option value="4">zona 4</option>
+                    {% for z in zonas %}
+                        <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
+                    {% endfor %}
                     </select>
 
                 </div>
                 <div class="col-lg-2"><span class="label label-info">2</span> Seleccione el gestor</div>
                 <div class="col-lg-4">
-                    <select id="Select1" runat="server" class="form-control">
+                    <select id="usuarios" runat="server" class="form-control">
                         <option value="0">---</option>
-                        <option value="1">Gestor 1</option>
-                        <option value="2">Gestor 2</option>
-                        <option value="3">Gestor 3</option>
-                        <option value="4">Gestor 4</option>
+                        {% for u in users %}
+                        <option value="{{ u.id }}">{{ u.username }}</option>
+                        {% endfor %}
                     </select>
 
                 </div>
