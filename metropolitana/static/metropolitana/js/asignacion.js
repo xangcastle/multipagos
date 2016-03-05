@@ -83,8 +83,7 @@ function obtener_usuarios(zona_id) {
                 data: {'zona_id': zona_id},
                 success: function(data) {
                     console.log(data);
-                    }
-                },
+                }
             });
         }
 
