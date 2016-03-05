@@ -5,9 +5,12 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from .models import *
 from digitalizacion.models import *
+from cartera.models import *
+from verificaciones.models import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from .models import *
 
 
 def home(request):
@@ -24,17 +27,6 @@ class verificacion_paquete(TemplateView):
 
 class entrega_paquete(TemplateView):
     template_name = "metropolitana/entrega.html"
-
-
-@login_required(login_url='/admin/login/')
-def asignacion_paquete(request):
-    context = RequestContext(request)
-    data = {'zonas': Zona.objects.all().order_by('name'),
-        'users': User.objects.all().order_by('username')}
-    template_name = "metropolitana/asignacion.html"
-    if request.method == "POST":
-        pass
-    return render_to_response(template_name, data, context_instance=context)
 
 
 def datos_paquete_(request):
@@ -89,3 +81,53 @@ def descarga(request):
     response['Content-Disposition'] = 'attachment; filename=%s' % "1065.pdf"
     response['X-Sendfile'] = "/home/abel/PDF/1075.pdf"
     return response
+
+
+def calcular_entregas(barrio):
+    return Paquete.objects.filter(idbarrio=barrio, estado='PENDIENTE',
+        cerrado=False).count()
+
+
+def calcular_cobros(barrio):
+    return Detalle.objects.filter(idbarrio=barrio, estado='PENDIENTE').count()
+
+
+def calcular_verificaciones(barrio):
+    return Verificacion.objects.filter(idbarrio=barrio,
+        estado='PENDIENTE').count()
+
+
+def get_zonas(request):
+    data = []
+    zonas = Zona.objects.all()
+    for z in zonas:
+        obj_json = {}
+        obj_json['pk'] = z.id
+        obj_json['code'] = z.code
+        obj_json['name'] = z.name
+        barrios = []
+        for b in z.barrios():
+            bar_json = {}
+            bar_json['pk'] = b.id
+            bar_json['code'] = b.code
+            bar_json['name'] = b.name
+            bar_json['entregas'] = calcular_entregas(b)
+            bar_json['cobros'] = calcular_cobros(b)
+            bar_json['verificaciones'] = calcular_verificaciones(b)
+            barrios.append(bar_json)
+        obj_json['barrios'] = barrios
+        data.append(obj_json)
+    data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')
+
+
+
+@login_required(login_url='/admin/login/')
+def asignacion_paquete(request):
+    context = RequestContext(request)
+    data = {'zonas': Zona.objects.all().order_by('name'),
+        'users': User.objects.all().order_by('username')}
+    template_name = "metropolitana/asignacion.html"
+    if request.method == "POST":
+        pass
+    return render_to_response(template_name, data, context_instance=context)

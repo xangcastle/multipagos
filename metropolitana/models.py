@@ -551,15 +551,6 @@ class Barrio(Entidad):
         self.revizado = self.get_revizado()
         super(Barrio, self).save()
 
-    def entregas_pendiente(self):
-        return 100
-
-    def cobranza_pendiente(self):
-        return 50
-
-    def verificaciones_pendiente(self):
-        return 25
-
 
 class Zona(Entidad):
     departamento = models.ForeignKey(Departamento)
@@ -691,6 +682,12 @@ class EstadisticaDepartamento(base_vista):
         verbose_name = 'estadisticas por departamento'
 
 
+class CiclosActivos(models.Manager):
+    def get_queryset(self):
+        return super(CiclosActivos, self).get_queryset().exclude(
+            code__in=CicloCierre.objects.all().values_list('code', flat=True))
+
+
 class EstadisticaCiclo(base_vista):
     code = models.CharField(max_length=6, primary_key=True)
     ano = models.IntegerField(blank=True, null=True)
@@ -700,6 +697,9 @@ class EstadisticaCiclo(base_vista):
     entregados = models.FloatField(blank=True, null=True,
         verbose_name="escaneados")
     pendientes = models.FloatField(blank=True, null=True)
+
+    objects = models.Manager()
+    activos = CiclosActivos()
 
     def __unicode__(self):
         return self.code

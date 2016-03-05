@@ -330,6 +330,7 @@ class estadistica_ciclo(admin.ModelAdmin):
             cierre.cerrado = True
             cierre.fecha_cierre = datetime.now()
             cierre.save()
+            o.paquetes().update(cerrado=True)
 
 
 class tipificacion_admin(ImportExportModelAdmin):
