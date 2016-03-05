@@ -13,7 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
     <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js"></script>
-
+    <script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css">
     
@@ -41,18 +41,22 @@
                 </div>
                 <div class="col-lg-2"><span class="label label-info">2</span> Seleccione el gestor</div>
                 <div class="col-lg-4">
-                    <select id="usuario" runat="server" class="form-control" name="usuario">
-                        <option value="0">---</option>
+                    <select id="usuario" runat="server" class="form-control" name="usuario" required="required">
+                        <option selected disabled value="0">---</option>
+                        <option value="red">red</option>
+                        <option value="yellow">yellow</option>
+                        <option value="green">green</option>
+                        <option value="grey">grey</option>
                     </select>
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-lg-2"><span class="label label-info">4</span> Seleccione la fecha</div>
+                <div class="col-lg-2"><span class="label label-info">3</span> Seleccione la fecha</div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <div class='input-group date' id='datepicker' name="picker">
-                            <input type='text' class="form-control" name="fecha" id="dtpFecha"/>
+                            <input type='text' class="form-control" name="fecha" id="dtpFecha" required/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -67,17 +71,19 @@
                         <div class="alert alert-{{ msgclass }}">
                         {{ mensaje }}
                         </div>
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Barrio</th>
-                                    <th>Entregas</th>
-                                    <th>Cobros</th>
-                                    <th>Verificaciones</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div style="max-height:80px; overflow-y:auto;">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Barrio</th>
+                                        <th>Entregas</th>
+                                        <th>Cobros</th>
+                                        <th>Verificaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                         <div class="row">
                             <div class="col-lg-9">
                                 <ul class="nav nav-pills" role="tablist">
