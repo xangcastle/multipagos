@@ -2,7 +2,6 @@ $(document).ready(function (){
 $('#zonas').change(function(){
     obtener_barrios($(this).val());
     obtener_usuarios($(this).val());
-    eventos();
     });
 });
 
@@ -70,6 +69,7 @@ function obtener_barrios(zona_id) {
                         row += '</tr>';
                         $("table>tbody").append(row);
                     }
+                    eventos();
                 },
             });
         }
