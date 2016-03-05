@@ -133,7 +133,7 @@ def get_zonas(request):
 
 @csrf_exempt
 def get_users_zona(request):
-    zona_id = request.POST.get('zona_id', '')
+    zona_id = int(request.POST.get('zona_id', ''))
     z = Zona.objects.get(id=zona_id)
     data = serializers.serialize('json', usuarios_asignados(z))
     struct = json.loads(data)
