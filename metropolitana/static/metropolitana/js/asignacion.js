@@ -1,18 +1,3 @@
-$(document).ready(function () {
-  $('.tableinput').change(function () { sumValues(); });
-  $('.ckSelectAll').change(function () {
-    if ($(this).is(':checked') == true) {
-      var cant = $(this).closest('div').find('.input-group-addon').first().text();
-      $(this).closest('div').find('input').first().val(cant);
-      $(this).closest('div').find('input').first().prop('disabled', true);
-    }
-    else
-      $(this).closest('div').find('input').first().prop('disabled', false);
-
-    sumValues();
-  })
-});
-
 function sumValues() {
 
   $('.table').each(function () {
@@ -60,25 +45,42 @@ function selectAll(control) {
 function obtener_barrios(zona_id) {
 
             $.ajax({
-
                 url: "/entregas/get_zonas/",
                 type: 'POST',
                 data: {'zona_id': zona_id},
-                beforeSend: function() {
-
-                    $("#msg").empty().append("<span class='alert'>Cargando...</span>");
-
-                },
                 success: function(data) {
-                    $("table").empty()
-                    //for (var i = 0; i < data.length; i++){
-                        alert(data);
-                   // }
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status);
-                    alert(thrownError);
-              }
-            });
+                    $("table>tbody").empty()
+                    var barrios = data[0].barrios;
+                    for (var i = 0; i < barrios.length; i++){
+                        var barrio = data[0].barrios[i];
 
+                        var row = '<tr>';
+                        row += '<td>' + barrio.code + ' - ' + barrio.name + '<input type="hidden" name="barrio_id" value="' + barrio.id + '"/></td>';
+                        row += '<td><div class="input-group input-sm"  style="width:180px"><span class="input-group-addon">' + barrio.entregas + '</span><input type="number" name="inputentrega" class="form-control tableinput"><span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span></div></td>';
+                        row += '<td><div class="input-group input-sm"  style="width:180px"><span class="input-group-addon">' + barrio.cobros + '</span><input type="number" name="inputcobro" class="form-control tableinput" ><span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span></div></td>';
+                        row += '<td><div class="input-group input-sm"  style="width:180px"><span class="input-group-addon">' + barrio.verificaciones + '</span><input type="number" name="inputverificacion" class="form-control tableinput" ><span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span></div></td>';
+                        row += '</tr>';
+                        $("table>tbody").append(row);
+                    }
+                    eventos();
+                },
+            });
         }
+
+
+
+function eventos(){
+  $('.tableinput').change(function () { sumValues(); });
+  $('.ckSelectAll').change(function () {
+    if ($(this).is(':checked') == true) {
+      var cant = $(this).closest('div').find('.input-group-addon').first().text();
+      $(this).closest('div').find('input').first().val(cant);
+      $(this).closest('div').find('input').first().prop('disabled', true);
+    }
+    else
+      $(this).closest('div').find('input').first().prop('disabled', false);
+
+    sumValues();
+  })
+
+    }
