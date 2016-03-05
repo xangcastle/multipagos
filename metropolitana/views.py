@@ -160,10 +160,8 @@ def asignacion_paquete(request):
         for n in range(0, t):
             b = Barrio.objects.get(
                 id=int(request.POST.getlist('barrio', '')[n]))
-            u = User.objects.get(id=int(request.POST.getlist('usuario')[n]))
-            fecha = request.POST.get('fecha', '')
             entregas = int(request.POST.getlist('entrega', '')[n])
-            cobros = request.POST.getlist('cobro')[n]
+            cobros = request.POST.getlist('cobro', '')[n]
             verificaciones = request.POST.getlist('verificacion', '')[n]
             if entregas > 0:
                 asignar_facturas(b, u, entregas, fecha)
