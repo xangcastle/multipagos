@@ -97,6 +97,15 @@ def calcular_verificaciones(barrio):
         estado='PENDIENTE').count()
 
 
+def usuarios_asignados(zona):
+    usuarios = []
+    perfiles = UserProfile.objects.all()
+    for p in perfiles:
+        if zona in p.zonas.all():
+            usuarios.append(p.user)
+    return usuarios
+
+
 def get_zonas(request):
     zona_id = int(request.POST.get('zona_id', ''))
     data = []
@@ -124,7 +133,7 @@ def get_zonas(request):
 def get_users_zona(request):
     zona_id = request.POST.get('zona_id', '')
     z = Zona.objects.get(id=zona_id)
-    data = serializers.serialize('json', z.usuarios_asignados())
+    data = serializers.serialize('json', usuarios_asignados(z))
     struct = json.loads(data)
     data = json.dumps(struct)
     return HttpResponse(data, content_type='application/json')

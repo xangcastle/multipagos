@@ -572,14 +572,6 @@ class Zona(Entidad):
                 zb, create = zona_barrio.objects.get_or_create(zona=self,
                     barrio=b)
 
-    def usuarios_asignados(self):
-        usuarios = []
-        perfiles = UserProfile.objects.all()
-        for p in perfiles:
-            if self in p.zonas.all():
-                usuarios.append(p.user)
-        return usuarios
-
 
 class zona_barrio(models.Model):
     zona = models.ForeignKey(Zona)
