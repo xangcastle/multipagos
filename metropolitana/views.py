@@ -118,14 +118,16 @@ def get_zonas(request):
     obj_json['name'] = z.name
     barrios = []
     for b in z.barrios():
-        bar_json = {}
-        bar_json['pk'] = b.id
-        bar_json['code'] = b.code
-        bar_json['name'] = b.name
-        bar_json['entregas'] = calcular_entregas(b)
-        bar_json['cobros'] = calcular_cobros(b)
-        bar_json['verificaciones'] = calcular_verificaciones(b)
-        barrios.append(bar_json)
+        if calcular_entregas(b) + calcular_cobros(b) + \
+        calcular_verificaciones(b) > 0:
+            bar_json = {}
+            bar_json['pk'] = b.id
+            bar_json['code'] = b.code
+            bar_json['name'] = b.name
+            bar_json['entregas'] = calcular_entregas(b)
+            bar_json['cobros'] = calcular_cobros(b)
+            bar_json['verificaciones'] = calcular_verificaciones(b)
+            barrios.append(bar_json)
     obj_json['barrios'] = barrios
     data.append(obj_json)
     data = json.dumps(data)
