@@ -1,3 +1,9 @@
+$(document).ready(function (){
+$('#zonas').change(function(){
+    obtener_barrios($(this).val());
+    });
+});
+
 function sumValues() {
 
   $('.table').each(function () {
