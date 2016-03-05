@@ -3,6 +3,7 @@ $('#zonas').change(function(){
     obtener_barrios($(this).val());
     obtener_usuarios($(this).val());
     });
+$('#datetimepicker1').datetimepicker();
 });
 
 function sumValues() {
