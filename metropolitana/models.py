@@ -8,6 +8,7 @@ import subprocess
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 import time
+from movil.models import UserProfile
 
 
 def get_code(entidad):
@@ -571,10 +572,13 @@ class Zona(Entidad):
                 zb, create = zona_barrio.objects.get_or_create(zona=self,
                     barrio=b)
 
-    #def save(self, *args, **kwargs):
-        #super(Zona, self).save()
-        #if not self.barrios():
-            #self.autoasignar()
+    def usuarios_asignados(self):
+        usuarios = []
+        perfiles = UserProfile.objects.all()
+        for p in perfiles:
+            if self in p.zonas.all():
+                usuarios.append(p.user)
+        return usuarios
 
 
 class zona_barrio(models.Model):

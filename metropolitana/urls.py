@@ -13,4 +13,5 @@ urlpatterns = patterns('metropolitana.views',
     url(r'^indexar/$', indexar.as_view(), name='indexar'),
     url(r'^descarga/$', 'descarga', name='descarga'),
     url(r'^get_zonas/$', 'get_zonas', name='get_zonas'),
+    url(r'^get_users_zona/$', 'get_users_zona', name='get_users_zona'),
 )

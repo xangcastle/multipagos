@@ -9,7 +9,6 @@ from cartera.models import *
 from verificaciones.models import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import *
 
@@ -98,7 +97,6 @@ def calcular_verificaciones(barrio):
         estado='PENDIENTE').count()
 
 
-@csrf_exempt
 def get_zonas(request):
     zona_id = int(request.POST.get('zona_id', ''))
     data = []
@@ -123,11 +121,19 @@ def get_zonas(request):
     return HttpResponse(data, content_type='application/json')
 
 
+def get_users_zona(request):
+    zona_id = request.POST.get('zona_id', '')
+    z = Zona.objects.get(id=zona_id)
+    data = serializers.serialize('json', z.usuarios_asignados())
+    struct = json.loads(data)
+    data = json.dumps(struct)
+    return HttpResponse(data, content_type='application/json')
+
+
 @login_required(login_url='/admin/login/')
 def asignacion_paquete(request):
     context = RequestContext(request)
-    data = {'zonas': Zona.objects.all().order_by('name'),
-        'users': User.objects.all().order_by('username')}
+    data = {'zonas': Zona.objects.all().order_by('name')}
     template_name = "metropolitana/asignacion.html"
     if request.method == "POST":
         pass

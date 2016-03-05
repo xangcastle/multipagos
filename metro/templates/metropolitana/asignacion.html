@@ -38,9 +38,6 @@
                 <div class="col-lg-4">
                     <select id="usuarios" runat="server" class="form-control">
                         <option value="0">---</option>
-                        {% for u in users %}
-                        <option value="{{ u.id }}">{{ u.username }}</option>
-                        {% endfor %}
                     </select>
 
                 </div>
@@ -48,14 +45,6 @@
             <br />
             <div>
                 <div class="panel panel-default">
-                    <div class="panel-heading"><div class=""></div>
-
-                         <div class="btn-group pull-right">
-                             <a class="btn btn-info btn-sm" data-toggle="collapse" data-target="#panelEntrega">Ver</a>
-                         </div>
-                        <h3 class="panel-title">Entregas</h3>
-                        <br />
-                    </div>
                     <div class="panel-body" id="panelEntrega" >
                         <div class="alert alert-info">En esta sección usted podrá asignar la cantidad de entregas del gestor hasta una cantidad maxima de x entregas
 
@@ -69,34 +58,7 @@
                                     <th>Verificaciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            {% for b in barrios %}
-                                <tr>
-                                    <td>{{ b.name }}<input type="hidden" name="barrio_id" value="{{ b.id }}"/></td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">{{ b.entregas_pendiente }}</span>
-                                            <input type="number" name="inputentrega" class="form-control tableinput">
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">{{ b.cobranza_pendiente }}</span>
-                                            <input type="number" name="inputcobro" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group input-sm"  style="width:180px">
-                                            <span class="input-group-addon">{{ b.verificaciones_pendiente }}</span>
-                                            <input type="number" name="inputverificacion" class="form-control tableinput" >
-                                            <span class="input-group-addon"><input type="checkbox" class="ckSelectAll"/></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation" style="width:200px"><a>Entrega actual <span class="badge" id="asignacionActual">0</span></a></li>
