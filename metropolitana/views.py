@@ -154,25 +154,12 @@ def asignacion_paquete(request):
         'msgclass': 'info'}
     template_name = "metropolitana/asignacion.html"
     if request.method == "POST":
-        user = User.objects.get(id=int(request.POST.get('usuario', '')))
-        data['mensaje'] = 'Trabajo asignado correctamente al usuario ' \
-        + user.username
-        data['msgclass'] = 'success'
         t = len(request.POST.getlist('barrio', ''))
-        for n in range(0, t):
-            b = Barrio.objects.get(
-                id=int(request.POST.getlist('barrio', '')[n]))
-            b = User.objects.get(id=int(request.POST.getlist('usuario')[n]))
-            fecha = request.POST.get('fecha', '')
-            entregas = int(request.POST.getlist('entrega', '')[n])
-            cobros = request.POST.getlist('cobro')[n]
-            verificaciones = request.POST.getlist('verificacion', '')[n]
-            if entregas > 0:
-                asignar_facturas(b, u, entregas, fecha)
-            if cobros > 0:
-                asignar_cobros(b, u, cobros, fecha)
-            if verificaciones > 0:
-                asignar_verificaciones(b, u, verificaciones, fecha)
+        user = request.POST.get('usuario', '')
+        data['mensaje'] = 'total barrio %s | usuario capturado %s' % (
+            t, user)
+        data['msgclass'] = 'success'
+
     return render_to_response(template_name, data, context_instance=context)
 
 
@@ -195,3 +182,19 @@ def asignar_verificaciones(barrio, user, cantidad, fecha):
         idbarrio=barrio)[:cantidad]
     ps.update(user=user, fecha_asignacion_user=fecha)
     return ps
+
+
+"""for n in range(0, t):
+            b = Barrio.objects.get(
+                id=int(request.POST.getlist('barrio', '')[n]))
+            u = User.objects.get(id=int(request.POST.getlist('usuario')[n]))
+            fecha = request.POST.get('fecha', '')
+            entregas = int(request.POST.getlist('entrega', '')[n])
+            cobros = request.POST.getlist('cobro')[n]
+            verificaciones = request.POST.getlist('verificacion', '')[n]
+            if entregas > 0:
+                asignar_facturas(b, u, entregas, fecha)
+            if cobros > 0:
+                asignar_cobros(b, u, cobros, fecha)
+            if verificaciones > 0:
+                asignar_verificaciones(b, u, verificaciones, fecha)"""
