@@ -8,7 +8,6 @@ import subprocess
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 import time
-from movil.models import UserProfile
 
 
 def get_code(entidad):
