@@ -8,7 +8,7 @@ from digitalizacion.models import *
 from cartera.models import *
 from verificaciones.models import *
 from django.http import HttpResponseRedirect
-from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import *
 
@@ -106,6 +106,7 @@ def usuarios_asignados(zona):
     return usuarios
 
 
+@csrf_exempt
 def get_zonas(request):
     zona_id = int(request.POST.get('zona_id', ''))
     data = []
@@ -130,6 +131,7 @@ def get_zonas(request):
     return HttpResponse(data, content_type='application/json')
 
 
+@csrf_exempt
 def get_users_zona(request):
     zona_id = request.POST.get('zona_id', '')
     z = Zona.objects.get(id=zona_id)
