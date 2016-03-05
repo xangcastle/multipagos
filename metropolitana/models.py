@@ -208,6 +208,7 @@ class Paquete(base):
                          )
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
+    fecha_asignacion_user = models.DateField(null=True, blank=True)
 
     def get_estado(self):
         if self.comprobante:

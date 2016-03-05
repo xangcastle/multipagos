@@ -149,10 +149,52 @@ def get_users_zona(request):
 def asignacion_paquete(request):
     context = RequestContext(request)
     data = {'zonas': Zona.objects.all().order_by('name'),
-        'mensaje': 'En esta seccion usted podra asignar las distintas tareas en cada barrio al gestor hasta una cantidad maxima de x entregas'}
+        'mensaje': 'En esta seccion usted podra asignar las distintas tareas'
+        + ' en cada barrio al gestor hasta una cantidad maxima de x entregas',
+        'msgclass': 'info'}
     template_name = "metropolitana/asignacion.html"
     if request.method == "POST":
         user = User.objects.get(id=int(request.POST.get('usuario', '')))
         data['mensaje'] = 'Trabajo asignado correctamente al usuario ' \
         + user.username
+        data['msgclass'] = 'success'
+        t = len(request.POST.getlist('barrio', ''))
+        for n in range(0, t):
+            try:
+                b = Barrio.objects.get(
+                    id=int(request.POST.getlist('barrio')[n]))
+                b = User.objects.get(id=int(request.POST.getlist('usuario')[n]))
+                fecha = request.POST.get('fecha', '')
+                entregas = int(request.POST.getlist('entrega')[n])
+                cobros = request.POST.getlist('cobro')[n]
+                verificaciones = request.POST.getlist('verificacion')[n]
+                if entregas > 0:
+                    asignar_facturas(b, u, entregas, fecha)
+                if cobros > 0:
+                    asignar_cobros(b, u, cobros, fecha)
+                if verificaciones > 0:
+                    asignar_verificaciones(b, u, verificaciones, fecha)
+            except:
+                pass
     return render_to_response(template_name, data, context_instance=context)
+
+
+def asignar_facturas(barrio, user, cantidad, fecha):
+    ps = Paquete.objects.filter(estado='PENDIENTE', cerrado=False,
+        barrio=barrio)[:cantidad]
+    ps.update(user=user, fecha_asignacion_user=fecha)
+    return ps
+
+
+def asignar_cobros(barrio, user, cantidad, fecha):
+    ps = Detalle.objects.filter(estado='PENDIENTE',
+        barrio=barrio)[:cantidad]
+    ps.update(user=user, fecha_asignacion_user=fecha)
+    return ps
+
+
+def asignar_verificaciones(barrio, user, cantidad, fecha):
+    ps = Verificaciones.objects.filter(estado='PENDIENTE',
+        barrio=barrio)[:cantidad]
+    ps.update(user=user, fecha_asignacion_user=fecha)
+    return ps

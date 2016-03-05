@@ -227,6 +227,7 @@ class Detalle(models.Model):
     idcliente = models.ForeignKey(Cliente, null=True, blank=True)
     integrado = models.NullBooleanField()
     pagado = models.NullBooleanField()
+    fecha_asignacion_user = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
         return self.cliente

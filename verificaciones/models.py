@@ -130,6 +130,7 @@ class Verificacion(models.Model):
     iddepartamento = models.ForeignKey(Departamento, null=True, blank=True)
     idmunicipio = models.ForeignKey(Municipio, null=True, blank=True)
     idbarrio = models.ForeignKey(Barrio, null=True, blank=True)
+    fecha_asignacion_user = models.DateField(null=True, blank=True)
 
     def get_departamento(self):
         d = None
