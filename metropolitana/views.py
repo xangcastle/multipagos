@@ -9,6 +9,7 @@ from cartera.models import *
 from verificaciones.models import *
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import *
 
@@ -96,7 +97,7 @@ def calcular_verificaciones(barrio):
     return Verificacion.objects.filter(idbarrio=barrio,
         estado='PENDIENTE').count()
 
-
+@csrf_exempt
 def get_zonas(request):
     zona_id = int(request.POST.get('zona_id', ''))
     data = []
