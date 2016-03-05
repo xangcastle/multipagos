@@ -61,9 +61,9 @@ function obtener_barrios(zona_id) {
 
             $.ajax({
 
-                url: "{% url 'get_zonas' %}",
+                url: "/entregas/get_zonas/",
                 type: 'POST',
-                data: zona_id,
+                data: {'zona_id': zona_id},
                 beforeSend: function() {
 
                     $("#msg").empty().append("<span class='alert'>Cargando...</span>");
