@@ -160,22 +160,19 @@ def asignacion_paquete(request):
         data['msgclass'] = 'success'
         t = len(request.POST.getlist('barrio', ''))
         for n in range(0, t):
-            try:
-                b = Barrio.objects.get(
-                    id=int(request.POST.getlist('barrio')[n]))
-                b = User.objects.get(id=int(request.POST.getlist('usuario')[n]))
-                fecha = request.POST.get('fecha', '')
-                entregas = int(request.POST.getlist('entrega')[n])
-                cobros = request.POST.getlist('cobro')[n]
-                verificaciones = request.POST.getlist('verificacion')[n]
-                if entregas > 0:
-                    asignar_facturas(b, u, entregas, fecha)
-                if cobros > 0:
-                    asignar_cobros(b, u, cobros, fecha)
-                if verificaciones > 0:
-                    asignar_verificaciones(b, u, verificaciones, fecha)
-            except:
-                pass
+            b = Barrio.objects.get(
+                id=int(request.POST.getlist('barrio')[n]))
+            b = User.objects.get(id=int(request.POST.getlist('usuario')[n]))
+            fecha = request.POST.get('fecha', '')
+            entregas = int(request.POST.getlist('entrega')[n])
+            cobros = request.POST.getlist('cobro')[n]
+            verificaciones = request.POST.getlist('verificacion')[n]
+            if entregas > 0:
+                asignar_facturas(b, u, entregas, fecha)
+            if cobros > 0:
+                asignar_cobros(b, u, cobros, fecha)
+            if verificaciones > 0:
+                asignar_verificaciones(b, u, verificaciones, fecha)
     return render_to_response(template_name, data, context_instance=context)
 
 
