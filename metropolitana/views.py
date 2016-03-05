@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .models import *
 from movil.models import UserProfile
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -147,8 +148,11 @@ def get_users_zona(request):
 @login_required(login_url='/admin/login/')
 def asignacion_paquete(request):
     context = RequestContext(request)
-    data = {'zonas': Zona.objects.all().order_by('name')}
+    data = {'zonas': Zona.objects.all().order_by('name'),
+        'mensaje': 'En esta sección usted podrá asignar las distintas tareas en cada barrio al gestor hasta una cantidad maxima de x entregas'}
     template_name = "metropolitana/asignacion.html"
     if request.method == "POST":
-        pass
+        user = User.objects.get(id=int(request.POST.get('usuario', '')))
+        data['mensaje'] = 'Trabajo asignado correctamente al usuario ' \
+        + user.username
     return render_to_response(template_name, data, context_instance=context)
