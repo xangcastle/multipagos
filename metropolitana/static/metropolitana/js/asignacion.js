@@ -86,7 +86,7 @@ function obtener_usuarios(zona_id) {
                     $('#usuario').empty();
                     $('#usuario').append('<option value="0">---</option>');
                     for (var i = 0; i < data.length; i++){
-                        $('#usuarios').append('<option value="' + data[i].pk + '">' + data[i].fields.username + '</option>');
+                        $('#usuario').append('<option value="' + data[i].pk + '">' + data[i].fields.username + '</option>');
                     }
                 }
             });

@@ -156,8 +156,10 @@ def asignacion_paquete(request):
     if request.method == "POST":
         t = len(request.POST.getlist('barrio', ''))
         user = request.POST.get('usuario', '')
-        data['mensaje'] = 'total barrio %s | usuario capturado %s' % (
-            t, user)
+        fecha = request.POST.get('fecha', '')
+        barrio = request.POST.getlist('barrio', '')[0]
+        data['mensaje'] = 'total barrios %s | usuario capturado %s | fecha %s | primer barrio %s' \
+        % (t, user, fecha, barrio)
         data['msgclass'] = 'success'
 
     return render_to_response(template_name, data, context_instance=context)
