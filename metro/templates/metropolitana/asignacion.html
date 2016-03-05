@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="col-lg-2"><span class="label label-info">1</span> Seleccione la zona</div>
                 <div class="col-lg-4">
-                    <select id="zonas" runat="server" class="form-control">
+                    <select id="zonas" runat="server" class="form-control" name="zona">
                         <option value="0">---</option>
                     {% for z in zonas %}
                         <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
@@ -39,10 +39,9 @@
                 </div>
                 <div class="col-lg-2"><span class="label label-info">2</span> Seleccione el gestor</div>
                 <div class="col-lg-4">
-                    <select id="usuarios" runat="server" class="form-control">
+                    <select id="usuarios" runat="server" class="form-control" name="usuario">
                         <option value="0">---</option>
                     </select>
-
                 </div>
             </div>
             <br />
@@ -50,8 +49,8 @@
                 <div class="col-lg-2"><span class="label label-info">4</span> Seleccione la fecha</div>
                 <div class="col-lg-4">
                     <div class="form-group">
-                        <div class='input-group date' id='datetimepicker1'>
-                            <input type='text' class="form-control" />
+                        <div class='input-group date' id='datepicker' name="picker">
+                            <input type='text' class="form-control" name="fecha"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -63,8 +62,7 @@
             <div>
                 <div class="panel panel-default">
                     <div class="panel-body" id="panelEntrega" >
-                        <div class="alert alert-info">En esta sección usted podrá asignar la cantidad de entregas del gestor hasta una cantidad maxima de x entregas
-
+                        <div class="alert alert-info">En esta sección usted podrá asignar las distintas tareas en cada barrio al gestor hasta una cantidad maxima de x entregas
                         </div>
                         <table class="table table-bordered table-striped">
                             <thead>
@@ -77,6 +75,8 @@
                             </thead>
                             <tbody></tbody>
                         </table>
+                        <div class="row">
+                        <div class="col-md-6 col-ms-6">
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation" style="width:200px"><a>Entrega actual <span class="badge" id="asignacionActual">0</span></a></li>
                             <li role="presentation" style="width:200px"><a>Entrega pendiente <span class="badge" id="asignacionPendiente">3</span></a></li>
@@ -94,14 +94,19 @@
                             <li role="presentation" style="width:200px"><a>Verificación pendiente <span class="badge" id="verfPendiente">3</span></a></li>
                             <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">3</span></a></li>
                         </ul>
+                        </div>
+                        <div class="col-md-3 col-ms-3">
+                        <input type='submit' value='Asignar Trabajo'>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <hr />
-            <footer>
-                <p>&copy; - Multipagos </p>
-            </footer>
         </div>
     </form>
+    <footer>
+        <p>&copy; - Multipagos </p>
+    </footer>
 </body>
 </html>
