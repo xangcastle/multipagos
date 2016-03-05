@@ -75,6 +75,10 @@ function obtener_barrios(zona_id) {
                         alert(data);
                    // }
                 }
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+              }
             });
 
         }
