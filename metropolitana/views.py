@@ -87,16 +87,17 @@ def descarga(request):
 
 def calcular_entregas(barrio):
     return Paquete.objects.filter(idbarrio=barrio, estado='PENDIENTE',
-        cerrado=False).count()
+        cerrado=False, user__isnull=True).count()
 
 
 def calcular_cobros(barrio):
-    return Detalle.objects.filter(idbarrio=barrio, estado='PENDIENTE').count()
+    return Detalle.objects.filter(idbarrio=barrio, estado='PENDIENTE',
+        user__isnull=True).count()
 
 
 def calcular_verificaciones(barrio):
     return Verificacion.objects.filter(idbarrio=barrio,
-        estado='PENDIENTE').count()
+        estado='PENDIENTE', user__isnull=True).count()
 
 
 def usuarios_asignados(zona):
