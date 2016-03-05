@@ -8,16 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel de asignaciones</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
+    <script type="text/javascript" src="/static/metropolitana/js/asignacion.js" ></script>
 </head>
 <body>
     <form runat="server">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-
 
         <div class="container body-content">
             <div class="jumbotron">
@@ -72,8 +70,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            {% load logistica %}
-                            {% get_barrios as barrios where_zona_is 22 %}
                             {% for b in barrios %}
                                 <tr>
                                     <td>{{ b.name }}<input type="hidden" name="barrio_id" value="{{ b.id }}"/></td>
@@ -127,65 +123,6 @@
                 <p>&copy; - Multipagos </p>
             </footer>
         </div>
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.tableinput').change(function () { sumValues(); });
-                $('.ckSelectAll').change(function () {
-                    if ($(this).is(':checked') == true) {
-                        var cant = $(this).closest('div').find('.input-group-addon').first().text();
-                        $(this).closest('div').find('input').first().val(cant);
-                        $(this).closest('div').find('input').first().prop('disabled', true);
-                    }
-                    else
-                        $(this).closest('div').find('input').first().prop('disabled', false);
-
-                    sumValues();
-                })
-            });
-
-            function sumValues() {
-
-                $('.table').each(function () {
-                    var totalasignacionActual = 0;
-                    var totalcobroActual = 0;
-                    var totalverifActual = 0;
-                    $(this).find('input[name=inputentrega]').each(function () {
-                        if (!isNaN($(this).val()) && $(this).val()!="")
-                            totalasignacionActual += parseInt($(this).val());
-                    });
-                    $(this).find('input[name=inputcobro]').each(function () {
-                        if (!isNaN($(this).val()) && $(this).val() != "")
-                            totalcobroActual += parseInt($(this).val());
-                    });
-                    $(this).find('input[name=inputverificacion]').each(function () {
-                        if (!isNaN($(this).val()) && $(this).val() != "")
-                            totalverifActual += parseInt($(this).val());
-                    });
-
-                    $('#asignacionActual').text(totalasignacionActual);
-                    $('#cobroActual').text(totalcobroActual);
-                    $('#verfiActual').text(totalverifActual);
-
-                    var asignacion=0;
-                    var cobro=0;
-                    var verif=0;
-
-                    asignacion = parseInt($('#asignacionPendiente').text());
-                    cobro = parseInt($('#cobroPendiente').text());
-                    verif = parseInt($('#verfPendiente').text());
-
-                    $('#asignacionTotal').text(totalasignacionActual+asignacion);
-                    $('#cobroTotal').text(totalcobroActual+cobro);
-                    $('#verfTotal').text(totalverifActual+verif);
-
-                });
-            }
-            function selectAll(control) {
-                if (control.checked) {
-                    alert("cheked");
-                }
-            }
-        </script>
     </form>
 </body>
 </html>

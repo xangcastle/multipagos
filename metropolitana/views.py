@@ -97,6 +97,7 @@ def calcular_verificaciones(barrio):
     return Verificacion.objects.filter(idbarrio=barrio,
         estado='PENDIENTE').count()
 
+
 @csrf_exempt
 def get_zonas(request):
     zona_id = int(request.POST.get('zona_id', ''))
