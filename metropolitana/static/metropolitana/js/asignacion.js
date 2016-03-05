@@ -82,7 +82,11 @@ function obtener_usuarios(zona_id) {
                 type: 'POST',
                 data: {'zona_id': zona_id},
                 success: function(data) {
-                    console.log(data);
+                    $('#usuarios').empty();
+                    $('#usuarios').append('<option value="0">---</option>');
+                    for (var i = 0; i < data.length; i++){
+                        $('#usuarios').append('<option value="' + data[i].pk + '">' + data[i].fields.username + '</option>');
+                    }
                 }
             });
         }
