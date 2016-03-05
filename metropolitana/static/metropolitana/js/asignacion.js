@@ -74,7 +74,7 @@ function obtener_barrios(zona_id) {
                     //for (var i = 0; i < data.length; i++){
                         alert(data);
                    // }
-                }
+                },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status);
                     alert(thrownError);
