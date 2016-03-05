@@ -178,20 +178,29 @@ def asignacion_paquete(request):
 def asignar_facturas(barrio, user, cantidad, fecha):
     ps = Paquete.objects.filter(estado='PENDIENTE', cerrado=False,
         idbarrio=barrio)[:cantidad]
-    ps.update(user=user, fecha_asignacion_user=fecha)
+    for p in ps:
+        p.user = user
+        p.fecha_asignacion_user = fecha
+        p.save()
     return ps
 
 
 def asignar_cobros(barrio, user, cantidad, fecha):
     ps = Detalle.objects.filter(estado='PENDIENTE',
         idbarrio=barrio)[:cantidad]
-    ps.update(user=user, fecha_asignacion_user=fecha)
+    for p in ps:
+        p.user = user
+        p.fecha_asignacion_user = fecha
+        p.save()
     return ps
 
 
 def asignar_verificaciones(barrio, user, cantidad, fecha):
     ps = Verificaciones.objects.filter(estado='PENDIENTE',
         idbarrio=barrio)[:cantidad]
-    ps.update(user=user, fecha_asignacion_user=fecha)
+    for p in ps:
+        p.user = user
+        p.fecha_asignacion_user = fecha
+        p.save()
     return ps
 

@@ -99,10 +99,10 @@ function eventos(){
     if ($(this).is(':checked') == true) {
       var cant = $(this).closest('div').find('.input-group-addon').first().text();
       $(this).closest('div').find('input').first().val(cant);
-      $(this).closest('div').find('input').first().prop('disabled', true);
+      $(this).closest('div').find('input').first().prop('readonly', true);
     }
     else
-      $(this).closest('div').find('input').first().prop('disabled', false);
+      $(this).closest('div').find('input').first().prop('readonly', false);
 
     sumValues();
   })
