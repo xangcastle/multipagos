@@ -32,13 +32,13 @@ admin.site.register(Corriente, cartera_corriente_admin)
 
 
 class rebaja_corriente_admin(ImportExportModelAdmin):
-    resource_class = ccorriente_resouce
+    resource_class = crebaja_resouce
 
 admin.site.register(Rebaja, rebaja_corriente_admin)
 
 
 class mora_corriente_admin(ImportExportModelAdmin):
-    resource_class = ccorriente_resouce
+    resource_class = cmora_resouce
 
 admin.site.register(Mora, mora_corriente_admin)
 
