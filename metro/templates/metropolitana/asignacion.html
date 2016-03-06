@@ -23,16 +23,16 @@
     <form runat="server" method="post" action".">
         {% csrf_token %}
         <div class="container body-content">
-            <div class="jumbotron">
+           <!-- <div class="jumbotron">
                 <h1>Panel de asignaciones</h1>
                 <p class="lead">Desde esta sección usted podrá asignar cuotas de trabajo para cada una de las actividades de los gestores</p>
 
-            </div>
+            </div>-->
             <div class="row">
                 <div class="col-lg-2"><span class="label label-info">1</span> Seleccione la zona</div>
                 <div class="col-lg-4">
                     <select id="zonas" runat="server" class="form-control" name="zona">
-                            <option value="0">---</option>
+                            <option selected disabled value="0">---</option>
                         {% for z in zonas %}
                             <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
                         {% endfor %}
@@ -43,10 +43,6 @@
                 <div class="col-lg-4">
                     <select id="usuario" runat="server" class="form-control" name="usuario" required="required">
                         <option selected disabled value="0">---</option>
-                        <option value="red">red</option>
-                        <option value="yellow">yellow</option>
-                        <option value="green">green</option>
-                        <option value="grey">grey</option>
                     </select>
                 </div>
             </div>
@@ -71,7 +67,11 @@
                         <div class="alert alert-{{ msgclass }}">
                         {{ mensaje }}
                         </div>
+<<<<<<< HEAD
                         <div style="max-height:800px; overflow-y:auto;">
+=======
+                        <div style="max-height:400px; overflow-y:auto;">
+>>>>>>> af1e3c95001f9a5e097caa3276f48be8e73b9ad1
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -88,24 +88,43 @@
                             <div class="col-lg-9">
                                 <ul class="nav nav-pills" role="tablist">
                                     <li role="presentation" style="width:200px"><a>Entrega actual <span class="badge" id="asignacionActual">0</span></a></li>
-                                    <li role="presentation" style="width:200px"><a>Entrega pendiente <span class="badge" id="asignacionPendiente">3</span></a></li>
-                                    <li role="presentation" style="width:200px" class="active"><a> Entrega total<span class="badge" id="asignacionTotal">3</span></a></li>
+                                    <li role="presentation" style="width:200px"><a>Entrega pendiente <span class="badge" id="asignacionPendiente">0</span></a></li>
+                                    <li role="presentation" style="width:200px" class="active"><a> Entrega total<span class="badge" id="asignacionTotal">0</span></a></li>
                                 </ul>
                                 <br />
                                 <ul class="nav nav-pills" role="tablist">
                                     <li role="presentation" style="width:200px"><a>Cobros actual <span class="badge" id="cobroActual">0</span></a></li>
-                                    <li role="presentation" style="width:200px"><a>Cobros pendiente <span class="badge" id="cobroPendiente">3</span></a></li>
-                                    <li role="presentation" style="width:200px" class="active"><a> Cobros total<span class="badge" id="cobroTotal">3</span></a></li>
+                                    <li role="presentation" style="width:200px"><a>Cobros pendiente <span class="badge" id="cobroPendiente">0</span></a></li>
+                                    <li role="presentation" style="width:200px" class="active"><a> Cobros total<span class="badge" id="cobroTotal">0</span></a></li>
                                 </ul>
                                 <br />
                                 <ul class="nav nav-pills" role="tablist">
                                     <li role="presentation" style="width:200px"><a>Verificación actual <span class="badge" id="verfiActual">0</span></a></li>
-                                    <li role="presentation" style="width:200px"><a>Verificación pendiente <span class="badge" id="verfPendiente">3</span></a></li>
-                                    <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">3</span></a></li>
+                                    <li role="presentation" style="width:200px"><a>Verificación pendiente <span class="badge" id="verfPendiente">0</span></a></li>
+                                    <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">0</span></a></li>
                                 </ul>
+                                <br />
+                                        <input type='submit' class="btn btn-success" value='Asignar Trabajo'>
                             </div>
-                            <div class="col-lg-3">
-                                <input type='submit' class="btn btn-success" value='Asignar Trabajo'>
+                            <div class="col-lg-3 col-sm-6">
+                                        <ul class="list-group">
+                                            <li class="list-group-item list-group-item-info">
+                                                <h4 class="list-group-item-heading">Horas en distribución</h4>
+                                                <p class="list-group-item-text" id="horasdistribucion">horas</p>
+                                            </li>
+                                            <li class="list-group-item list-group-item-warning">
+                                                <h4 class="list-group-item-heading">Horas en cobranza</h4>
+                                                <p class="list-group-item-text" id="horascobro">horas</p>
+                                            </li>
+                                            <li class="list-group-item list-group-item-success">
+                                                <h4 class="list-group-item-heading">Horas en verificacion</h4>
+                                                <p class="list-group-item-text" id="horasveficicacion">horas</p>
+                                            </li>
+                                            <li class="list-group-item list-group-item-default">
+                                                <h4 class="list-group-item-heading">Total horas </h4>
+                                                <p class="list-group-item-text" id="horastotal">horas</p>
+                                            </li>
+                                        </ul>
                             </div>
                         </div>
                     </div>
