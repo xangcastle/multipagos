@@ -11,10 +11,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
-    <script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
-
+    <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js"></script>
+    <script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css">
+    
     <script type="text/javascript" src="/static/metropolitana/js/asignacion.js" ></script>
 </head>
 <body>
@@ -30,27 +32,31 @@
                 <div class="col-lg-2"><span class="label label-info">1</span> Seleccione la zona</div>
                 <div class="col-lg-4">
                     <select id="zonas" runat="server" class="form-control" name="zona">
-                        <option value="0">---</option>
-                    {% for z in zonas %}
-                        <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
-                    {% endfor %}
+                            <option value="0">---</option>
+                        {% for z in zonas %}
+                            <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
+                        {% endfor %}
                     </select>
 
                 </div>
                 <div class="col-lg-2"><span class="label label-info">2</span> Seleccione el gestor</div>
                 <div class="col-lg-4">
-                    <select id="usuario" runat="server" class="form-control" name="usuario">
-                        <option value="0">---</option>
+                    <select id="usuario" runat="server" class="form-control" name="usuario" required="required">
+                        <option selected disabled value="0">---</option>
+                        <option value="red">red</option>
+                        <option value="yellow">yellow</option>
+                        <option value="green">green</option>
+                        <option value="grey">grey</option>
                     </select>
                 </div>
             </div>
             <br />
             <div class="row">
-                <div class="col-lg-2"><span class="label label-info">4</span> Seleccione la fecha</div>
+                <div class="col-lg-2"><span class="label label-info">3</span> Seleccione la fecha</div>
                 <div class="col-lg-4">
                     <div class="form-group">
                         <div class='input-group date' id='datepicker' name="picker">
-                            <input type='text' class="form-control" name="fecha"/>
+                            <input type='text' class="form-control" name="fecha" id="dtpFecha" required/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -65,40 +71,42 @@
                         <div class="alert alert-{{ msgclass }}">
                         {{ mensaje }}
                         </div>
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Barrio</th>
-                                    <th>Entregas</th>
-                                    <th>Cobros</th>
-                                    <th>Verificaciones</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div style="max-height:80px; overflow-y:auto;">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Barrio</th>
+                                        <th>Entregas</th>
+                                        <th>Cobros</th>
+                                        <th>Verificaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                         <div class="row">
-                        <div class="col-md-6 col-ms-6">
-                        <ul class="nav nav-pills" role="tablist">
-                            <li role="presentation" style="width:200px"><a>Entrega actual <span class="badge" id="asignacionActual">0</span></a></li>
-                            <li role="presentation" style="width:200px"><a>Entrega pendiente <span class="badge" id="asignacionPendiente">3</span></a></li>
-                            <li role="presentation" style="width:200px" class="active"><a> Entrega total<span class="badge" id="asignacionTotal">3</span></a></li>
-                        </ul>
-                        <br />
-                        <ul class="nav nav-pills" role="tablist">
-                            <li role="presentation" style="width:200px"><a>Cobros actual <span class="badge" id="cobroActual">0</span></a></li>
-                            <li role="presentation" style="width:200px"><a>Cobros pendiente <span class="badge" id="cobroPendiente">3</span></a></li>
-                            <li role="presentation" style="width:200px" class="active"><a> Cobros total<span class="badge" id="cobroTotal">3</span></a></li>
-                        </ul>
-                        <br />
-                        <ul class="nav nav-pills" role="tablist">
-                            <li role="presentation" style="width:200px"><a>Verificación actual <span class="badge" id="verfiActual">0</span></a></li>
-                            <li role="presentation" style="width:200px"><a>Verificación pendiente <span class="badge" id="verfPendiente">3</span></a></li>
-                            <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">3</span></a></li>
-                        </ul>
-                        </div>
-                        <div class="col-md-3 col-ms-3">
-                        <input type='submit' value='Asignar Trabajo'>
-                        </div>
+                            <div class="col-lg-9">
+                                <ul class="nav nav-pills" role="tablist">
+                                    <li role="presentation" style="width:200px"><a>Entrega actual <span class="badge" id="asignacionActual">0</span></a></li>
+                                    <li role="presentation" style="width:200px"><a>Entrega pendiente <span class="badge" id="asignacionPendiente">3</span></a></li>
+                                    <li role="presentation" style="width:200px" class="active"><a> Entrega total<span class="badge" id="asignacionTotal">3</span></a></li>
+                                </ul>
+                                <br />
+                                <ul class="nav nav-pills" role="tablist">
+                                    <li role="presentation" style="width:200px"><a>Cobros actual <span class="badge" id="cobroActual">0</span></a></li>
+                                    <li role="presentation" style="width:200px"><a>Cobros pendiente <span class="badge" id="cobroPendiente">3</span></a></li>
+                                    <li role="presentation" style="width:200px" class="active"><a> Cobros total<span class="badge" id="cobroTotal">3</span></a></li>
+                                </ul>
+                                <br />
+                                <ul class="nav nav-pills" role="tablist">
+                                    <li role="presentation" style="width:200px"><a>Verificación actual <span class="badge" id="verfiActual">0</span></a></li>
+                                    <li role="presentation" style="width:200px"><a>Verificación pendiente <span class="badge" id="verfPendiente">3</span></a></li>
+                                    <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">3</span></a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-3">
+                                <input type='submit' class="btn btn-success" value='Asignar Trabajo'>
+                            </div>
                         </div>
                     </div>
                 </div>
