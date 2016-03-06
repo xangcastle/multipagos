@@ -13,7 +13,7 @@ class Verificacion(models.Model):
     contrato = models.IntegerField(null=True, blank=True)
     plan = models.CharField(max_length=200, null=True, blank=True,
         help_text="plan de facturacion")
-    cedula = models.CharField(max_length=25, null=True, blank=True)
+    cedula = models.CharField(max_length=125, null=True, blank=True)
     servicio = models.CharField(max_length=200, null=True, blank=True)
     categoria = models.CharField(max_length=65, null=True, blank=True)
     sucursal = models.CharField(max_length=65, null=True, blank=True)
@@ -21,9 +21,9 @@ class Verificacion(models.Model):
     municipio = models.CharField(max_length=125, null=True, blank=True)
     barrio = models.CharField(max_length=125, null=True, blank=True)
     direccion = models.TextField(max_length=400, null=True, blank=True)
-    telefono = models.CharField(max_length=25, null=True, blank=True)
-    celular = models.CharField(max_length=25, null=True, blank=True)
-    costo_instalacion = models.FloatField(max_length=25, null=True, blank=True)
+    telefono = models.CharField(max_length=125, null=True, blank=True)
+    celular = models.CharField(max_length=125, null=True, blank=True)
+    costo_instalacion = models.FloatField(max_length=125, null=True, blank=True)
     equipo = models.CharField(max_length=65, null=True, blank=True)
     serial = models.CharField(max_length=65, null=True, blank=True)
     mac = models.CharField(max_length=65, null=True, blank=True)
@@ -66,14 +66,14 @@ class Verificacion(models.Model):
     telefono_ver = models.CharField(max_length=50, null=True,
         blank=True, choices=TIPOS_VERIFICACIONES,
         verbose_name="verificacion de numero de telefono")
-    telefono_corr = models.CharField(max_length=25, null=True, blank=True,
+    telefono_corr = models.CharField(max_length=125, null=True, blank=True,
         verbose_name="nueva numero de telefono")
     celular_ver = models.CharField(max_length=50, null=True,
         blank=True, choices=TIPOS_VERIFICACIONES,
         verbose_name="verificacion de numero de celular")
-    celular_corr = models.CharField(max_length=25, null=True, blank=True,
+    celular_corr = models.CharField(max_length=125, null=True, blank=True,
         verbose_name="nuevo numero de celular")
-    telefono_trabajo = models.CharField(max_length=25, null=True, blank=True,
+    telefono_trabajo = models.CharField(max_length=125, null=True, blank=True,
         verbose_name="telefono del trabajo")
     #DATOS DE SERVICIO
     servicio_contratado = models.CharField(max_length=4, null=True,
@@ -83,7 +83,7 @@ class Verificacion(models.Model):
         blank=True, choices=ASEVERACIONES,
         verbose_name="pago algun costo por instalacion del servicio?")
     costo_instalacion_corr = models.FloatField(
-        max_length=25, null=True, blank=True)
+        max_length=125, null=True, blank=True)
     conoce_tarifa = models.CharField(max_length=4, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="conoce la tarifa mensual del servicio?")

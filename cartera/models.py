@@ -7,6 +7,17 @@ from django.db.models import Max
 from datetime import datetime
 
 
+def devolver_mayor(a, b):
+    if a and not b:
+        return a
+    else:
+        return b
+    if a > b:
+        return a
+    else:
+        return b
+
+
 def get_by_code(instance, code):
     model = type(instance)
     try:
@@ -283,10 +294,10 @@ class Detalle(models.Model):
             try:
                 c, create = Cliente.objects.get_or_create(
                     contrato=self.contrato)
-                c.code = self.cliente
-                c.name = self.suscriptor
-                c.identificacion = self.nit
-                c.telefonos = self.telefonos()
+                c.code = devolver_mayor(self.cliente, c.code)
+                c.name = devolver_mayor(self.suscriptor, c.name)
+                c.identificacion = devolver_mayor(self.nit, c.identificacion)
+                c.telefonos = devolver_mayor(self.telefonos(), c.telefonos)
                 if self.iddepartamento:
                     c.departamento = self.iddepartamento
                 if self.idmunicipio:
@@ -419,3 +430,30 @@ class TipoGestion(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.signo, self.descripcion)
+
+
+class TipoMora(models.Model):
+    name = models.CharField(max_length=125, null=True,
+        verbose_name="descripcion")
+    dias = models.IntegerField(null=True,
+        verbose_name="cantidad de dias en mora")
+
+    def __unicode__(self):
+        if self.name:
+            return self.name
+        else:
+            return ''
+
+
+class Promosion(models.Model):
+    idcliente = models.ForeignKey(Cliente, null=True, blank=True)
+    contrato = models.CharField(max_length=65, null=True, blank=True)
+    descuento = models.FloatField(null=True, blank=True)
+    fecha_baja = models.DateField(null=True, blank=True)
+    fecha_vence = models.DateField(null=True, blank=True)
+
+    def get_cliente(self):
+        c = None
+        if self.contrato(self):
+            c, created = Cliente.objects.get_or_create(contrato=self.contrato)
+        return c
