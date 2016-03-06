@@ -203,6 +203,7 @@ class Detalle(models.Model):
     barr_contacto = models.CharField(max_length=125, null=True, blank=True)
     cuenta_cobro = models.CharField(max_length=65, null=True, blank=True)
     servicio = models.CharField(max_length=165, null=True, blank=True)
+    factura = models.CharField(max_length=65, null=True, blank=True)
     factura_interna = models.CharField(max_length=65, null=True, blank=True)
     no_cupon = models.CharField(max_length=65, null=True, blank=True)
     no_fiscal = models.CharField(max_length=65, null=True, blank=True)

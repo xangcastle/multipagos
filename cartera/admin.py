@@ -32,12 +32,12 @@ class base_tabular(admin.TabularInline):
 
 class detalle_cartera(base_tabular):
     model = Detalle
-    fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
-        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion',
-        'comentario', 'pagado')
-    readonly_fields = ('factura_interna', 'no_cupon', 'no_fiscal', 'fecha_fact',
-        'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'fecha_asignacion',
-        'comentario', 'pagado')
+    fields = ('factura', 'factura_interna', 'no_cupon', 'no_fiscal',
+        'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura',
+        'fecha_asignacion', 'comentario', 'pagado')
+    readonly_fields = ('factura', 'factura_interna', 'no_cupon', 'no_fiscal',
+        'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura',
+        'fecha_asignacion', 'comentario', 'pagado')
 
 
 class promesas_cliente(base_tabular):
