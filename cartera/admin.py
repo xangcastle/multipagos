@@ -1,10 +1,11 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from .models import *
+from .resources import detalle_resouce
 
 
 class detalle_admin(ImportExportModelAdmin):
-    #resource_class = detalle_resouce
+    resource_class = detalle_resouce
     list_display = ('suscriptor', 'contrato', 'servicio',
         'iddepartamento',
         'idmunicipio', 'idbarrio', 'servicio',

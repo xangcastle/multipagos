@@ -85,6 +85,12 @@ class Entrega(models.Model):
         db_table = "metropolitana_paquete"
 
 
+class CarteraMorosa(models.Manager):
+    def get_queryset(self):
+        return super(CarteraMorosa, self).get_queryset().exclude(
+            estado_mora='SOLVENTE')
+
+
 class Cliente(Entidad):
     identificacion = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
@@ -102,6 +108,12 @@ class Cliente(Entidad):
     comentario = models.CharField(max_length=125, null=True, blank=True)
     telefonos = models.CharField(max_length=65, null=True, blank=True)
     direccion = models.CharField(max_length=255, null=True, blank=True)
+    estado_mora = models.CharField(max_length=55, null=True, blank=True,
+        verbose_name='estado de mora',
+        help_text='esta campo determina el estado moroso del cliente')
+
+    objects = models.Manager()
+    objects = CarteraMorosa()
 
     def facturas(self):
         return Detalle.objects.filter(idcliente=self)
@@ -109,13 +121,16 @@ class Cliente(Entidad):
     def promesas(self):
         return PromesaPago.objects.filter(cliente=self)
 
-    def get_estado_corte(self):
+    def get_estado_mora(self):
+        estado = ''
         if self.facturas():
             por_pago = self.facturas().filter(pagado=False)
             for f in por_pago:
                 if f.comentario == 'COBRO Y CORTE':
-                    self.comentario = 'COBRO Y CORTE'
-                    self.save()
+                    estado = 'COBRO Y CORTE'
+        else:
+            'SOLVENTE'
+        return estado
 
     def get_direccion(self):
         if self.facturas():
