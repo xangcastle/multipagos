@@ -87,7 +87,7 @@ function obtener_usuarios(zona_id) {
                 data: {'zona_id': zona_id},
                 success: function(data) {
                     $('#usuario').empty();
-                    $('#usuario').append('<option value="0">---</option>');
+                    $('#usuario').append('<option selected disabled value="0">---</option>');
                     for (var i = 0; i < data.length; i++){
                         $('#usuario').append('<option value="' + data[i].pk + '">' + data[i].fields.username + '</option>');
                     }
