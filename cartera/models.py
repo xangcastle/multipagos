@@ -445,15 +445,50 @@ class TipoMora(models.Model):
             return ''
 
 
+class PromosionVigente(models.Model):
+    def get_queryset(self):
+        return super(PromosionVigente, self).get_queryset().filter(
+            estado='VIGENTE')
+
+
 class Promosion(models.Model):
     idcliente = models.ForeignKey(Cliente, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
     descuento = models.FloatField(null=True, blank=True)
     fecha_baja = models.DateField(null=True, blank=True)
     fecha_vence = models.DateField(null=True, blank=True)
+    ESTADOS_PROMOSION = (
+    ('VIGENTE', 'VIGENTE'),
+    ('VENCIDA', 'VENCIDA'),
+        )
+    estado = models.CharField(max_length=125, null=True, blank=True,
+        choices=ESTADOS_PROMOSION)
+
+    def get_estado(self):
+        if self.fecha_vence <= datetime.now():
+            return 'VENCIDA'
+        else:
+            return 'VIGENTE'
+
+    objects = models.Manager()
+    objects = PromosionVigente()
 
     def get_cliente(self):
         c = None
         if self.contrato(self):
             c, created = Cliente.objects.get_or_create(contrato=self.contrato)
         return c
+
+    def save(self, *args, **kwargs):
+        self.estado = self.get_estado()
+        super(Promosion, self).save()
+
+    def __unicode__(self):
+        return str(self.fecha_vence)
+
+    @property
+    def integrado(self):
+        if self.idcliente:
+            return True
+        else:
+            return False

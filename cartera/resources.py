@@ -14,3 +14,9 @@ class detalle_resouce(resources.ModelResource):
             'canal_venta', 'ejecutivo_venta', 'facturas_generadas',
             'tel_contacto', 'tel_instalacion', 'tel_contacto_cliente',
             'suscriptor', 'direccion', 'tipo_cartera', 'comentario')
+
+
+class promosion_resouce(resources.ModelResource):
+    class Meta:
+        model = Promosion
+        fields = ('contrato', 'descuento', 'fecha_baja', 'fecha_vence')

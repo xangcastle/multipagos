@@ -78,3 +78,18 @@ class tipo_gestion_admin(admin.ModelAdmin):
 
 
 admin.site.register(TipoGestion, tipo_gestion_admin)
+
+
+class promosion_admin(ImportExportModelAdmin):
+    resource_class = promosion_resouce
+    list_display = ('contrato', 'descuento', 'fecha_baja', 'fecha_vence',
+        'integrado')
+    list_filter = ('integrado')
+    actions = ['integrar']
+
+    def integrar(self, request, queryset):
+        for obj in queryset:
+            obj.idcliente = obj.get_cliente()
+    integrar.short_description = "integrar al sistema promosiones seleccionadas"
+
+admin.site.register(Promosion, promosion_admin)
