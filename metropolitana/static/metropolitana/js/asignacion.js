@@ -109,7 +109,9 @@ function obtener_usuarios(zona_id) {
 function eventos(){
     //PREVENT DEFAULT TABLEINPUTS
     $('.tableinput').keypress(function(event) {
-        event.preventDefault();
+        if (event.which == 13 ) {
+            event.preventDefault();
+        }
     });
     $('.tableinput').change(function () { sumValues(); });
     $('.ckSelectAll').change(function () {
