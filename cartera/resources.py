@@ -19,12 +19,12 @@ class cmora_resouce(resources.ModelResource):
 
         fields = ('id', 'cliente', 'producto', 'categoria', 'contrato', 'nit',
             'departamento', 'localidad', 'barr_contacto',
-            'servicio', 'factura_interna', 'factura', 'no_fiscal',
+            'servicio', 'factura', 'no_fiscal',
             'ciclo', 'ano', 'mes', 'fecha_fact', 'fecha_venc', 'tipo_mora',
             'estado_corte', 'fecha_instalacion', 'descr_plan', 'tecnologia',
-            'canal_venta', 'ejecutivo_venta', 'facturas_generadas',
+            'canal_venta', 'ejecutivo_venta',
             'tel_contacto', 'tel_instalacion', 'tel_contacto_cliente',
-            'suscriptor', 'direccion', 'tipo_cartera', 'comentario')
+            'suscriptor', 'direccion', 'fecha_asignacion', 'comentario')
 
 
 class crebaja_resouce(resources.ModelResource):
@@ -33,12 +33,12 @@ class crebaja_resouce(resources.ModelResource):
 
         fields = ('id', 'cliente', 'producto', 'categoria', 'contrato', 'nit',
             'departamento', 'localidad', 'barr_contacto',
-            'servicio', 'factura_interna', 'factura', 'no_fiscal',
+            'servicio', 'factura', 'no_fiscal',
             'ciclo', 'ano', 'mes', 'fecha_fact', 'fecha_venc', 'tipo_mora',
             'estado_corte', 'fecha_instalacion', 'descr_plan', 'tecnologia',
-            'canal_venta', 'ejecutivo_venta', 'facturas_generadas',
+            'canal_venta', 'ejecutivo_venta',
             'tel_contacto', 'tel_instalacion', 'tel_contacto_cliente',
-            'suscriptor', 'direccion', 'tipo_cartera', 'comentario')
+            'suscriptor', 'direccion', 'fecha_asignacion', 'comentario')
 
 
 class promosion_resouce(resources.ModelResource):
