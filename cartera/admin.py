@@ -28,20 +28,17 @@ admin.site.register(Detalle, detalle_admin)
 class cartera_corriente_admin(ImportExportModelAdmin):
     resource_class = ccorriente_resouce
 
-
 admin.site.register(Corriente, cartera_corriente_admin)
 
 
 class rebaja_corriente_admin(ImportExportModelAdmin):
     resource_class = ccorriente_resouce
 
-
 admin.site.register(Rebaja, rebaja_corriente_admin)
 
 
 class mora_corriente_admin(ImportExportModelAdmin):
     resource_class = ccorriente_resouce
-
 
 admin.site.register(Mora, mora_corriente_admin)
 
