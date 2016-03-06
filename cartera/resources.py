@@ -8,7 +8,7 @@ class detalle_resouce(resources.ModelResource):
         model = Detalle
         fields = ('cliente', 'producto', 'categoria', 'contrato', 'nit',
             'departamento', 'localidad', 'barr_contacto', 'cuenta_cobro',
-            'servicio', 'factura_interna', 'no_cupon', 'no_fiscal',
+            'servicio', 'factura', 'factura_interna', 'no_cupon', 'no_fiscal',
             'ciclo', 'ano', 'mes', 'fecha_fact', 'fecha_venc', 'tipo_mora',
             'estado_corte', 'fecha_instalacion', 'descr_plan', 'tecnologia',
             'canal_venta', 'ejecutivo_venta', 'facturas_generadas',
