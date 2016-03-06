@@ -4,8 +4,8 @@ from .models import *
 from .resources import *
 
 
-class detalle_admin(ImportExportModelAdmin):
-    resource_class = detalle_resouce
+class detalle_admin(admin.ModelAdmin):
+    resource_class = ccorriente_resouce
     list_display = ('suscriptor', 'contrato', 'servicio',
         'iddepartamento',
         'idmunicipio', 'idbarrio', 'servicio',
@@ -23,6 +23,27 @@ class detalle_admin(ImportExportModelAdmin):
 
 
 admin.site.register(Detalle, detalle_admin)
+
+
+class cartera_corriente_admin(ImportExportModelAdmin):
+    resource_class = ccorriente_resouce
+
+
+admin.site.register(Corriente, cartera_corriente_admin)
+
+
+class rebaja_corriente_admin(ImportExportModelAdmin):
+    resource_class = ccorriente_resouce
+
+
+admin.site.register(Rebaja, rebaja_corriente_admin)
+
+
+class mora_corriente_admin(ImportExportModelAdmin):
+    resource_class = ccorriente_resouce
+
+
+admin.site.register(Mora, mora_corriente_admin)
 
 
 class base_tabular(admin.TabularInline):
