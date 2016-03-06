@@ -262,6 +262,9 @@ class base_detalle(models.Model):
 
 class Detalle(base_detalle):
 
+    def __unicode__(self):
+        return self.suscriptor
+
     def get_departamento(self):
         d = None
         if self.departamento:
