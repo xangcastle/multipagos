@@ -351,22 +351,22 @@ class cartera_corriente(models.Manager):
             tipo_mora__isnull=True)
 
 
+class import_manager(models.Manager):
+
+    def get_queryset(self):
+        return super(import_manager, self).get_queryset().filter(
+            id=0)
+
+
 class Corriente(base_detalle):
     objects = models.Manager()
-    objects = cartera_corriente()
+    objects = import_manager()
 
     class Meta:
         verbose_name = 'factura'
         verbose_name_plural = "importacion de cartera corriente"
         managed = False
         db_table = 'cartera_detalle'
-
-
-class import_manager(models.Manager):
-
-    def get_queryset(self):
-        return super(cartera_corriente, self).get_queryset().filter(
-            id=0)
 
 
 class import_model(models.Model):
