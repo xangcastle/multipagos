@@ -1,9 +1,12 @@
 $(document).ready(function (){
-$('#zonas').change(function(){
-    obtener_barrios($(this).val());
-    obtener_usuarios($(this).val());
-    });
-$('#datetimepicker1').datetimepicker();
+    $('#zonas').change(function(){
+        obtener_barrios($(this).val());
+        obtener_usuarios($(this).val());
+        });
+    $('#dtpFecha').datepicker({
+        format: "yyyy-dd-mm",
+        language: "es"
+     });
 });
 
 function sumValues() {
@@ -94,17 +97,21 @@ function obtener_usuarios(zona_id) {
 
 
 function eventos(){
-  $('.tableinput').change(function () { sumValues(); });
-  $('.ckSelectAll').change(function () {
-    if ($(this).is(':checked') == true) {
-      var cant = $(this).closest('div').find('.input-group-addon').first().text();
-      $(this).closest('div').find('input').first().val(cant);
-      $(this).closest('div').find('input').first().prop('readonly', true);
-    }
-    else
-      $(this).closest('div').find('input').first().prop('readonly', false);
+    //PREVENT DEFAULT TABLEINPUTS
+    $('.tableinput').keypress(function(event) {
+        event.preventDefault();
+    });
+    $('.tableinput').change(function () { sumValues(); });
+    $('.ckSelectAll').change(function () {
+        if ($(this).is(':checked') == true) {
+        var cant = $(this).closest('div').find('.input-group-addon').first().text();
+        $(this).closest('div').find('input').first().val(cant);
+        $(this).closest('div').find('input').first().prop('readonly', true);
+        }
+        else
+        $(this).closest('div').find('input').first().prop('readonly', false);
 
-    sumValues();
-  })
+        sumValues();
+    })
 
-    }
+}
