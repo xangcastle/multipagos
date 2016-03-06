@@ -442,6 +442,9 @@ class import_model(models.Model):
 
 class Rebaja(import_model):
 
+    objects = models.Manager()
+    objects = import_manager()
+
     class Meta:
         verbose_name = 'factura'
         verbose_name_plural = "importacion de rebajas de cartera"
@@ -450,6 +453,9 @@ class Rebaja(import_model):
 
 
 class Mora(import_model):
+
+    objects = models.Manager()
+    objects = import_manager()
 
     class Meta:
         verbose_name = 'factura'
