@@ -206,7 +206,7 @@ class Detalle(models.Model):
     fecha_asignacion = models.DateField(null=True, blank=True)
     codigo = models.CharField(max_length=125, null=True, blank=True)
     comentario = models.CharField(max_length=125, null=True, blank=True)
-    ESTADOS_DE_ENTREGA = (
+    ESTADOS_DE_ENTREGA = (('PENDIENTE', 'PENDIENTE'),
                           ('VISITADO', 'VISITADO'),
                           ('LLAMADO', 'LLAMADO'),
                           ('CON PROMESA DE PAGO', 'CON PROMESA DE PAGO'),
