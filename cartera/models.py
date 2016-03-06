@@ -370,8 +370,7 @@ class Corriente(base_detalle):
 
 
 class Rebaja(models.Model):
-    id = models.CharField(max_length=65, null=True, blank=True,
-        db_column="no_cupon", primary_key=True)
+    id = models.CharField(max_length=65, db_column="no_cupon", primary_key=True)
     cliente = models.CharField(max_length=65, null=True, blank=True)
     producto = models.CharField(max_length=65, null=True, blank=True)
     categoria = models.CharField(max_length=65, null=True, blank=True)
@@ -445,8 +444,7 @@ class Rebaja(models.Model):
 
 
 class Mora(models.Model):
-    id = models.CharField(max_length=65, null=True, blank=True,
-        db_column="no_cupon", primary_key=True)
+    id = models.CharField(max_length=65, db_column="no_cupon", primary_key=True)
     cliente = models.CharField(max_length=65, null=True, blank=True)
     producto = models.CharField(max_length=65, null=True, blank=True)
     categoria = models.CharField(max_length=65, null=True, blank=True)
