@@ -15,15 +15,15 @@ function sumValues() {
     var totalasignacionActual = 0;
     var totalcobroActual = 0;
     var totalverifActual = 0;
-    $(this).find('input[name=inputentrega]').each(function () {
+    $(this).find('input[name=entrega]').each(function () {
       if (!isNaN($(this).val()) && $(this).val()!="")
         totalasignacionActual += parseInt($(this).val());
     });
-    $(this).find('input[name=inputcobro]').each(function () {
+    $(this).find('input[name=cobro]').each(function () {
       if (!isNaN($(this).val()) && $(this).val() != "")
         totalcobroActual += parseInt($(this).val());
     });
-    $(this).find('input[name=inputverificacion]').each(function () {
+    $(this).find('input[name=verificacion]').each(function () {
       if (!isNaN($(this).val()) && $(this).val() != "")
         totalverifActual += parseInt($(this).val());
     });
@@ -44,6 +44,17 @@ function sumValues() {
     $('#cobroTotal').text(totalcobroActual+cobro);
     $('#verfTotal').text(totalverifActual+verif);
 
+    var hordist=0.0;
+    var horcobro=0.0;
+    var horverif=0.0;
+    
+    hordist=(totalasignacionActual+asignacion)*3;
+    horcobro=(totalcobroActual+cobro)*15;
+    horverif=(totalverifActual+verif)*8;
+    
+    $('#horasdistribucion').text(totalasignacionActual+asignacion);
+    $('#horascobro').text(horcobro);
+    $('#horasveficicacion').text(horverif);
   });
 }
 function selectAll(control) {
@@ -54,7 +65,6 @@ function selectAll(control) {
 
 
 function obtener_barrios(zona_id) {
-
             $.ajax({
                 url: "/entregas/get_zonas/",
                 type: 'POST',
@@ -113,5 +123,4 @@ function eventos(){
 
         sumValues();
     })
-
 }
