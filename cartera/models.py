@@ -492,3 +492,6 @@ class Promosion(models.Model):
             return True
         else:
             return False
+
+    class Meta:
+        verbose_name_plural = "promosiones"

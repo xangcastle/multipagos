@@ -92,3 +92,10 @@ class promosion_admin(ImportExportModelAdmin):
     integrar.short_description = "integrar al sistema promosiones seleccionadas"
 
 admin.site.register(Promosion, promosion_admin)
+
+
+class tipo_mora_admin(admin.ModelAdmin):
+    list_display = ('name', 'dias')
+
+
+admin.site.register(TipoMora, tipo_mora_admin)
