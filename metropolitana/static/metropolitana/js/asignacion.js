@@ -48,13 +48,15 @@ function sumValues() {
     var horcobro=0.0;
     var horverif=0.0;
     
-    hordist=(totalasignacionActual+asignacion)*3;
-    horcobro=(totalcobroActual+cobro)*15;
-    horverif=(totalverifActual+verif)*8;
+    hordist=((totalasignacionActual+asignacion)*3)/60;
+    horcobro=((totalcobroActual+cobro)*15)/60;
+    horverif=((totalverifActual+verif)*8)/60;
     
-    $('#horasdistribucion').text(totalasignacionActual+asignacion);
+    $('#horasdistribucion').text(hordist);
     $('#horascobro').text(horcobro);
     $('#horasveficicacion').text(horverif);
+    $('#horastotal').text(hordist+horcobro+horverif);
+    
   });
 }
 function selectAll(control) {
@@ -109,7 +111,9 @@ function obtener_usuarios(zona_id) {
 function eventos(){
     //PREVENT DEFAULT TABLEINPUTS
     $('.tableinput').keypress(function(event) {
-        event.preventDefault();
+        if (event.which == 13 ) {
+            event.preventDefault();
+        }
     });
     $('.tableinput').change(function () { sumValues(); });
     $('.ckSelectAll').change(function () {
