@@ -244,12 +244,6 @@ class Detalle(models.Model):
     pagado = models.NullBooleanField()
     fecha_asignacion_user = models.DateField(null=True, blank=True)
 
-    def __unicode__(self):
-        if self.cliente:
-            return self.cliente + ' ' + self.suscriptor
-        else:
-            self.suscriptor
-
     def get_departamento(self):
         d = None
         if self.departamento:
