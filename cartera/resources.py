@@ -8,8 +8,9 @@ class ccorriente_resouce(resources.ModelResource):
         model = Corriente
 
         fields = ('id', 'contrato', 'departamento', 'localidad',
-            'barr_contacto', 'servicio', 'factura', 'no_cupon', 'ciclo', 'ano',
-            'suscriptor', 'direccion', 'tipo_cartera', 'comentario')
+            'saldo_pend_factura', 'barr_contacto', 'servicio', 'factura',
+            'no_cupon', 'ciclo', 'ano', 'suscriptor', 'direccion',
+            'tipo_cartera', 'comentario')
 
 
 class cmora_resouce(resources.ModelResource):
