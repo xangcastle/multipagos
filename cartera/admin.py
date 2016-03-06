@@ -84,7 +84,7 @@ class promosion_admin(ImportExportModelAdmin):
     resource_class = promosion_resouce
     list_display = ('contrato', 'descuento', 'fecha_baja', 'fecha_vence',
         'integrado')
-    list_filter = ('integrado')
+    list_filter = ('integrado', )
     actions = ['integrar']
 
     def integrar(self, request, queryset):
