@@ -1,4 +1,4 @@
-from django.db import models
+    from django.db import models
 from metropolitana.models import Departamento, Municipio, Barrio, Entidad, \
 Zona
 from geoposition.fields import GeopositionField

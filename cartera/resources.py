@@ -25,18 +25,18 @@ class cmora_resouce(resources.ModelResource):
         fields = ('id', 'cliente', 'producto', 'categoria', 'contrato', 'nit',
             'departamento', 'localidad', 'barr_contacto',
             'servicio', 'factura', 'no_fiscal',
-            'ciclo', 'ano', 'mes', 'fecha_fact', 'fecha_venc', 'tipo_mora',
-            'estado_corte', 'fecha_instalacion', 'descr_plan', 'tecnologia',
-            'canal_venta', 'ejecutivo_venta',
+            'saldo_pend_factura', 'ciclo', 'ano', 'mes', 'fecha_fact',
+            'fecha_venc', 'tipo_mora', 'estado_corte', 'fecha_instalacion',
+            'descr_plan', 'tecnologia', 'canal_venta', 'ejecutivo_venta',
             'tel_contacto', 'tel_instalacion', 'tel_contacto_cliente',
             'suscriptor', 'direccion', 'fecha_asignacion', 'comentario')
 
         export_order = ('id', 'cliente', 'producto', 'categoria', 'contrato',
             'nit', 'departamento', 'localidad', 'barr_contacto',
             'servicio', 'factura', 'no_fiscal',
-            'ciclo', 'mes', 'ano', 'fecha_fact', 'fecha_venc', 'tipo_mora',
-            'estado_corte', 'fecha_instalacion', 'descr_plan', 'tecnologia',
-            'canal_venta', 'ejecutivo_venta',
+            'saldo_pend_factura', 'ciclo', 'ano', 'mes', 'fecha_fact',
+            'fecha_venc', 'tipo_mora', 'estado_corte', 'fecha_instalacion',
+            'descr_plan', 'tecnologia', 'canal_venta', 'ejecutivo_venta',
             'tel_contacto', 'tel_instalacion', 'tel_contacto_cliente',
             'suscriptor', 'direccion', 'fecha_asignacion', 'comentario')
 
@@ -48,18 +48,18 @@ class crebaja_resouce(resources.ModelResource):
         fields = ('id', 'cliente', 'producto', 'categoria', 'contrato', 'nit',
             'departamento', 'localidad', 'barr_contacto',
             'servicio', 'factura', 'no_fiscal',
-            'ciclo', 'mes', 'ano', 'fecha_fact', 'fecha_venc', 'tipo_mora',
-            'estado_corte', 'fecha_instalacion', 'descr_plan', 'tecnologia',
-            'canal_venta', 'ejecutivo_venta',
+            'saldo_pend_factura', 'ciclo', 'ano', 'mes', 'fecha_fact',
+            'fecha_venc', 'tipo_mora', 'estado_corte', 'fecha_instalacion',
+            'descr_plan', 'tecnologia', 'canal_venta', 'ejecutivo_venta',
             'tel_contacto', 'tel_instalacion', 'tel_contacto_cliente',
             'suscriptor', 'direccion', 'fecha_asignacion', 'comentario')
 
         export_order = ('id', 'cliente', 'producto', 'categoria', 'contrato',
             'nit', 'departamento', 'localidad', 'barr_contacto',
             'servicio', 'factura', 'no_fiscal',
-            'ciclo', 'ano', 'mes', 'fecha_fact', 'fecha_venc', 'tipo_mora',
-            'estado_corte', 'fecha_instalacion', 'descr_plan', 'tecnologia',
-            'canal_venta', 'ejecutivo_venta',
+            'saldo_pend_factura', 'ciclo', 'ano', 'mes', 'fecha_fact',
+            'fecha_venc', 'tipo_mora', 'estado_corte', 'fecha_instalacion',
+            'descr_plan', 'tecnologia', 'canal_venta', 'ejecutivo_venta',
             'tel_contacto', 'tel_instalacion', 'tel_contacto_cliente',
             'suscriptor', 'direccion', 'fecha_asignacion', 'comentario')
 
