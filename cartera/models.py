@@ -81,11 +81,11 @@ class Entrega(models.Model):
             try:
                 c, create = Cliente.objects.get_or_create(
                     contrato=self.contrato)
-                c.name = self.cliente
+                c.name = devolver_mayor(self.suscriptor, c.name)
                 c.departamento = self.iddepartamento
                 c.municipio = self.idmunicipio
                 c.barrio = self.idbarrio
-                c.direccion = self.direccion
+                c.direccion = devolver_mayor(self.direccion, c.direccion)
                 c.save()
             except:
                 c = None
@@ -293,7 +293,7 @@ class base_detalle(models.Model):
                     c.municipio = self.idmunicipio
                 if self.idbarrio:
                     c.barrio = self.idbarrio
-                c.direccion = c.get_direccion()
+                c.direccion = c.direccion
                 c.save()
             except:
                 c = None
