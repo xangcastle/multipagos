@@ -243,6 +243,13 @@ class base_detalle(models.Model):
         except:
             return None
 
+    def __setitem__(self, key, value):
+        try:
+            setattr(self, key, value)
+            return True
+        except:
+            return False
+
     def get_departamento(self):
         d = None
         if self.departamento:
