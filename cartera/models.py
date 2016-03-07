@@ -134,7 +134,7 @@ class Cliente(Entidad):
         if self.facturas():
             for f in self.facturas():
                 self.tipo_mora = devolver_mora_mayor(self.tipo_mora,
-                    f.tipo_mora)
+                    f.idtipo_mora)
             self.save()
 
     def get_direccion(self):
