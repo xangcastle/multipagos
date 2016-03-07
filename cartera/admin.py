@@ -9,7 +9,7 @@ class detalle_admin(admin.ModelAdmin):
         'iddepartamento', 'idmunicipio', 'idbarrio', 'servicio',
         'saldo_pend_factura', 'integrado', 'estado', 'user')
     list_filter = ('categoria', 'iddepartamento', 'idmunicipio', 'idbarrio',
-        'estado_corte', 'integrado', 'estado', 'user')
+        'estado_corte', 'integrado', 'estado', 'user', 'idtipo_mora')
 
     def action_integrar(self, request, queryset):
         msj = integrar_detalle(queryset)
