@@ -326,14 +326,6 @@ class Detalle(base_detalle):
     pagado = models.NullBooleanField()
     fecha_asignacion_user = models.DateField(null=True, blank=True)
 
-    def integrar(self):
-        self.iddepartamento = self.get_departamento()
-        self.idmunicipio = self.get_municipio()
-        self.idbarrio = self.get_barrio()
-        self.idcliente = self.get_cliente()
-        self.integrado = True
-        self.save()
-
     def get_pagado(self):
         if self.monto and self.monto >= self.saldo_pend_factura:
             return True
@@ -372,7 +364,6 @@ def actualizar_info(det, imp):
         if not field == 'id':
             det[field] = imp[field]
             det.save()
-            det.integrar()
 
 
 class import_model(base_detalle):
@@ -540,3 +531,29 @@ class Promosion(models.Model):
 
     class Meta:
         verbose_name_plural = "promosiones"
+
+
+def integrar_detalle(ps):
+    message = ""
+    ds = ps.order_by('departamento').distinct('departamento')
+    for d in ds:
+        qs = ps.filter(departamento=d.departamento)
+        qs.update(iddepartamento=d.get_departamento().id)
+    ms = ps.order_by('departamento', 'localidad').distinct(
+        'departamento', 'localidad')
+    for m in ms:
+        qs = ps.filter(departamento=m.departamento,
+            localidad=m.localidad)
+        qs.update(idmunicipio=m.get_municipio().id)
+    bs = ps.order_by('departamento', 'localidad', 'barr_contacto').distinct(
+        'departamento', 'localidad', 'barr_contacto')
+    for b in bs:
+        qs = ps.filter(departamento=b.departamento,
+            localidad=b.localidad, barr_contacto=b.barr_contacto)
+        qs.update(idbarrio=b.get_barrio().id)
+    for  p in ps:
+        p.idcliente = p.get_cliente()
+        p.save()
+    message += "integrado, total de facturas = %s end %s departamentos" \
+    % (str(ps.count()), str(ds.count()))
+    return message

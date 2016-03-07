@@ -12,8 +12,8 @@ class detalle_admin(admin.ModelAdmin):
         'estado_corte', 'integrado', 'estado', 'user')
 
     def action_integrar(self, request, queryset):
-        for d in queryset:
-            d.integrar()
+        msj = integrar_detalle(queryset)
+        self.message_user(request, msj)
     action_integrar.short_description = \
     "integrar clientes de los registros selecionados"
 
