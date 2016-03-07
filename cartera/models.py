@@ -370,6 +370,7 @@ def actualizar_info(det, imp):
     for field in imp._meta.get_all_field_names():
         if not field == 'id':
             det[field] = imp[field]
+    det.integrado = False
     det.save()
 
 
@@ -561,6 +562,7 @@ def integrar_detalle(ps):
         qs.update(idbarrio=b.get_barrio().id)
     for  p in ps:
         p.idcliente = p.get_cliente()
+        p.integrado = True
         p.save()
     message += "integrado, total de facturas = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
