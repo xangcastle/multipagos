@@ -278,25 +278,20 @@ class base_detalle(models.Model):
         return b
 
     def get_cliente(self):
-        c = None
-        if self.contrato:
-            try:
-                c, create = Cliente.objects.get_or_create(
-                    contrato=self.contrato)
-                c.code = devolver_mayor(self.cliente, c.code)
-                c.name = devolver_mayor(self.suscriptor, c.name)
-                c.identificacion = devolver_mayor(self.nit, c.identificacion)
-                c.telefonos = devolver_mayor(self.telefonos(), c.telefonos)
-                if self.iddepartamento:
-                    c.departamento = self.iddepartamento
-                if self.idmunicipio:
-                    c.municipio = self.idmunicipio
-                if self.idbarrio:
-                    c.barrio = self.idbarrio
-                c.direccion = c.direccion
-                c.save()
-            except:
-                c = None
+        c, create = Cliente.objects.get_or_create(
+            contrato=self.contrato)
+        c.code = devolver_mayor(self.cliente, c.code)
+        c.name = devolver_mayor(self.suscriptor, c.name)
+        c.identificacion = devolver_mayor(self.nit, c.identificacion)
+        c.telefonos = devolver_mayor(self.telefonos(), c.telefonos)
+        if self.iddepartamento:
+            c.departamento = self.iddepartamento
+        if self.idmunicipio:
+            c.municipio = self.idmunicipio
+        if self.idbarrio:
+            c.barrio = self.idbarrio
+        c.direccion = c.direccion
+        c.save()
         return c
 
     def get_mora(self):
