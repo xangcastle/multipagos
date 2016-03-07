@@ -575,7 +575,7 @@ def integrar_detalle(ps):
     cs = ps.order_by('contrato').distinct('contrato')
     for c in cs:
         qs = ps.filter(contrato=c.contrato)
-        qs.update(idcliente=c.get_cliente())
+        qs.update(idcliente=c.get_cliente().id)
     message += "integrado, total de facturas = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message
