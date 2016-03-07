@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 import time
 
 
-def get_code(entidad):
+def get_code(entidad, length=4):
         model = type(entidad)
         code = ''
         sets = model.objects.filter(code__isnull=False)
@@ -29,7 +29,9 @@ def get_code(entidad):
                     code = min(disponibles)
                 else:
                     code = max(ocupados) + 1
-        return str(code).zfill(4)
+        else:
+            code = 1
+        return str(code).zfill(length)
 
 
 def get_code_cliente(entidad):

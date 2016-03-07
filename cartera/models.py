@@ -1,6 +1,6 @@
 from django.db import models
 from metropolitana.models import Departamento, Municipio, Barrio, Entidad, \
-Zona
+Zona, get_code
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 from django.db.models import Max
@@ -81,6 +81,7 @@ class Entrega(models.Model):
             try:
                 c, create = Cliente.objects.get_or_create(
                     contrato=self.contrato)
+                c.code = devolver_mayor(self.cliente, c.code)
                 c.name = devolver_mayor(self.suscriptor, c.name)
                 c.departamento = self.iddepartamento
                 c.municipio = self.idmunicipio
@@ -182,6 +183,8 @@ class Cliente(Entidad):
             return False
 
     def save(self, *args, **kwargs):
+        if not self.code:
+            self.code = get_code(self, 6)
         self.position_ver = self.get_position_verificada()
         super(Cliente, self).save()
 
@@ -569,10 +572,10 @@ def integrar_detalle(ps):
         qs = ps.filter(departamento=b.departamento,
             localidad=b.localidad, barr_contacto=b.barr_contacto)
         qs.update(idbarrio=b.get_barrio().id)
-    for  p in ps:
-        p.idcliente = p.get_cliente()
-        p.integrado = True
-        p.save()
+    cs = ps.order_by('contrato').distinct('contrato')
+    for c in cs:
+        qs = ps.filter(contrato=c.contrato)
+        qs.update(idcliente=c.get_cliente())
     message += "integrado, total de facturas = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message
