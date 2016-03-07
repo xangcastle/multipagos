@@ -371,6 +371,7 @@ def actualizar_info(det, imp):
         if not field == 'id':
             det[field] = imp[field]
     det.integrado = False
+    det.estado = 'PENDIENTE'
     det.save()
 
 
