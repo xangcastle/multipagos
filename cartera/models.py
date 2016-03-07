@@ -465,10 +465,11 @@ class PromesaPago(models.Model):
 
 
 class Gestion(models.Model):
-    detalle = models.ForeignKey(Detalle)
+    cliente = models.ForeignKey(Cliente)
     user = models.ForeignKey(User)
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(null=True)
     tipo_gestion = models.ForeignKey('TipoGestion', null=True)
+    fecha_promesa = models.DateTime(null=True)
     observaciones = models.CharField(max_length=255, null=True)
 
 
@@ -575,7 +576,7 @@ def integrar_detalle(ps):
     cs = ps.order_by('contrato').distinct('contrato')
     for c in cs:
         qs = ps.filter(contrato=c.contrato)
-        qs.update(idcliente=c.get_cliente().id)
+        qs.update(idcliente=c.get_cliente().id, integrado=True)
     message += "integrado, total de facturas = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message

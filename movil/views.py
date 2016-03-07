@@ -296,6 +296,7 @@ def get_detalle(request):
         d.user = u
         d.fecha_entrega = request.POST.get('Fecha', '')
         d.monto = request.POST.get('Monto', '')
+        d.estado = 'PAGADO'
         d.save()
         obj_json['Mensaje'] = 'Registro grabado con exito'
     data = json.dumps(obj_json)
@@ -352,25 +353,28 @@ def get_corte(request):
 @csrf_exempt
 def get_gestion(request):
     obj_json = {'Mensaje': ''}
-    obj_json['detalle'] = request.POST.get('detalle', '')
+    obj_json['contrato'] = request.POST.get('contrato', '')
     obj_json['user'] = request.POST.get('user', '')
     obj_json['tipo_gestion'] = request.POST.get('tipo_gestion', '')
+    obj_json['fecha'] = request.POST.get('fecha', '')
+    obj_json['fecha_promesa'] = request.POST.get('fecha_promesa', '')
     obj_json['observaciones'] = request.POST.get('observaciones', '')
     try:
         tg = TipoGestion.objects.get(signo=obj_json['tipo_gestion'])
     except:
         tg = None
     try:
-        dd = Detalle.objects.get(id=int(obj_json['detalle']))
+        c = Cliente.objects.get(contrato=obj_json['contrato'])
     except:
-        dd = None
+        c = None
     try:
         u = TipoGestion.objects.get(id=obj_json['user'])
     except:
         u = None
-    if tg and dd and u:
-        g = Gestion(detalle=dd, user=u, tipo_gestion=tg,
-            observaciones=obj_json['observaciones'])
+    if tg and c and u:
+        g = Gestion(cliente=c, user=u, tipo_gestion=tg,
+            observaciones=obj_json['observaciones'],
+            fecha=obj_json['fecha'])
         g.save()
         obj_json['Mensaje'] = "gestion guardada con exito"
     data = json.dumps(obj_json)
