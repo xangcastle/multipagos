@@ -85,8 +85,10 @@ class cliente_admin(admin.ModelAdmin):
             ("placeholder detalle_set-group",), "fields": ()}),
         ("Promesas de Pago", {"classes":
             ("placeholder promesapago_set-group",), "fields": ()}),
+        ("Facturas en Distribucion", {"classes":
+            ("placeholder entrega_set-group",), "fields": ()}),
         ('Ubicacion Exacta', {
-                'classes': ('grp-collapse grp-close', ),
+                'classes': ('grp-collapse grp-closed', ),
                 'fields': ('position', )
         }),
                             )
