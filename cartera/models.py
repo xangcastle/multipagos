@@ -99,7 +99,7 @@ class Entrega(models.Model):
 class CarteraMorosa(models.Manager):
     def get_queryset(self):
         return super(CarteraMorosa, self).get_queryset().exclude(
-            estado_mora__in=TipoMora.objects.all())
+            tipo_mora__in=TipoMora.objects.all())
 
 
 class Cliente(Entidad):

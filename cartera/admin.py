@@ -68,7 +68,7 @@ class entregas_cliente(base_tabular):
 class cliente_admin(admin.ModelAdmin):
     list_display = ('code', 'name', 'identificacion', 'comentario',
         'position_ver')
-    list_filter = ('departamento', 'municipio', 'position_ver')
+    list_filter = ('departamento', 'municipio', 'position_ver', 'tipo_mora')
     search_fields = ('code', 'name', 'identificacion', 'contrato')
     readonly_fields = ('code', 'name', 'identificacion', 'departamento',
         'municipio', 'barrio', 'zona', 'comentario', 'direccion', 'tipo_mora')
