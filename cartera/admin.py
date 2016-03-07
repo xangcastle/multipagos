@@ -77,7 +77,7 @@ class cliente_admin(admin.ModelAdmin):
                 'classes': ('grp-collapse grp-open', ),
                 'fields': (
                             'name', ('code', 'identificacion'),
-                            ('departameno', 'municipio', 'barrio'),
+                            ('departamento', 'municipio', 'barrio'),
                             'zona', 'direccion', 'comentario'
                         )
         }),
