@@ -583,6 +583,8 @@ def integrar_detalle(ps):
 
 
 def devolver_mora_mayor(m1, m2):
+    if not m1 and not m2:
+        return None
     if m1 and not m2:
         return m1
     if m2 and not m1:
