@@ -363,7 +363,7 @@ def actualizar_info(det, imp):
     for field in imp._meta.get_field_names():
         if not field == 'id':
             det[field] = imp[field]
-            det.save()
+    det.save()
 
 
 class import_model(base_detalle):
@@ -371,6 +371,7 @@ class import_model(base_detalle):
     def integrar(self):
         f, created = Detalle.objects.get_or_create(no_cupon=self.no_cupon)
         actualizar_info(f, self)
+        self.delete()
 
 
 class Corte(models.Model):

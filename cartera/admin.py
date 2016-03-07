@@ -27,6 +27,14 @@ class import_model_admin(ImportExportModelAdmin):
         'departamento', 'localidad', 'barr_contacto', 'servicio',
         'saldo_pend_factura')
 
+    def action_integrar(self, request, queryset):
+        for obj in queryset:
+            obj.integrar()
+    action_integrar.short_description = \
+    "actualizar cartera mora y rebajas"
+
+    actions = [action_integrar]
+
 admin.site.register(import_model, import_model_admin)
 
 
