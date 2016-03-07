@@ -122,7 +122,7 @@ class Cliente(Entidad):
     tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
 
     objects = models.Manager()
-    objects = CarteraMorosa()
+    morosos = CarteraMorosa()
 
     def facturas(self):
         return Detalle.objects.filter(idcliente=self)
