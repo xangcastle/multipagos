@@ -70,9 +70,27 @@ class cliente_admin(admin.ModelAdmin):
         'position_ver')
     list_filter = ('departamento', 'municipio', 'position_ver')
     search_fields = ('code', 'name', 'identificacion', 'contrato')
-    fields = ('code', 'name', 'identificacion', 'departamento', 'municipio',
-        'barrio', 'zona', 'comentario', 'direccion', 'position')
-    inlines = [detalle_cartera, promesas_cliente]
+    readonly_fields = ('code', 'name', 'identificacion', 'departamento',
+        'municipio', 'barrio', 'zona', 'comentario', 'direccion', 'position')
+    fieldsets = (
+        ('Datos Generales', {
+                'classes': ('grp-collapse grp-open', ),
+                'fields': (
+                            'name', ('code', 'identificacion'),
+                            ('departameno', 'municipio', 'barrio'),
+                            'zona', 'direccion', 'comentario'
+                        )
+        }),
+        ("Detalle de Mora", {"classes":
+            ("placeholder detalle_set-group",), "fields": ()}),
+        ("Promesas de Pago", {"classes":
+            ("placeholder promesapago_set-group",), "fields": ()}),
+        ('Ubicacion Exacta', {
+                'classes': ('grp-collapse grp-close', ),
+                'fields': ('postition', )
+        }),
+                            )
+    inlines = [detalle_cartera, promesas_cliente, entregas_cliente]
 
 admin.site.register(Cliente, cliente_admin)
 
