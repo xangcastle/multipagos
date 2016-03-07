@@ -327,7 +327,8 @@ class Detalle(base_detalle):
     fecha_entrega = models.DateTimeField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     monto = models.FloatField(null=True, blank=True)
-    idcliente = models.ForeignKey(Cliente, null=True, blank=True)
+    idcliente = models.ForeignKey(Cliente, null=True, blank=True,
+        on_delete=models.SET_NULL)
     integrado = models.NullBooleanField()
     pagado = models.NullBooleanField()
     fecha_asignacion_user = models.DateField(null=True, blank=True)
