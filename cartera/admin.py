@@ -71,14 +71,14 @@ class cliente_admin(admin.ModelAdmin):
     list_filter = ('departamento', 'municipio', 'position_ver')
     search_fields = ('code', 'name', 'identificacion', 'contrato')
     readonly_fields = ('code', 'name', 'identificacion', 'departamento',
-        'municipio', 'barrio', 'zona', 'comentario', 'direccion')
+        'municipio', 'barrio', 'zona', 'comentario', 'direccion', 'tipo_mora')
     fieldsets = (
         ('Datos Generales', {
                 'classes': ('grp-collapse grp-open', ),
                 'fields': (
                             'name', ('code', 'identificacion'),
                             ('departamento', 'municipio', 'barrio'),
-                            'zona', 'direccion', 'comentario'
+                            ('zona', 'tipo_mora'), 'direccion', 'comentario'
                         )
         }),
         ("Detalle de Mora", {"classes":
@@ -88,7 +88,7 @@ class cliente_admin(admin.ModelAdmin):
         ("Facturas en Distribucion", {"classes":
             ("placeholder entrega_set-group",), "fields": ()}),
         ('Ubicacion Exacta', {
-                'classes': ('grp-collapse grp-closed', ),
+                'classes': ('grp-collapse grp-open', ),
                 'fields': ('position', )
         }),
                             )

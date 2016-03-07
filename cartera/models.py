@@ -99,7 +99,7 @@ class Entrega(models.Model):
 class CarteraMorosa(models.Manager):
     def get_queryset(self):
         return super(CarteraMorosa, self).get_queryset().exclude(
-            estado_mora='SOLVENTE')
+            estado_mora__in=TipoMora.objects.all())
 
 
 class Cliente(Entidad):
@@ -119,9 +119,7 @@ class Cliente(Entidad):
     comentario = models.CharField(max_length=125, null=True, blank=True)
     telefonos = models.CharField(max_length=65, null=True, blank=True)
     direccion = models.CharField(max_length=255, null=True, blank=True)
-    estado_mora = models.CharField(max_length=55, null=True, blank=True,
-        verbose_name='estado de mora',
-        help_text='esta campo determina el estado moroso del cliente')
+    tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
 
     objects = models.Manager()
     objects = CarteraMorosa()
@@ -133,15 +131,11 @@ class Cliente(Entidad):
         return PromesaPago.objects.filter(cliente=self)
 
     def get_estado_mora(self):
-        estado = ''
         if self.facturas():
-            por_pago = self.facturas().filter(pagado=False)
-            for f in por_pago:
-                if f.comentario == 'COBRO Y CORTE':
-                    estado = 'COBRO Y CORTE'
-        else:
-            'SOLVENTE'
-        return estado
+            for f in self.facturas():
+                self.tipo_mora = devolver_mora_mayor(self.tipo_mora,
+                    f.tipo_mora)
+            self.save()
 
     def get_direccion(self):
         if self.facturas():
@@ -305,11 +299,21 @@ class base_detalle(models.Model):
                 c = None
         return c
 
+    def get_mora(self):
+        m = None
+        if self.tipo_mora:
+            try:
+                m, created = TipoMora.objects.get_or_create(name=self.tipo_mora)
+            except:
+                pass
+        return m
+
     class Meta:
         abstract = True
 
 
 class Detalle(base_detalle):
+    idtipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
     ESTADOS_DE_ENTREGA = (('PENDIENTE', 'PENDIENTE'),
                           ('VISITADO', 'VISITADO'),
                           ('LLAMADO', 'LLAMADO'),
@@ -350,6 +354,10 @@ class Detalle(base_detalle):
         if self.tel_contacto_cliente:
             dt.append(self.tel_contacto_cliente)
         return ', '.join(dt)
+
+    class Meta:
+        verbose_name_plural = "detalle de mora"
+        verbose_name = "factura"
 
 
 class cartera_corriente(models.Manager):
@@ -451,6 +459,10 @@ class PromesaPago(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.cliente.name, str(self.fecha_pago))
+
+    class Meta:
+        verbose_name_plural = 'promesas de pagos'
+        verbose_name = 'promesa de pago'
 
 
 class Gestion(models.Model):
@@ -568,3 +580,14 @@ def integrar_detalle(ps):
     message += "integrado, total de facturas = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message
+
+
+def devolver_mora_mayor(m1, m2):
+    if m1 and not m2:
+        return m1
+    if m2 and not m1:
+        return m2
+    if m1.dias > m2.dias:
+        return m1
+    else:
+        return m2
