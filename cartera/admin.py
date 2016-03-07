@@ -5,10 +5,8 @@ from .resources import *
 
 
 class detalle_admin(admin.ModelAdmin):
-    resource_class = ccorriente_resouce
     list_display = ('suscriptor', 'contrato', 'servicio',
-        'iddepartamento',
-        'idmunicipio', 'idbarrio', 'servicio',
+        'iddepartamento', 'idmunicipio', 'idbarrio', 'servicio',
         'saldo_pend_factura', 'integrado', 'estado', 'user')
     list_filter = ('categoria', 'iddepartamento', 'idmunicipio', 'idbarrio',
         'estado_corte', 'integrado', 'estado', 'user')
@@ -21,26 +19,15 @@ class detalle_admin(admin.ModelAdmin):
 
     actions = [action_integrar]
 
-
 admin.site.register(Detalle, detalle_admin)
 
 
-class cartera_corriente_admin(ImportExportModelAdmin):
-    resource_class = ccorriente_resouce
+class import_model_admin(ImportExportModelAdmin):
+    list_display = ('suscriptor', 'contrato', 'servicio',
+        'departamento', 'localidad', 'barr_contacto', 'servicio',
+        'saldo_pend_factura')
 
-admin.site.register(Corriente, cartera_corriente_admin)
-
-
-class rebaja_corriente_admin(ImportExportModelAdmin):
-    resource_class = crebaja_resouce
-
-admin.site.register(Rebaja, rebaja_corriente_admin)
-
-
-class mora_corriente_admin(ImportExportModelAdmin):
-    resource_class = cmora_resouce
-
-admin.site.register(Mora, mora_corriente_admin)
+admin.site.register(import_model, import_model_admin)
 
 
 class base_tabular(admin.TabularInline):

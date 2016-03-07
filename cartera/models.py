@@ -233,37 +233,15 @@ class base_detalle(models.Model):
     fecha_asignacion = models.DateField(null=True, blank=True)
     codigo = models.CharField(max_length=125, null=True, blank=True)
     comentario = models.CharField(max_length=125, null=True, blank=True)
-    ESTADOS_DE_ENTREGA = (('PENDIENTE', 'PENDIENTE'),
-                          ('VISITADO', 'VISITADO'),
-                          ('LLAMADO', 'LLAMADO'),
-                          ('CON PROMESA DE PAGO', 'CON PROMESA DE PAGO'),
-                          ('PAGAGO', 'PAGADO'),
-                         )
-    estado = models.CharField(max_length=65, null=True, blank=True,
-        choices=ESTADOS_DE_ENTREGA)
-    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
-        verbose_name='departamento')
-    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True,
-        verbose_name='municipio')
-    idbarrio = models.ForeignKey(Barrio, null=True, blank=True,
-        verbose_name='barrio')
-    position = GeopositionField(null=True, blank=True)
-    fecha_entrega = models.DateTimeField(null=True, blank=True)
-    user = models.ForeignKey(User, null=True, blank=True)
-    monto = models.FloatField(null=True, blank=True)
-    idcliente = models.ForeignKey(Cliente, null=True, blank=True)
-    integrado = models.NullBooleanField()
-    pagado = models.NullBooleanField()
-    fecha_asignacion_user = models.DateField(null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-
-class Detalle(base_detalle):
 
     def __unicode__(self):
         return self.suscriptor
+
+    def __getitem__(self, fieldname):
+        try:
+            return getattr(self, fieldname)
+        except:
+            return None
 
     def get_departamento(self):
         d = None
@@ -320,6 +298,34 @@ class Detalle(base_detalle):
                 c = None
         return c
 
+    class Meta:
+        abstract = True
+
+
+class Detalle(base_detalle):
+    ESTADOS_DE_ENTREGA = (('PENDIENTE', 'PENDIENTE'),
+                          ('VISITADO', 'VISITADO'),
+                          ('LLAMADO', 'LLAMADO'),
+                          ('CON PROMESA DE PAGO', 'CON PROMESA DE PAGO'),
+                          ('PAGAGO', 'PAGADO'),
+                         )
+    estado = models.CharField(max_length=65, null=True, blank=True,
+        choices=ESTADOS_DE_ENTREGA)
+    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
+        verbose_name='departamento')
+    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True,
+        verbose_name='municipio')
+    idbarrio = models.ForeignKey(Barrio, null=True, blank=True,
+        verbose_name='barrio')
+    position = GeopositionField(null=True, blank=True)
+    fecha_entrega = models.DateTimeField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
+    monto = models.FloatField(null=True, blank=True)
+    idcliente = models.ForeignKey(Cliente, null=True, blank=True)
+    integrado = models.NullBooleanField()
+    pagado = models.NullBooleanField()
+    fecha_asignacion_user = models.DateField(null=True, blank=True)
+
     def integrar(self):
         self.iddepartamento = self.get_departamento()
         self.idmunicipio = self.get_municipio()
@@ -361,107 +367,19 @@ class import_manager(models.Manager):
             id=0)
 
 
-class Corriente(base_detalle):
-    objects = models.Manager()
-    objects = import_manager()
-
-    class Meta:
-        verbose_name = 'factura'
-        verbose_name_plural = "importacion de cartera corriente"
-        managed = False
-        db_table = 'cartera_detalle'
+def actualizar_info(det, imp):
+    for field in imp._meta.get_field_names():
+        if not field == 'id':
+            det[field] = imp[field]
+            det.save()
+            det.integrar()
 
 
-class import_model(models.Model):
-    id = models.CharField(max_length=65, db_column="no_cupon", primary_key=True)
-    cliente = models.CharField(max_length=65, null=True, blank=True)
-    producto = models.CharField(max_length=65, null=True, blank=True)
-    categoria = models.CharField(max_length=65, null=True, blank=True)
-    contrato = models.CharField(max_length=65, null=True, blank=True)
-    nit = models.CharField(max_length=65, null=True, blank=True)
-    departamento = models.CharField(max_length=65, null=True, blank=True)
-    localidad = models.CharField(max_length=65, null=True, blank=True)
-    barr_contacto = models.CharField(max_length=125, null=True, blank=True)
-    cuenta_cobro = models.CharField(max_length=65, null=True, blank=True)
-    servicio = models.CharField(max_length=165, null=True, blank=True)
-    factura = models.CharField(max_length=65, null=True, blank=True)
-    factura_interna = models.CharField(max_length=65, null=True, blank=True)
-    no_fiscal = models.CharField(max_length=65, null=True, blank=True)
-    saldo_pend_factura = models.FloatField(null=True, blank=True)
-    ciclo = models.PositiveIntegerField(null=True, blank=True)
-    ano = models.PositiveIntegerField(null=True, blank=True)
-    mes = models.PositiveIntegerField(null=True, blank=True)
-    fecha_fact = models.DateField(null=True, blank=True)
-    fecha_venc = models.DateField(null=True, blank=True)
-    tipo_mora = models.CharField(max_length=65, null=True, blank=True)
-    estado_corte = models.CharField(max_length=165, null=True, blank=True)
-    fecha_instalacion = models.DateField(null=True, blank=True)
-    descr_plan = models.CharField(max_length=165, null=True, blank=True)
-    tecnologia = models.CharField(max_length=125, null=True, blank=True)
-    canal_venta = models.CharField(max_length=125, null=True, blank=True)
-    ejecutivo_venta = models.CharField(max_length=125, null=True, blank=True)
-    facturas_generadas = models.IntegerField(null=True, blank=True)
-    facturas_pagadas = models.IntegerField(null=True, blank=True)
-    tel_contacto = models.CharField(max_length=65, null=True, blank=True)
-    tel_instalacion = models.CharField(max_length=65, null=True, blank=True)
-    tel_contacto_cliente = models.CharField(max_length=65, null=True,
-        blank=True)
-    suscriptor = models.CharField(max_length=165, null=True, blank=True)
-    direccion = models.TextField(max_length=400, null=True, blank=True)
-    tipo_cartera = models.CharField(max_length=125, null=True, blank=True)
-    recurzo_externo = models.CharField(max_length=65, null=True, blank=True)
-    fecha_asignacion = models.DateField(null=True, blank=True)
-    codigo = models.CharField(max_length=125, null=True, blank=True)
-    comentario = models.CharField(max_length=125, null=True, blank=True)
-    ESTADOS_DE_ENTREGA = (('PENDIENTE', 'PENDIENTE'),
-                          ('VISITADO', 'VISITADO'),
-                          ('LLAMADO', 'LLAMADO'),
-                          ('CON PROMESA DE PAGO', 'CON PROMESA DE PAGO'),
-                          ('PAGAGO', 'PAGADO'),
-                         )
-    estado = models.CharField(max_length=65, null=True, blank=True,
-        choices=ESTADOS_DE_ENTREGA)
-    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
-        verbose_name='departamento')
-    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True,
-        verbose_name='municipio')
-    idbarrio = models.ForeignKey(Barrio, null=True, blank=True,
-        verbose_name='barrio')
-    position = GeopositionField(null=True, blank=True)
-    fecha_entrega = models.DateTimeField(null=True, blank=True)
-    user = models.ForeignKey(User, null=True, blank=True)
-    monto = models.FloatField(null=True, blank=True)
-    idcliente = models.ForeignKey(Cliente, null=True, blank=True)
-    integrado = models.NullBooleanField()
-    pagado = models.NullBooleanField()
-    fecha_asignacion_user = models.DateField(null=True, blank=True)
+class import_model(base_detalle):
 
-    class Meta:
-        abstract = True
-
-
-class Rebaja(import_model):
-
-    objects = models.Manager()
-    objects = import_manager()
-
-    class Meta:
-        verbose_name = 'factura'
-        verbose_name_plural = "importacion de rebajas de cartera"
-        managed = False
-        db_table = 'cartera_detalle'
-
-
-class Mora(import_model):
-
-    objects = models.Manager()
-    objects = import_manager()
-
-    class Meta:
-        verbose_name = 'factura'
-        verbose_name_plural = "importacion de cartera en mora"
-        managed = False
-        db_table = 'cartera_detalle'
+    def integrar(self):
+        f, created = Detalle.objects.get_or_create(no_cupon=self.no_cupon)
+        actualizar_info(f, self)
 
 
 class Corte(models.Model):
