@@ -360,7 +360,7 @@ class import_manager(models.Manager):
 
 
 def actualizar_info(det, imp):
-    for field in imp._meta.get_field_names():
+    for field in imp._meta.get_all_field_names():
         if not field == 'id':
             det[field] = imp[field]
     det.save()
