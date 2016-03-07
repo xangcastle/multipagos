@@ -3,11 +3,10 @@
 
 <html lang="es">
 <head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Panel de asignaciones</title>
-
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de asignaciones</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
@@ -17,48 +16,124 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css">
 
-    <script type="text/javascript" src="/static/metropolitana/js/asignacion.js" ></script>
+  <script type="text/javascript" src="/static/metropolitana/js/asignacion.js" ></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+  <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js"></script>
+  <script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <script type="text/javascript" src="/static/metropolitana/js/asignacion.js"></script>
 </head>
 <body>
-    <form runat="server" method="post" action".">
-        {% csrf_token %}
-        <div class="container body-content">
-           <!-- <div class="jumbotron">
-                <h1>Panel de asignaciones</h1>
-                <p class="lead">Desde esta sección usted podrá asignar cuotas de trabajo para cada una de las actividades de los gestores</p>
-
-            </div>-->
-            <div class="row">
-                <div class="col-lg-2"><span class="label label-info">1</span> Seleccione la zona</div>
-                <div class="col-lg-4">
-                    <select id="zonas" runat="server" class="form-control" name="zona">
-                            <option selected disabled value="0">---</option>
-                        {% for z in zonas %}
-                            <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
-                        {% endfor %}
-                    </select>
-
-                </div>
-                <div class="col-lg-2"><span class="label label-info">2</span> Seleccione el gestor</div>
-                <div class="col-lg-4">
-                    <select id="usuario" runat="server" class="form-control" name="usuario" required="required">
-                        <option selected disabled value="0">---</option>
-                    </select>
-                </div>
+  <form runat="server" method="post" action".">
+    {% csrf_token %}
+    <div class="container body-content">
+      <br />
+      <br />
+      <div>
+        <div class="panel panel-default">
+          <div class="panel-body" id="panelEntrega">
+            <div class="alert alert-{{ msgclass }}">
+              {{ mensaje }}
             </div>
-            <br />
+            <div style="max-height:400px; overflow-y:auto;">
+              <table class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Barrio</th>
+                    <th>Entregas</th>
+                    <th>Cobros</th>
+                    <th>Verificaciones</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
             <div class="row">
-                <div class="col-lg-2"><span class="label label-info">3</span> Seleccione la fecha</div>
-                <div class="col-lg-4">
+              <div class="col-lg-4">
+                <div class="row">
+                  <div class="col-lg-12"><span class="label label-info">1</span> Seleccione la zona</div>
+                  <div class="col-lg-12">
+                    <select id="zonas" runat="server" class="form-control" name="zona">
+                      <option selected disabled value="0">---</option>
+                      {% for z in zonas %}
+                      <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
+                      {% endfor %}
+                    </select>
+
+                  </div>
+                  <div class="col-lg-12"><span class="label label-info">2</span> Seleccione el gestor</div>
+                  <div class="col-lg-12">
+                    <select id="usuario" runat="server" class="form-control" name="usuario" required="required">
+                      <option selected disabled value="0">---</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-12"><span class="label label-info">3</span> Seleccione la fecha</div>
+                  <div class="col-lg-12">
                     <div class="form-group">
-                        <div class='input-group date' id='datepicker' name="picker">
-                            <input type='text' class="form-control" name="fecha" id="dtpFecha" required/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
+                      <div class='input-group date' id='datepicker' name="picker">
+                        <input type='text' class="form-control" name="fecha" id="dtpFecha" required />
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                      </div>
                     </div>
+                  </div>
                 </div>
+              </div>
+              <div class="col-lg-4">
+                <input type="hidden" id="asignacionActual" />
+                <input type="hidden" id="asignacionPendiente" />
+                <input type="hidden" id="cobroActual" />
+                <input type="hidden" id="cobroPendiente" />
+                <input type="hidden" id="verfiActual" />
+                <input type="hidden" id="verfPendiente" />
+
+                <ul class="nav nav-pills" role="tablist">
+                  <!--<li role="presentation" style="width:200px;visibility"><a>Entrega actual <span class="badge">0</span></a></li>
+                  <li role="presentation" style="width:200px;"><a>Entrega pendiente <span class="badge">0</span></a></li>-->
+                  <li role="presentation" style="width:200px" class="active"><a> Entrega total<span class="badge" id="asignacionTotal">0</span></a></li>
+                </ul>
+                <br />
+                <ul class="nav nav-pills" role="tablist">
+                  <!--<li role="presentation" style="width:200px;"><a>Cobros actual <span class="badge">0</span></a></li>
+                  <li role="presentation" style="width:200px;"><a>Cobros pendiente <span class="badge">0</span></a></li>-->
+                  <li role="presentation" style="width:200px" class="active"><a> Cobros total<span class="badge" id="cobroTotal">0</span></a></li>
+                </ul>
+                <br />
+                <ul class="nav nav-pills" role="tablist">
+                  <!--<li role="presentation" style="width:200px;"><a>Verificación actual <span class="badge">0</span></a></li>
+                  <li role="presentation" style="width:200px;"><a>Verificación pendiente <span class="badge">0</span></a></li>-->
+                  <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">0</span></a></li>
+                </ul>
+                <br />
+              </div>
+              <div class="col-lg-4">
+                <ul class="list-group">
+                  <li class="list-group-item list-group-item-info">
+                    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en distribución</h4>
+                    <p class="list-group-item-text" id="horasdistribucion">horas</p>
+                  </li>
+                  <li class="list-group-item list-group-item-warning">
+                    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en cobranza</h4>
+                    <p class="list-group-item-text" id="horascobro">horas</p>
+                  </li>
+                  <li class="list-group-item list-group-item-success">
+                    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en verificacion</h4>
+                    <p class="list-group-item-text" id="horasveficicacion">horas</p>
+                  </li>
+                  <li class="list-group-item list-group-item-default">
+                    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Total horas </h4>
+                    <p class="list-group-item-text" id="horastotal">horas</p>
+                  </li>
+                </ul>
+              </div>
+              <input type='submit' class="btn btn-success" value='Asignar Trabajo'>
             </div>
             <br />
             <div>
@@ -67,11 +142,8 @@
                         <div class="alert alert-{{ msgclass }}">
                         {{ mensaje }}
                         </div>
-<<<<<<< HEAD
                         <div style="max-height:800px; overflow-y:auto;">
-=======
                         <div style="max-height:400px; overflow-y:auto;">
->>>>>>> af1e3c95001f9a5e097caa3276f48be8e73b9ad1
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -129,12 +201,24 @@
                         </div>
                     </div>
                 </div>
+            <div class="row">
+              <div class="col-lg-9">
+
+
+              </div>
+              <div class="col-lg-3 col-sm-6">
+
+              </div>
             </div>
-            <hr />
+          </div>
         </div>
-    </form>
-    <footer>
-        <p>&copy; - Multipagos </p>
-    </footer>
+      </div>
+      <hr />
+    </div>
+  </form>
+  <footer>
+    <p>&copy; - Multipagos </p>
+  </footer>
 </body>
 </html>
+
