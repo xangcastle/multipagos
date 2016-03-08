@@ -66,8 +66,8 @@ class entregas_cliente(base_tabular):
 
 
 class cliente_admin(admin.ModelAdmin):
-    list_display = ('code', 'name', 'identificacion', 'comentario',
-        'position_ver')
+    list_display = ('code', 'name', 'identificacion', 'saldo_total',
+        'comentario', 'tipo_mora', 'position_ver')
     list_filter = ('departamento', 'municipio', 'position_ver', 'tipo_mora')
     search_fields = ('code', 'name', 'identificacion', 'contrato')
     readonly_fields = ('code', 'name', 'identificacion', 'departamento',
@@ -93,6 +93,15 @@ class cliente_admin(admin.ModelAdmin):
         }),
                             )
     inlines = [detalle_cartera, promesas_cliente, entregas_cliente]
+
+    actions = ['action_orden_corte', ]
+
+    def action_orden_corte(self, request, queryset):
+        for obj in queryset:
+            obj.generar_orden_corte()
+        self.message_user('%s ' % queryset.count())
+    action_orden_corte.short_description = \
+    "generar orden de corte para los clientes seleccionados"
 
 admin.site.register(Cliente, cliente_admin)
 

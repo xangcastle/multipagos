@@ -5,6 +5,7 @@ from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 from django.db.models import Max
 from datetime import datetime
+from django.db.models import Sum
 
 
 def devolver_mayor(a, b):
@@ -121,6 +122,7 @@ class Cliente(Entidad):
     telefonos = models.CharField(max_length=65, null=True, blank=True)
     direccion = models.CharField(max_length=255, null=True, blank=True)
     tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
+    saldo_total = models.FloatField(null=True, blank=True)
 
     objects = models.Manager()
     morosos = CarteraMorosa()
@@ -137,6 +139,13 @@ class Cliente(Entidad):
                 self.tipo_mora = devolver_mora_mayor(self.tipo_mora,
                     f.idtipo_mora)
             self.save()
+
+    def get_saldo(self):
+        if self.facturas():
+            return self.facturas().aggregate(
+                Sum('saldo_pend_fact'))['saldo_pend_fact__sum']
+        else:
+            return 0.0
 
     def get_direccion(self):
         if self.facturas():
