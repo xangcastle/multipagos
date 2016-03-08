@@ -27,13 +27,8 @@ def get_user(request):
 
 @csrf_exempt
 def get_paquetes(request):
-    ciclo = request.POST.get('ciclo', '')
-    mes = request.POST.get('mes', '')
-    ano = request.POST.get('ano', '')
-    d = request.POST.get('departamento', '')
-    departamento = Departamento.objects.get(id=d)
-    queryset = Paquete.objects.filter(ciclo=ciclo, mes=mes, ano=ano,
-        iddepartamento=departamento)
+    usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
+    queryset = Paquete.objects.filter(user=usuario, estado='PENDIENTE')
     if queryset:
         data = serializers.serialize('json', queryset)
         struct = json.loads(data)
@@ -222,10 +217,8 @@ def get_verificacion(request):
 
 @csrf_exempt
 def get_verificaciones(request):
-    d = request.POST.get('departamento', '')
-    departamento = Departamento.objects.get(id=d)
-    queryset = Verificacion.objects.filter(iddepartamento=departamento).exclude(
-        estado='VENCIDA')
+    usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
+    queryset = Verificacion.objects.filter(user=usuario, estado='PENDIENTE')
     if queryset:
         data = serializers.serialize('json', queryset)
         struct = json.loads(data)
@@ -306,10 +299,8 @@ def get_detalle(request):
 @csrf_exempt
 def get_cortes(request):
     data = []
-    d = request.POST.get('departamento', '')
-    departamento = Departamento.objects.get(id=d)
-    queryset = Corte.objects.filter(departamento=departamento).exclude(
-        estado='CORTADO')
+    usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
+    queryset = Corte.objects.filter(user=usuario, estado='PENDIENTE')
     if queryset:
         for c in queryset:
             data.append(c.to_json())
