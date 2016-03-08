@@ -143,7 +143,7 @@ class Cliente(Entidad):
     def get_saldo(self):
         if self.facturas():
             return self.facturas().aggregate(
-                Sum('saldo_pend_fact'))['saldo_pend_fact__sum']
+                Sum('saldo_pend_factura'))['saldo_pend_factura__sum']
         else:
             return 0.0
 
