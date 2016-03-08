@@ -373,7 +373,7 @@ def get_gestion(request):
 
 def cartera_user(user):
     isc = Detalle.objects.filter(estado='PENDIENTE', user=user
-    ).order_by('idcliente').distinct('idcliente').values_list(
+    ).order_by('idcliente').values_list(
         'idcliente', flat=True)
     cs = Cliente.objects.filter(id__in=isc)
     return cs
