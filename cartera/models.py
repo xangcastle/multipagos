@@ -313,6 +313,8 @@ class base_detalle(models.Model):
                 m, created = TipoMora.objects.get_or_create(name=self.tipo_mora)
             except:
                 pass
+        else:
+            m = TipoMora.objects.get(name='AL_DIA')
         return m
 
     class Meta:
