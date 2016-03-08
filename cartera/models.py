@@ -185,6 +185,12 @@ class Cliente(Entidad):
         else:
             return None
 
+    def get_comentario(self):
+        if self.facturas():
+            return self.facturas().order_by('-fecha_asignacion')[0].comentario
+        else:
+            return ""
+
     def get_position_verificada(self):
         if self.position:
             return True
@@ -512,6 +518,9 @@ class TipoMora(models.Model):
             return self.name
         else:
             return ''
+
+    class Meta:
+        ordering = ['dias', ]
 
 
 class PromosionVigente(models.Model):
