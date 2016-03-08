@@ -230,10 +230,9 @@ def get_verificaciones(request):
 
 @csrf_exempt
 def get_cartera(request):
+    usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
     data = []
-    d = request.POST.get('departamento', '')
-    departamento = Departamento.objects.get(id=d)
-    queryset = Cliente.objects.filter(departamento=departamento)
+    queryset = cartera_user(usuario)
     for c in queryset:
         obj_json = {}
         obj_json['code'] = c.id
@@ -370,3 +369,11 @@ def get_gestion(request):
         obj_json['Mensaje'] = "gestion guardada con exito"
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
+
+
+def cartera_user(user):
+    isc = Detalle.objects.filter(estado='PENDIENTE', user=user
+    ).order_by('idcliente').distinct('idcliente').values_list(
+        'idcliente', flat=True)
+    cs = Cliente.objects.filter(id__in=isc)
+    return cs
