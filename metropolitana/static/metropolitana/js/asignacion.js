@@ -9,6 +9,31 @@ $(document).ready(function (){
      });
 });
 
+
+function sumValues() {
+
+  var total_entrega = 0;
+  var total_cobro = 0;
+  var total_verificacion = 0;
+  $('.table tbody tr').each(function (key, value) {
+    if($(value).find('input[name=entrega]').val().trim() != '')
+      total_entrega += parseInt($(value).find('input[name=entrega]').val());
+    if($(value).find('input[name=cobro]').val().trim() != '')
+      total_cobro += parseInt($(value).find('input[name=cobro]').val());
+    if($(value).find('input[name=verificacion]').val().trim() != '')
+      total_verificacion += parseInt($(value).find('input[name=verificacion]').val());
+    if(key == ($('.table tbody tr').length-1)) {
+      console.log('-----------');
+      console.log(total_entrega);
+      console.log(total_cobro);
+      console.log(total_verificacion);
+      $('#verfTotal').text(total_verificacion);
+      $('#cobroTotal').text(total_cobro);
+      $('#asignacionTotal').text(total_entrega);
+    }
+  });
+}
+/*
 function sumValues() {
 
   $('.table').each(function () {
@@ -47,18 +72,19 @@ function sumValues() {
     var hordist=0.0;
     var horcobro=0.0;
     var horverif=0.0;
-    
+
     hordist=((totalasignacionActual+asignacion)*3)/60;
     horcobro=((totalcobroActual+cobro)*15)/60;
     horverif=((totalverifActual+verif)*8)/60;
-    
+
     $('#horasdistribucion').text(hordist);
     $('#horascobro').text(horcobro);
     $('#horasveficicacion').text(horverif);
     $('#horastotal').text(hordist+horcobro+horverif);
-    
+
   });
 }
+*/
 function selectAll(control) {
   if (control.checked) {
     alert("cheked");
