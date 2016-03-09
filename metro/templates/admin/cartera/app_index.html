@@ -117,8 +117,6 @@ td {
 }
 
     </style>
-  </head>
-  <body>
 
     <div id="pieChart"></div>
     <div id="barChart"></div>
@@ -152,13 +150,13 @@ var 	formatAsPercentage = d3.format("%"),
 function dsPieChart(){
 
 	var dataset = [
-			{category: "Sam", measure: 0.30},
-	      {category: "Peter", measure: 0.25},
-	      {category: "John", measure: 0.15},
-	      {category: "Rick", measure: 0.05},
-	      {category: "Lenny", measure: 0.18},
-	      {category: "Paul", measure:0.04},
-	      {category: "Steve", measure: 0.03}
+	      {category: "Mora 1", measure: 0.30},
+	      {category: "Mora 2", measure: 0.25},
+	      {category: "Mora 3", measure: 0.15},
+	      {category: "Mora 4", measure: 0.05},
+	      {category: "Mora 5", measure: 0.18},
+	      {category: "Mora 6", measure:0.04},
+	      {category: "Mora 7", measure: 0.03}
 	      ]
 	      ;
 
@@ -235,7 +233,7 @@ function dsPieChart(){
 		vis.append("svg:text")
 	     	.attr("dy", ".35em")
 	      .attr("text-anchor", "middle")
-	      .text("Revenue Share 2012")
+	      .text("Marzo 2016")
 	      .attr("class","title")
 	      ;
 
@@ -279,46 +277,46 @@ dsPieChart();
 
 
 var datasetBarChart = [
-{ group: "All", category: "Oranges", measure: 63850.4963 },
-{ group: "All", category: "Apples", measure: 78258.0845 },
-{ group: "All", category: "Grapes", measure: 60610.2355 },
-{ group: "All", category: "Figs", measure: 30493.1686 },
-{ group: "All", category: "Mangos", measure: 56097.0151 },
-{ group: "Sam", category: "Oranges", measure: 19441.5648 },
-{ group: "Sam", category: "Apples", measure: 25922.0864 },
-{ group: "Sam", category: "Grapes", measure: 9720.7824 },
-{ group: "Sam", category: "Figs", measure: 6480.5216 },
-{ group: "Sam", category: "Mangos", measure: 19441.5648 },
-{ group: "Peter", category: "Oranges", measure: 22913.2728 },
-{ group: "Peter", category: "Apples", measure: 7637.7576 },
-{ group: "Peter", category: "Grapes", measure: 23549.7526 },
-{ group: "Peter", category: "Figs", measure: 1909.4394 },
-{ group: "Peter", category: "Mangos", measure: 7637.7576 },
-{ group: "John", category: "Oranges", measure: 1041.5124 },
-{ group: "John", category: "Apples", measure: 2430.1956 },
-{ group: "John", category: "Grapes", measure: 15275.5152 },
-{ group: "John", category: "Figs", measure: 4166.0496 },
-{ group: "John", category: "Mangos", measure: 11803.8072 },
-{ group: "Rick", category: "Oranges", measure: 7406.3104 },
-{ group: "Rick", category: "Apples", measure: 2545.9192 },
-{ group: "Rick", category: "Grapes", measure: 1620.1304 },
-{ group: "Rick", category: "Figs", measure: 8563.5464 },
-{ group: "Rick", category: "Mangos", measure: 3008.8136 },
-{ group: "Lenny", category: "Oranges", measure: 7637.7576 },
-{ group: "Lenny", category: "Apples", measure: 35411.4216 },
-{ group: "Lenny", category: "Grapes", measure: 8332.0992 },
-{ group: "Lenny", category: "Figs", measure: 6249.0744 },
-{ group: "Lenny", category: "Mangos", measure: 11803.8072 },
-{ group: "Paul", category: "Oranges", measure: 3182.399 },
-{ group: "Paul", category: "Apples", measure: 867.927 },
-{ group: "Paul", category: "Grapes", measure: 1808.18125 },
-{ group: "Paul", category: "Figs", measure: 795.59975 },
-{ group: "Paul", category: "Mangos", measure: 578.618 },
-{ group: "Steve", category: "Oranges", measure: 2227.6793 },
-{ group: "Steve", category: "Apples", measure: 3442.7771 },
-{ group: "Steve", category: "Grapes", measure: 303.77445 },
-{ group: "Steve", category: "Figs", measure: 2328.93745 },
-{ group: "Steve", category: "Mangos", measure: 1822.6467 },
+{ group: "All", category: "Managua", measure: 63850.4963 },
+{ group: "All", category: "Leon", measure: 78258.0845 },
+{ group: "All", category: "Esteli", measure: 60610.2355 },
+{ group: "All", category: "Matagalpa", measure: 30493.1686 },
+{ group: "All", category: "Ocotal", measure: 56097.0151 },
+{ group: "Mora 1", category: "Managua", measure: 19441.5648 },
+{ group: "Mora 1", category: "Leon", measure: 25922.0864 },
+{ group: "Mora 1", category: "Esteli", measure: 9720.7824 },
+{ group: "Mora 1", category: "Matagalpa", measure: 6480.5216 },
+{ group: "Mora 1", category: "Ocotal", measure: 19441.5648 },
+{ group: "Mora 2", category: "Managua", measure: 22913.2728 },
+{ group: "Mora 2", category: "Leon", measure: 7637.7576 },
+{ group: "Mora 2", category: "Esteli", measure: 23549.7526 },
+{ group: "Mora 2", category: "Matagalpa", measure: 1909.4394 },
+{ group: "Mora 2", category: "Ocotal", measure: 7637.7576 },
+{ group: "Mora 3", category: "Managua", measure: 1041.5124 },
+{ group: "Mora 3", category: "Leon", measure: 2430.1956 },
+{ group: "Mora 3", category: "Esteli", measure: 15275.5152 },
+{ group: "Mora 3", category: "Matagalpa", measure: 4166.0496 },
+{ group: "Mora 3", category: "Ocotal", measure: 11803.8072 },
+{ group: "Mora 4", category: "Managua", measure: 7406.3104 },
+{ group: "Mora 4", category: "Leon", measure: 2545.9192 },
+{ group: "Mora 4", category: "Esteli", measure: 1620.1304 },
+{ group: "Mora 4", category: "Matagalpa", measure: 8563.5464 },
+{ group: "Mora 4", category: "Ocotal", measure: 3008.8136 },
+{ group: "Mora 5", category: "Managua", measure: 7637.7576 },
+{ group: "Mora 5", category: "Leon", measure: 35411.4216 },
+{ group: "Mora 5", category: "Esteli", measure: 8332.0992 },
+{ group: "Mora 5", category: "Matagalpa", measure: 6249.0744 },
+{ group: "Mora 5", category: "Ocotal", measure: 11803.8072 },
+{ group: "Mora 5", category: "Managua", measure: 3182.399 },
+{ group: "Mora 5", category: "Leon", measure: 867.927 },
+{ group: "Mora 5", category: "Esteli", measure: 1808.18125 },
+{ group: "Mora 5", category: "Matagalpa", measure: 795.59975 },
+{ group: "Mora 5", category: "Ocotal", measure: 578.618 },
+{ group: "Mora 6", category: "Managua", measure: 2227.6793 },
+{ group: "Mora 6", category: "Leon", measure: 3442.7771 },
+{ group: "Mora 6", category: "Esteli", measure: 303.77445 },
+{ group: "Mora 6", category: "Matagalpa", measure: 2328.93745 },
+{ group: "Mora 6", category: "Ocotal", measure: 1822.6467 },
 ]
 ;
 
@@ -472,7 +470,7 @@ function dsBarChart() {
 		.attr("y", 15)
 		.attr("class","title")				
 		.attr("text-anchor", "middle")
-		.text("Overall Sales Breakdown 2012")
+		.text("Cartera de clientes Marzo 2016")
 		;
 }
 
@@ -569,41 +567,41 @@ var datasetLineChart = [
 { group: "All", category: 2010, measure: 310900 },
 { group: "All", category: 2011, measure: 223900 },
 { group: "All", category: 2012, measure: 234500 },
-{ group: "Sam", category: 2008, measure: 81006.52 },
-{ group: "Sam", category: 2009, measure: 70499.4 },
-{ group: "Sam", category: 2010, measure: 96379 },
-{ group: "Sam", category: 2011, measure: 64931 },
-{ group: "Sam", category: 2012, measure: 70350 },
-{ group: "Peter", category: 2008, measure: 63647.98 },
-{ group: "Peter", category: 2009, measure: 61099.48 },
-{ group: "Peter", category: 2010, measure: 87052 },
-{ group: "Peter", category: 2011, measure: 58214 },
-{ group: "Peter", category: 2012, measure: 58625 },
-{ group: "Rick", category: 2008, measure: 23144.72 },
-{ group: "Rick", category: 2009, measure: 14099.88 },
-{ group: "Rick", category: 2010, measure: 15545 },
-{ group: "Rick", category: 2011, measure: 11195 },
-{ group: "Rick", category: 2012, measure: 11725 },
-{ group: "John", category: 2008, measure: 34717.08 },
-{ group: "John", category: 2009, measure: 30549.74 },
-{ group: "John", category: 2010, measure: 34199 },
-{ group: "John", category: 2011, measure: 33585 },
-{ group: "John", category: 2012, measure: 35175 },
-{ group: "Lenny", category: 2008, measure: 69434.16 },
-{ group: "Lenny", category: 2009, measure: 46999.6 },
-{ group: "Lenny", category: 2010, measure: 62180 },
-{ group: "Lenny", category: 2011, measure: 40302 },
-{ group: "Lenny", category: 2012, measure: 42210 },
-{ group: "Paul", category: 2008, measure: 7232.725 },
-{ group: "Paul", category: 2009, measure: 4699.96 },
-{ group: "Paul", category: 2010, measure: 6218 },
-{ group: "Paul", category: 2011, measure: 8956 },
-{ group: "Paul", category: 2012, measure: 9380 },
-{ group: "Steve", category: 2008, measure: 10125.815 },
-{ group: "Steve", category: 2009, measure: 7049.94 },
-{ group: "Steve", category: 2010, measure: 9327 },
-{ group: "Steve", category: 2011, measure: 6717 },
-{ group: "Steve", category: 2012, measure: 7035 }
+{ group: "Mora 1", category: 2008, measure: 81006.52 },
+{ group: "Mora 1", category: 2009, measure: 70499.4 },
+{ group: "Mora 1", category: 2010, measure: 96379 },
+{ group: "Mora 1", category: 2011, measure: 64931 },
+{ group: "Mora 1", category: 2012, measure: 70350 },
+{ group: "Mora 2", category: 2008, measure: 63647.98 },
+{ group: "Mora 2", category: 2009, measure: 61099.48 },
+{ group: "Mora 2", category: 2010, measure: 87052 },
+{ group: "Mora 2", category: 2011, measure: 58214 },
+{ group: "Mora 2", category: 2012, measure: 58625 },
+{ group: "Mora 4", category: 2008, measure: 23144.72 },
+{ group: "Mora 4", category: 2009, measure: 14099.88 },
+{ group: "Mora 4", category: 2010, measure: 15545 },
+{ group: "Mora 4", category: 2011, measure: 11195 },
+{ group: "Mora 4", category: 2012, measure: 11725 },
+{ group: "Mora 3", category: 2008, measure: 34717.08 },
+{ group: "Mora 3", category: 2009, measure: 30549.74 },
+{ group: "Mora 3", category: 2010, measure: 34199 },
+{ group: "Mora 3", category: 2011, measure: 33585 },
+{ group: "Mora 3", category: 2012, measure: 35175 },
+{ group: "Mora 5", category: 2008, measure: 69434.16 },
+{ group: "Mora 5", category: 2009, measure: 46999.6 },
+{ group: "Mora 5", category: 2010, measure: 62180 },
+{ group: "Mora 5", category: 2011, measure: 40302 },
+{ group: "Mora 5", category: 2012, measure: 42210 },
+{ group: "Mora 5", category: 2008, measure: 7232.725 },
+{ group: "Mora 5", category: 2009, measure: 4699.96 },
+{ group: "Mora 5", category: 2010, measure: 6218 },
+{ group: "Mora 5", category: 2011, measure: 8956 },
+{ group: "Mora 5", category: 2012, measure: 9380 },
+{ group: "Mora 6", category: 2008, measure: 10125.815 },
+{ group: "Mora 6", category: 2009, measure: 7049.94 },
+{ group: "Mora 6", category: 2010, measure: 9327 },
+{ group: "Mora 6", category: 2011, measure: 6717 },
+{ group: "Mora 6", category: 2012, measure: 7035 }
 ]
 ;
 
@@ -709,7 +707,7 @@ function dsLineChart() {
 	    ;
 
 	svg.append("text")
-		.text("Performance 2012")
+		.text("Performance 2016")
 		.attr("id","lineChartTitle1")	
 		.attr("x",margin.left + ((width + margin.right)/2))
 		.attr("y", 10)
