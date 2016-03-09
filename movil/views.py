@@ -27,13 +27,8 @@ def get_user(request):
 
 @csrf_exempt
 def get_paquetes(request):
-    ciclo = request.POST.get('ciclo', '')
-    mes = request.POST.get('mes', '')
-    ano = request.POST.get('ano', '')
-    d = request.POST.get('departamento', '')
-    departamento = Departamento.objects.get(id=d)
-    queryset = Paquete.objects.filter(ciclo=ciclo, mes=mes, ano=ano,
-        iddepartamento=departamento)
+    usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
+    queryset = Paquete.objects.filter(user=usuario, estado='PENDIENTE')
     if queryset:
         data = serializers.serialize('json', queryset)
         struct = json.loads(data)
