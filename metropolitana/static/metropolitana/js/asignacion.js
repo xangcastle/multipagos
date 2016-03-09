@@ -26,8 +26,12 @@ function sumValues() {
       $('#cobroTotal').text(total_cobro);
       $('#asignacionTotal').text(total_entrega);
       $('#horasdistribucion').empty().html(((total_entrega*3)/60).toFixed(1)+' Horas');
-      $('#horascobro').empty().html(((total_entrega*15)/60).toFixed(1)+' Horas');
-      $('#horasveficicacion').empty().html(((total_entrega*8)/60).toFixed(1)+' Horas');
+      $('#horascobro').empty().html(((total_cobro*15)/60).toFixed(1)+' Horas');
+      $('#horasveficicacion').empty().html(((total_verificacion*8)/60).toFixed(1)+' Horas');
+      $('#horastotal').empty()
+          .html((total_entrega*3)/60)
+              + ((total_cobro*15)/60)
+                  + ((total_verificacion*8)/60)).toFixed(1)+' Horas');
     }
   });
 }
