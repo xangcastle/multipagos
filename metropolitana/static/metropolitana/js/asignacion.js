@@ -29,9 +29,10 @@ function sumValues() {
       $('#horascobro').empty().html(((total_cobro*15)/60).toFixed(1)+' Horas');
       $('#horasveficicacion').empty().html(((total_verificacion*8)/60).toFixed(1)+' Horas');
       $('#horastotal').empty()
-          .html((total_entrega*3)/60)
+          .html(
+              ((total_entrega*3)/60)
               + ((total_cobro*15)/60)
-                  + ((total_verificacion*8)/60)).toFixed(1)+' Horas');
+              + ((total_verificacion*8)/60).toFixed(1)+' Horas');
     }
   });
 }
