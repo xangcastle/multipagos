@@ -101,7 +101,6 @@ class cliente_admin(admin.ModelAdmin):
     def action_orden_corte(self, request, queryset):
         for obj in queryset:
             obj.generar_orden_corte()
-        self.message_user('%s ' % queryset.count())
     action_orden_corte.short_description = \
     "generar orden de corte para los clientes seleccionados"
 
