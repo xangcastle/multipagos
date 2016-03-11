@@ -38,6 +38,21 @@ def get_paquetes(request):
     return HttpResponse(data, content_type='application/json')
 
 
+@csrf_exempt
+def get_ciclo(request):
+    queryset = Paquete.objects.filter(
+        ciclo=request.POST.get('ciclo', ''),
+        mes=request.POST.get('mes', ''),
+        ano=request.POST.get('ano', ''))
+    if queryset:
+        data = serializers.serialize('json', queryset)
+        struct = json.loads(data)
+        data = json.dumps(struct)
+    else:
+        data = None
+    return HttpResponse(data, content_type='application/json')
+
+
 
 @csrf_exempt
 def get_paquete(request):

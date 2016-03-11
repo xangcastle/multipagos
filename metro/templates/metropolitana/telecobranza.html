@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head runat="server">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de asignaciones</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+  <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+  <script src="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/locales/bootstrap-datepicker.es.js"></script>
+  <script src="http://1000hz.github.io/bootstrap-validator/dist/validator.min.js"></script>
+  <script src="http://fooplugins.com/footable/js/footable.js"></script>
+  <!-- Material Design fonts -->
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://fooplugins.com/footable/css/footable.core.css?v=2-0-1">
+
+  <!-- Bootstrap Material Design -->
+  <link rel="stylesheet" type="text/css" href="http://fezvrasta.github.io/bootstrap-material-design/dist/css/bootstrap-material-design.css">
+  <link rel="stylesheet" type="text/css" href="http://fezvrasta.github.io/bootstrap-material-design/dist/css/ripples.min.css">
+</head>
+<body>
+
+    {% csrf_token %}
+    <div class="container body-content">
+      <br />
+      <br />
+      <div>
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h3 class="panel-title">Datos generales</h3>
+          </div>
+          <div class="panel-body" id="panelDatosGenerales">
+              <table class="footable table">
+                <thead>
+                  <tr>
+                    <th>Contrato</th>
+                    <th data-hide="phone">Nombre</th>
+                    <th data-hide="phone,tablet">Departamento</th>
+                    <th data-hide="all">Municipio</th>
+                    <th data-hide="all">Barrio</th>
+                    <th data-hide="phone,tablet">Telefono</th>
+                  </tr>
+                </thead>
+                <tbody class="tableboody">
+                </tbody>
+             </table>
+          </div>
+
+        </div>
+
+      </div>
+      <hr />
+    </div>
+
+  <div class="modal bs-example-modal-lg fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Gestion de Cobro</h4>
+        </div>
+        <div class="modal-body">
+
+
+          <div class="row">
+            <div class="col-lg-3">
+              <div class="form-group has-success is-empty">
+                <label class="control-label" for="inputSuccess">Contrato</label>
+                <input class="form-control" id="contrato" type="text">
+                <span class="material-input"></span>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <div class="form-group has-success is-empty">
+                <label class="control-label" for="inputSuccess">Identificacion</label>
+                <input class="form-control" id="indentificacion" type="text">
+                <span class="material-input"></span>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group has-success is-empty">
+                <label class="control-label" for="inputSuccess">Telefono</label>
+                <input class="form-control" id="telefono" type="text">
+                <span class="material-input"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group has-success is-empty">
+                <label class="control-label" for="inputSuccess">Nombre</label>
+                <input class="form-control" id="nombre" type="text">
+                <span class="material-input"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="form-group has-success is-empty">
+                <label class="control-label" for="inputSuccess">Departamento</label>
+                <input class="form-control" id="departamento" type="text">
+                <span class="material-input"></span>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group has-success is-empty">
+                <label class="control-label" for="inputSuccess">Municipio</label>
+                <input class="form-control" id="municipio" type="text">
+                <span class="material-input"></span>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="form-group has-success is-empty">
+                <label class="control-label" for="inputSuccess">Barrio</label>
+                <input class="form-control" id="barrio" type="text">
+                <span class="material-input"></span>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Facturas pendientes</h3>
+            </div>
+            <div id="listadofacturas" style="padding:15px">
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="form-group has-success is-empty">
+                    <label class="control-label" for="inputSuccess">No Factura</label>
+                    <input class="form-control" id="departamento" type="text" value="">
+                    <span class="material-input"></span>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group has-success is-empty">
+                    <label class="control-label" for="inputSuccess">Fecha</label>
+                    <input class="form-control" id="municipio" type="text">
+                    <span class="material-input"></span>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="form-group has-success is-empty">
+                    <label class="control-label" for="inputSuccess">Vence</label>
+                    <input class="form-control" id="barrio" type="text">
+                    <span class="material-input"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body">
+                <div class="togglebutton">
+                  <label>
+                    <input type="checkbox" id="pagarfactura">
+                    <span class="toggle"></span> Facturas pendientes
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"><span class="fa fa-close fa-fw"></span>Cerrar</button>
+          <button type="button" class="btn btn-primary"><span class="fa fa-save fa-fw"></span>Guardar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+    <script type="text/javascript">
+      var datos;
+      $(document).ready(function () {
+        cargarTabla();
+      });
+      function cargarTabla() {
+        var userID = {{ user }};
+        var data = new FormData();
+        data.append('usuario', userID);
+        $.ajax({
+          url: 'http://sys.multipagos.net/movil/get_cartera/',
+          data: data,
+          cache: false,
+          contentType: false,
+          processData: false,
+          type: 'POST',
+          success: function (data) {
+            datos = data;
+            drawTable(data);
+          }
+        });
+
+      }
+      function drawTable(data) {
+        for (var i = 0; i < data.length; i++) {
+          drawRow(data[i],i);
+        }
+        refreshFootable();
+      }
+      function drawRow(rowData,position) {
+        var row = $("<tr />")
+        $(".tableboody").append(row);
+        row.append($('<td><a href="javascript:cargarModalCobro('+ position +')">' + rowData.contrato + '</a></td>'));
+        row.append($("<td>" + rowData.name + "</td>"));
+        row.append($("<td>" + rowData.departamento + "</td>"));
+        row.append($("<td>" + rowData.municipio + "</td>"));
+        row.append($("<td>" + rowData.barrio + "</td>"));
+        row.append($("<td>" + rowData.telefonos + "</td>"));
+      }
+      function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+          hash = hashes[i].split('=');
+          vars.push(hash[0]);
+          vars[hash[0]] = hash[1];
+        }
+        return vars;
+      }
+      function refreshFootable() {
+        $('.footable').footable();
+      }
+
+      function cargarModalCobro(position) {
+        $('#myModal').modal('show')
+        var cobro = datos[position];
+        $("#contrato").val(cobro.contrato);
+        $("#nombre").val(cobro.name);
+        $("#indentificacion").val(cobro.identificacion);
+        $("#telefono").val(cobro.telefonos);
+        $("#departamento").val(cobro.departamento);
+        $("#municipio").val(cobro.municipio);
+        $("#barrio").val(cobro.barrio);
+        $("#listadofacturas").empty();
+        for (var i = 0; i < cobro.facturas.length; i++) {
+          cargarFactura(cobro.facturas[i]);
+        }
+      }
+      function cargarFactura(factura) {
+
+        var strHtml = '<div class="panel panel-success">';
+        strHtml = strHtml + '<div class="panel-heading">';
+        strHtml = strHtml + '<h3 class="panel-title">Factura ' + factura.factura_interna + ' - ' + factura.tipo_mora + '</h3>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '<div class="panel-body">';
+        strHtml = strHtml + '<div class="row"><div class="col-lg-4"><div class="form-group has-success is-empty">';
+        strHtml = strHtml + '<label class="control-label" for="inputSuccess">No Factura</label>';
+        strHtml = strHtml + '<input class="form-control" id="departamento" type="text" value="' + factura.factura_interna + '">';
+        strHtml = strHtml + '<span class="material-input"></span>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '<div class="col-lg-4">';
+        strHtml = strHtml + '<div class="form-group has-success is-empty">';
+        strHtml = strHtml + '<label class="control-label" for="inputSuccess">Fecha</label>';
+        strHtml = strHtml + '<input class="form-control" id="municipio" type="text" value="' + factura.fecha_fact + '">';
+        strHtml = strHtml + '<span class="material-input"></span>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '<div class="col-lg-4">';
+        strHtml = strHtml + '<div class="form-group has-success is-empty">';
+        strHtml = strHtml + '<label class="control-label" for="inputSuccess">Vence</label>';
+        strHtml = strHtml + '<input class="form-control" id="barrio" type="text" value="' + factura.fecha_venc + '">';
+        strHtml = strHtml + '<span class="material-input"></span>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+
+        strHtml = strHtml + '<div class="row">';
+
+        strHtml = strHtml + '<div class="col-lg-4">';
+        strHtml = strHtml + '<div class="form-group has-success is-empty">';
+        strHtml = strHtml + '<label class="control-label" for="inputSuccess">Monto</label>';
+        strHtml = strHtml + '<input class="form-control" id="monto" type="text" value="' + factura.saldo_pend_factura + '">';
+        strHtml = strHtml + '<span class="material-input"></span>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+
+        strHtml = strHtml + '<div class="col-lg-4">';
+        strHtml = strHtml + '<div class="panel-body">';
+        strHtml = strHtml + '<div class="togglebutton">';
+        strHtml = strHtml + '<label>';
+        strHtml = strHtml + '<input type="checkbox" id="pagarfactura">';
+        strHtml = strHtml + '<span class="toggle"></span> Facturas pendientes';
+        strHtml = strHtml + '</label>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+
+        strHtml = strHtml + '</div>';
+
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+        strHtml = strHtml + '</div>';
+        $("#listadofacturas").append(strHtml);
+      }
+    </script>
+ <style>
+   .form-group {
+     margin:inherit !important;
+   }
+   label.control-label {
+     margin:inherit !important;
+   }
+ </style>
+  <footer>
+    <p>&copy; - Multipagos </p>
+  </footer>
+</body>
+</html>
+
+
