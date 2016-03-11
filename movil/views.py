@@ -269,7 +269,12 @@ def get_cartera(request):
         obj_json['promesas'] = pmsas
         data.append(obj_json)
     data = json.dumps(data)
-    return HttpResponse(data, content_type='application/json')
+    response = HttpResponse(data, content_type='application/json')
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+    return response
 
 
 @csrf_exempt

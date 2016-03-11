@@ -402,9 +402,14 @@ def actualizar_info(det, imp):
 class import_model(base_detalle):
 
     def integrar(self):
-        f, created = Detalle.objects.get_or_create(no_cupon=self.no_cupon)
-        actualizar_info(f, self)
-        self.delete()
+        if self.no_cupon:
+            f, created = Detalle.objects.get_or_create(no_cupon=self.no_cupon)
+            actualizar_info(f, self)
+            self.delete()
+        if not self.no_cupon and self.factura_interna:
+            f, created = Detalle.objects.get_or_create(
+                factura_interna=self.factura_interna)
+            actualizar_info(f, self)
 
 
 class Corte(models.Model):
