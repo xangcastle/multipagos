@@ -18,19 +18,15 @@ from django.contrib.auth.models import User
 def home(request):
     return HttpResponseRedirect("/admin")
 
-@login_required
+
 class indexar(TemplateView):
     template_name = "metropolitana/pods.html"
 
-@login_required
-class telecobranza(TemplateView):
-    template_name = "metropolitana/telecobranza.html"
 
-@login_required
 class verificacion_paquete(TemplateView):
     template_name = "metropolitana/verificacion.html"
 
-@login_required
+
 class entrega_paquete(TemplateView):
     template_name = "metropolitana/entrega.html"
 
@@ -219,3 +215,10 @@ def asignar_verificaciones(barrio, user, cantidad, fecha):
         p.save()
     return ps
 
+
+@login_required(login_url='/admin/login/')
+def telecobranza(request):
+    context = RequestContext(request)
+    if request.method == "POST":
+        pass
+    return render_to_response(template_name, data, context_instance=context)
