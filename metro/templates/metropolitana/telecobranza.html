@@ -181,11 +181,11 @@
         cargarTabla();
       });
       function cargarTabla() {
-        var userID = {{ user }};
+        var userID = {{ user.id }};
         var data = new FormData();
         data.append('usuario', userID);
         $.ajax({
-          url: 'http://sys.multipagos.net/movil/get_cartera/',
+          url: '/movil/get_cartera/',
           data: data,
           cache: false,
           contentType: false,
