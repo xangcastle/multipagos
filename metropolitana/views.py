@@ -23,6 +23,10 @@ class indexar(TemplateView):
     template_name = "metropolitana/pods.html"
 
 
+class telecobranza(TemplateView):
+    template_name = "metropolitana/telecobranza.html"
+
+
 class verificacion_paquete(TemplateView):
     template_name = "metropolitana/verificacion.html"
 

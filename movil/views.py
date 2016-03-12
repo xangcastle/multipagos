@@ -53,7 +53,6 @@ def get_ciclo(request):
     return HttpResponse(data, content_type='application/json')
 
 
-
 @csrf_exempt
 def get_paquete(request):
     obj_json = {}
