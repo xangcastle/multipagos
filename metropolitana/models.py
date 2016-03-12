@@ -1054,3 +1054,11 @@ class entrega_diaria(models.Model):
     class Meta:
         managed = False
         db_table = "entrega_diaria"
+
+
+def reasignar_barrios(zona, barrios):
+    anteriores = zona_barrio.objects.filter(zona=zona)
+    anteriores.delete()
+    for b in barrios:
+        zb = zona_barrio(zona=zona, barrio=Barrio.objects.get(code=b))
+        zb.save()
