@@ -219,6 +219,7 @@ def asignar_verificaciones(barrio, user, cantidad, fecha):
 @login_required(login_url='/admin/login/')
 def telecobranza(request):
     template_name = "metropolitana/telecobranza.html"
+    data = {}
     context = RequestContext(request)
     if request.method == "POST":
         pass
