@@ -105,7 +105,7 @@ class Verificacion(models.Model):
     serial_corr = models.CharField(max_length=65, null=True, blank=True)
     mac_corr = models.CharField(max_length=65, null=True, blank=True)
     sim_corr = models.CharField(max_length=65, null=True, blank=True)
-    estado_equipos = models.CharField(max_length=4, null=True,
+    estado_equipos = models.CharField(max_length=40, null=True,
         blank=True, choices=ESTADOS)
     #OTROS
     visita_supervisor = models.CharField(max_length=4, null=True,
