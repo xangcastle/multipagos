@@ -123,6 +123,7 @@ class Cliente(Entidad):
     direccion = models.CharField(max_length=255, null=True, blank=True)
     tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
     saldo_total = models.FloatField(null=True, blank=True)
+    ciclo = models.PositiveIntegerField(null=True, blank=True)
 
     objects = models.Manager()
     morosos = CarteraMorosa()
@@ -190,6 +191,12 @@ class Cliente(Entidad):
             return self.facturas().order_by('-fecha_asignacion')[0].comentario
         else:
             return ""
+
+    def get_ciclo(self):
+        if self.facturas():
+            return self.facturas().order_by('-fecha_asignacion')[0].ciclo
+        else:
+            return None
 
     def get_position_verificada(self):
         if self.position:
