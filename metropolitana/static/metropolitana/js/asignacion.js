@@ -4,7 +4,7 @@ $(document).ready(function (){
         obtener_usuarios($(this).val());
         });
     $('#dtpFecha').datepicker({
-        format: "yyyy-dd-mm",
+        format: "yyyy-mm-dd",
         language: "es"
      });
 });
