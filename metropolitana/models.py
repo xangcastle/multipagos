@@ -1065,5 +1065,8 @@ def reasignar_barrios(zona, barrios):
 
 
 def get_zona(barrio):
-    return Zona.objects.get(
-        id=zona_barrio.objects.filter(barrio=barrio)[0].zona.id)
+    try:
+        return Zona.objects.get(
+            id=zona_barrio.objects.filter(barrio=barrio)[0].zona.id)
+    except:
+        return None
