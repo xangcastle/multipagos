@@ -14,7 +14,8 @@ class barriosH_Node(template.Node):
 
     def render(self, context):
             context[self.varname] = Barrio.objects.all().exclude(id__in=
-            zona_barrio.objects.all().values_list('barrio', flat=True))
+            zona_barrio.objects.all().values_list('barrio', flat=True)
+            ).order_by('departamento','municipio','name')
             return ''
 
 
