@@ -234,7 +234,6 @@ def crear_import_model(paquete):
     i.departamento = paquete.departamento
     i.localida = paquete.municipio
     i.barr_contrato = paquete.barrio
-    i.cuenta_cobro = paquete.cobro
     i.servicio = paquete.servicio
     i.factura = paquete.factura
     i.no_cupon = paquete.no_cupon
@@ -244,6 +243,7 @@ def crear_import_model(paquete):
     i.tel_contacto = paquete.tel_contacto
     i.direccion = paquete.direccion
     i.factura_interna = paquete.factura_interna
+    i.saldo_pend_factura = paquete.total_mes_factura
     i.save()
 
 
