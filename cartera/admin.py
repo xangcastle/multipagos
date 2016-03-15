@@ -70,7 +70,7 @@ class cliente_admin(admin.ModelAdmin):
         'comentario', 'tipo_mora', 'ciclo', 'departamento', 'municipio',
         'barrio')
     list_filter = ('departamento', 'municipio', 'barrio', 'position_ver',
-        'tipo_mora', 'ciclo', 'comentario')
+        'tipo_mora', 'ciclo', 'comentario', 'zona')
     search_fields = ('code', 'name', 'identificacion', 'contrato')
     readonly_fields = ('code', 'name', 'identificacion', 'departamento',
         'municipio', 'barrio', 'zona', 'comentario', 'direccion', 'tipo_mora')
@@ -94,7 +94,7 @@ class cliente_admin(admin.ModelAdmin):
                 'fields': ('position', )
         }),
                             )
-    inlines = [detalle_cartera, promesas_cliente, entregas_cliente]
+    inlines = [detalle_cartera]
 
     actions = ['action_orden_corte', ]
 
