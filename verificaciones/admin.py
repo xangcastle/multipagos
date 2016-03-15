@@ -8,10 +8,10 @@ class verificacion_admin(ImportExportModelAdmin):
     date_hierarchy = "fecha_entrega"
     resource_class = verificacion_resouce
     list_display = ('contrato', 'solicitud', 'nombre_cliente', 'servicio',
-        'categoria', 'departamento', 'municipio', 'barrio', 'direccion',
+        'categoria', 'iddepartamento', 'idmunicipio', 'idbarrio', 'direccion',
         'fecha_entrega', 'user', 'estado')
     list_filter = ('sucursal', 'iddepartamento', 'idmunicipio', 'idbarrio',
-        'servicio', 'categoria', 'user', 'estado')
+        'servicio', 'categoria', 'user', 'estado', 'integrado')
 
     fieldsets = (('Datos Generales', {
                 'classes': ('grp-collapse grp-open',),
