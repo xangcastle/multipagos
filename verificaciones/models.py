@@ -66,7 +66,7 @@ class Verificacion(models.Model):
     tipo_vivienda = models.CharField(max_length=50, null=True,
         blank=True, choices=TIPOS_PROPIEDAD,
         verbose_name="tipo de vivienda")
-    reside = models.CharField(max_length=4, null=True,
+    reside = models.CharField(max_length=24, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="cliente reside en la vivienda")
     #VERIFICACION Y/O ACTUALIZACION DE TELEFONOS
@@ -83,21 +83,21 @@ class Verificacion(models.Model):
     telefono_trabajo = models.CharField(max_length=125, null=True, blank=True,
         verbose_name="telefono del trabajo")
     #DATOS DE SERVICIO
-    servicio_contratado = models.CharField(max_length=4, null=True,
+    servicio_contratado = models.CharField(max_length=24, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="tiene el servicio contratado?")
-    pago_instalacion = models.CharField(max_length=4, null=True,
+    pago_instalacion = models.CharField(max_length=24, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="pago algun costo por instalacion del servicio?")
     costo_instalacion_corr = models.FloatField(
         max_length=125, null=True, blank=True)
-    conoce_tarifa = models.CharField(max_length=4, null=True,
+    conoce_tarifa = models.CharField(max_length=24, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="conoce la tarifa mensual del servicio?")
-    copia_contratos = models.CharField(max_length=4, null=True,
+    copia_contratos = models.CharField(max_length=24, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="posee copia de sus contratos?")
-    satisfecho_servicio = models.CharField(max_length=4, null=True,
+    satisfecho_servicio = models.CharField(max_length=24, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="esta satisfecho con el servicio contratado?")
     producto_malo = models.NullBooleanField(
@@ -115,7 +115,7 @@ class Verificacion(models.Model):
     estado_equipos = models.CharField(max_length=40, null=True,
         blank=True, choices=ESTADOS)
     #OTROS
-    visita_supervisor = models.CharField(max_length=4, null=True,
+    visita_supervisor = models.CharField(max_length=24, null=True,
         blank=True, choices=ASEVERACIONES,
         verbose_name="recibio visita de nuestro supervisor de ventas")
     comentarios = models.TextField(max_length=400, null=True, blank=True,
@@ -215,7 +215,7 @@ def integrar(ps):
         qs = ps.filter(departamento=b.departamento,
             municipio=b.municipio, barrio=b.barrio)
         qs.update(idbarrio=b.get_barrio().id)
-    ps.update(integrado=True)
+    ps.update(integrado=True, estado='PENDIENTE')
     message += "integrado, total de verificaciones = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message
