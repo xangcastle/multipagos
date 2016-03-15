@@ -1062,3 +1062,8 @@ def reasignar_barrios(zona, barrios):
     for b in barrios:
         zb = zona_barrio(zona=zona, barrio=Barrio.objects.get(code=b))
         zb.save()
+
+
+def get_zona(barrio):
+    return Zona.objects.get(
+        id=zona_barrio.objects.filter(barrio=barrio)[0].zona)

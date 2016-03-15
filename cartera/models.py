@@ -1,6 +1,6 @@
 from django.db import models
 from metropolitana.models import Departamento, Municipio, Barrio, Entidad, \
-Zona, get_code
+Zona, get_code, get_zona
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 from django.db.models import Max
