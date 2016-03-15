@@ -66,11 +66,11 @@ class entregas_cliente(base_tabular):
 
 
 class cliente_admin(admin.ModelAdmin):
-    list_display = ('code', 'name', 'identificacion', 'saldo_total',
+    list_display = ('contrato', 'name', 'identificacion', 'saldo_total',
         'comentario', 'tipo_mora', 'ciclo', 'departamento', 'municipio',
         'barrio')
     list_filter = ('departamento', 'municipio', 'barrio', 'position_ver',
-        'tipo_mora', 'ciclo')
+        'tipo_mora', 'ciclo', 'comentario')
     search_fields = ('code', 'name', 'identificacion', 'contrato')
     readonly_fields = ('code', 'name', 'identificacion', 'departamento',
         'municipio', 'barrio', 'zona', 'comentario', 'direccion', 'tipo_mora')
@@ -78,7 +78,7 @@ class cliente_admin(admin.ModelAdmin):
         ('Datos Generales', {
                 'classes': ('grp-collapse grp-open', ),
                 'fields': (
-                            'name', ('code', 'identificacion'),
+                            ('name', 'contrato'), ('code', 'identificacion'),
                             ('departamento', 'municipio', 'barrio'),
                             ('zona', 'tipo_mora'), 'direccion', 'comentario'
                         )
