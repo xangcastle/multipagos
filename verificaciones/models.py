@@ -6,6 +6,13 @@ Barrio
 from datetime import datetime
 
 
+def verification_data(data, ndata):
+    if data == ndata:
+        return 'CORRECTA'
+    else:
+        return 'INCORRECTA'
+
+
 class Verificacion(models.Model):
     #CARGA DE BASE DE DATOS
     fecha_alta = models.DateField(null=True, blank=True)
@@ -173,6 +180,18 @@ class Verificacion(models.Model):
         if self.fecha_vencimiento and self.fecha_vencimiento > datetime.now():
             self.estado = 'VENCIDA'
             self.save()
+
+    def validar(self):
+        self.direccion_ver = verification_data(self.direccion,
+            self.direccion_corr)
+        self.telefono_ver = verification_data(self.telefono,
+            self.telefono_corr)
+        self.celular_ver = verification_data(self.celular,
+            self.celular_corr)
+        if self.costo_instalacion_corr and self.costo_instalacion_corr > 0:
+            self.pago_instalacion = True
+        else:
+            self.pago_instalacion = False
 
     class Meta:
         verbose_name_plural = "verificaciones"
