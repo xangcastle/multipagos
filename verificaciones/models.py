@@ -131,6 +131,7 @@ class Verificacion(models.Model):
     idmunicipio = models.ForeignKey(Municipio, null=True, blank=True)
     idbarrio = models.ForeignKey(Barrio, null=True, blank=True)
     fecha_asignacion_user = models.DateField(null=True, blank=True)
+    integrado = models.BooleanField(default=False)
 
     def get_departamento(self):
         d = None
@@ -195,6 +196,7 @@ def integrar(ps):
         qs = ps.filter(departamento=b.departamento,
             municipio=b.municipio, barrio=b.barrio)
         qs.update(idbarrio=b.get_barrio().id)
+    ps.update(integrado=True)
     message += "integrado, total de verificaciones = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message
