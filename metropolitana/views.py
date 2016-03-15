@@ -216,6 +216,7 @@ def asignar_verificaciones(barrio, user, cantidad, fecha):
         p.save()
     return ps
 
+
 @login_required(login_url='/admin/login/')
 def telecobranza(request):
     template_name = "metropolitana/telecobranza.html"
@@ -226,7 +227,7 @@ def telecobranza(request):
     return render_to_response(template_name, data, context_instance=context)
 
 
-def crear_impor_model(paquete):
+def crear_import_model(paquete):
     i = import_model()
     i.suscriptor = paquete.cliente
     i.contrato = paquete.contrato
