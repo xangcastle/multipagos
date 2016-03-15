@@ -240,7 +240,7 @@ def crear_import_model(paquete):
     i.ciclo = paquete.ciclo
     i.ano = paquete.ano
     i.tipo_mora = "AL DIA"
-    i.tel_contacto = paquete.tel_contacto
+    i.tel_contacto = paquete.telefono_contacto
     i.direccion = paquete.direccion
     i.factura_interna = paquete.factura_interna
     i.saldo_pend_factura = paquete.total_mes_factura
