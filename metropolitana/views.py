@@ -236,7 +236,7 @@ def crear_import_model(paquete):
     i.barr_contrato = paquete.barrio
     i.servicio = paquete.servicio
     i.factura = paquete.factura
-    i.no_cupon = paquete.no_cupon
+    i.no_cupon = paquete.cupon
     i.ciclo = paquete.ciclo
     i.ano = paquete.ano
     i.tipo_mora = "AL DIA"
