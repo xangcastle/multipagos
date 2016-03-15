@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from movil.models import UserProfile
 from django.contrib.auth.models import User
+from cartera.models import import_model
 
 
 def home(request):
@@ -215,7 +216,6 @@ def asignar_verificaciones(barrio, user, cantidad, fecha):
         p.save()
     return ps
 
-
 @login_required(login_url='/admin/login/')
 def telecobranza(request):
     template_name = "metropolitana/telecobranza.html"
@@ -224,3 +224,28 @@ def telecobranza(request):
     if request.method == "POST":
         pass
     return render_to_response(template_name, data, context_instance=context)
+
+
+def crear_impor_model(paquete):
+    i = import_model()
+    i.suscriptor = paquete.cliente
+    i.contrato = paquete.contrato
+    i.departamento = paquete.departamento
+    i.localida = paquete.municipio
+    i.barr_contrato = paquete.barrio
+    i.cuenta_cobro = paquete.cobro
+    i.servicio = paquete.servicio
+    i.factura = paquete.factura
+    i.no_cupon = paquete.no_cupon
+    i.ciclo = paquete.ciclo
+    i.ano = paquete.ano
+    i.tipo_mora = "AL DIA"
+    i.tel_contacto = paquete.tel_contacto
+    i.direccion = paquete.direccion
+    i.factura_interna = paquete.factura_interna
+    i.save()
+
+
+def cargar_para_cobro(ciclo):
+    for p in ciclo.paquetes():
+        crear_import_model(p)

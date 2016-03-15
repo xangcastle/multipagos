@@ -17,6 +17,7 @@ from django.http.response import HttpResponse
 from django.core.servers.basehttp import FileWrapper
 actions.add_to_site(site)
 from datetime import datetime
+from .views import cargar_para_cobro
 
 
 def download_file(path):
@@ -220,7 +221,7 @@ class estadistica_ciclo(admin.ModelAdmin):
         'pendientes')
     actions = ['crear_rendicion', 'action_integrar', 'corregir_media',
         'generar_rendicion', 'generar_pods', 'generar_lista_distribucion',
-        'cerrar_ciclo']
+        'cerrar_ciclo', 'action_cagar_cartera']
     inlines = [estadistica_departamento]
     list_per_page = 10
 
@@ -282,6 +283,14 @@ class estadistica_ciclo(admin.ModelAdmin):
         for c in queryset:
             ps = Paquete.objects.filter(ciclo=c.ciclo, mes=c.mes, ano=c.ano)
             message = integrar(ps)
+        self.message_user(request, message)
+    action_integrar.short_description = \
+    'integrar ciclos seleccionados'
+
+    def action_cagar_cartera(self, request, queryset):
+        message = "facturas de los ciclos seleccionados fueron cargados a la aplicacion de cartera y cobro"
+        for c in queryset:
+            cargar_para_cobro(c)
         self.message_user(request, message)
     action_integrar.short_description = \
     'integrar ciclos seleccionados'
