@@ -204,6 +204,12 @@ class Cliente(Entidad):
         else:
             return False
 
+    def add_saldo(self, monto):
+        if self.saldo_total:
+            self.saldo_total += monto
+        else:
+            self.saldo_total = monto
+
     def save(self, *args, **kwargs):
         if not self.code:
             self.code = get_code(self, 6)
@@ -309,13 +315,19 @@ class base_detalle(models.Model):
         c.name = devolver_mayor(self.suscriptor, c.name)
         c.identificacion = devolver_mayor(self.nit, c.identificacion)
         c.telefonos = devolver_mayor(self.telefonos(), c.telefonos)
+        c.direccion = self.direccion
+        c.ciclo = self.ciclo
+        c.comentario = self.comentario
+        c.add_saldo(self.saldo_pend_factura)
         if self.iddepartamento:
             c.departamento = self.iddepartamento
         if self.idmunicipio:
             c.municipio = self.idmunicipio
         if self.idbarrio:
             c.barrio = self.idbarrio
-        c.direccion = c.direccion
+            c.zona = get_zona(self.idbarrio)
+        if self.idtipo_mora:
+            c.idtipo_mora = self.idtipo_mora
         c.save()
         return c
 

@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from movil.models import UserProfile
 from django.contrib.auth.models import User
-from cartera.models import import_model
+from cartera.models import Detalle, TipoMora
 
 
 def home(request):
@@ -188,7 +188,7 @@ def asignacion_paquete(request):
 
 
 def asignar_facturas(barrio, user, cantidad, fecha):
-    ps = Paquete.objects.filter(estado='PENDIENTE', cerrado=False,
+    ps = Paquete.objects.filter(estado='PENDIENTE',
         idbarrio=barrio)[:cantidad]
     for p in ps:
         p.user = user
@@ -228,22 +228,32 @@ def telecobranza(request):
 
 
 def crear_import_model(paquete):
-    i = import_model()
+    i = Detalle()
     i.suscriptor = paquete.cliente
     i.contrato = paquete.contrato
     i.departamento = paquete.departamento
-    i.localida = paquete.municipio
-    i.barr_contrato = paquete.barrio
+    i.localidad = paquete.municipio
+    i.barr_contacto = paquete.barrio
+    i.iddepartamento = paquete.iddepartamento
+    i.idmunicipio = paquete.idmunicipio
+    i.idbarrio = paquete.idbarrio
     i.servicio = paquete.servicio
     i.factura = paquete.factura
     i.no_cupon = paquete.cupon
+    i.mes = paquete.mes
     i.ciclo = paquete.ciclo
     i.ano = paquete.ano
-    i.tipo_mora = "AL DIA"
+    i.tipo_mora = 'AL_DIA'
     i.tel_contacto = paquete.telefono_contacto
     i.direccion = paquete.direccion
     i.factura_interna = paquete.factura_interna
     i.saldo_pend_factura = paquete.total_mes_factura
+    i.comentario = "Cartera Corriente"
+    i.position = paquete.position
+    i.integrado = True
+    i.estado = 'PENDIENTE'
+    i.idtipo_mora = i.get_mora()
+    i.idcliente = i.get_cliente()
     i.save()
 
 

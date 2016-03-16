@@ -5,7 +5,7 @@ from .resources import *
 
 
 class detalle_admin(admin.ModelAdmin):
-    list_display = ('suscriptor', 'contrato', 'servicio',
+    list_display = ('factura', 'no_cupon', 'suscriptor', 'contrato', 'servicio',
         'iddepartamento', 'idmunicipio', 'idbarrio', 'servicio',
         'saldo_pend_factura', 'integrado', 'estado', 'user')
     list_filter = ('categoria', 'iddepartamento', 'idmunicipio', 'idbarrio',
