@@ -34,6 +34,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'multifilefield',
+    'daterange_filter',
     'geoposition',
     'adminactions',
     'grappelli_dynamic_navbar',
