@@ -18,6 +18,7 @@ from django.core.servers.basehttp import FileWrapper
 actions.add_to_site(site)
 from datetime import datetime
 from .views import cargar_para_cobro
+from daterange_filter.filter import DateRangeFilter
 
 
 def download_file(path):
@@ -62,8 +63,8 @@ class paquete_admin(ImportExportModelAdmin):
         'idmunicipio', 'idbarrio', 'estado', 'ciclo', 'mes', 'ano', 'user',
         'fecha_entrega', 'link_comprobante')
 
-    list_filter = ('iddepartamento', 'idmunicipio', 'estado',
-        'ciclo', 'mes', 'ano', 'user', )
+    list_filter = (('fecha_entrega', DateRangeFilter), 'iddepartamento',
+        'idmunicipio', 'estado', 'ciclo', 'mes', 'ano', 'user', )
 
     #list_editable = ('comprobante',)
     fieldsets = (('Datos Generales', {

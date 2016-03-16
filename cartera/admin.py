@@ -142,3 +142,9 @@ class tipo_mora_admin(admin.ModelAdmin):
 
 
 admin.site.register(TipoMora, tipo_mora_admin)
+
+
+class gestion_admin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Gestion, gestion_admin)
