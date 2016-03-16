@@ -13,7 +13,8 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from movil.models import UserProfile
 from django.contrib.auth.models import User
-from cartera.models import Detalle, TipoMora
+from cartera.models import Detalle
+from datetime import datetime
 
 
 def home(request):
@@ -254,6 +255,7 @@ def crear_import_model(paquete):
     i.estado = 'PENDIENTE'
     i.idtipo_mora = i.get_mora()
     i.idcliente = i.get_cliente()
+    i.fecha_asignacion = datetime.now()
     i.save()
 
 
