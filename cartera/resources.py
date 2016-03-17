@@ -16,9 +16,3 @@ class ccorriente_resouce(resources.ModelResource):
             'barr_contacto', 'servicio', 'factura', 'no_cupon',
             'saldo_pend_factura', 'ciclo', 'mes', 'ano', 'suscriptor',
             'direccion', 'tipo_cartera', 'comentario')
-
-
-class promosion_resouce(resources.ModelResource):
-    class Meta:
-        model = Promosion
-        fields = ('contrato', 'descuento', 'fecha_baja', 'fecha_vence')

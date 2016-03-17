@@ -1,0 +1,21 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<p>Eliga el tipo de gestion:</p>
+
+<form action="" method="post">
+
+    {% csrf_token %}
+
+    {{ form }}
+
+    <p>se generara este tipo de gestion para los siguientes clientes:</p>
+
+    <ul>{{ clientes|unordered_list }}</ul>
+
+    <input type="hidden" name="action" value="generar_gestion" />
+    <input type="submit" name="apply" value="Generar Gestiones" />
+</form>
+
+{% endblock %}

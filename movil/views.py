@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Detalle, Cliente, Corte, Gestion, TipoGestion
+from cartera.models import Factura, Cliente, Gestion, TipoGestion
 
 
 @csrf_exempt
@@ -295,7 +295,7 @@ def get_cartera(request):
 def get_detalle(request):
     obj_json = {'Mensaje': ''}
     try:
-        d = Detalle.objects.get(id=int(request.POST.get('Pk')))
+        d = Factura.objects.get(id=int(request.POST.get('Pk')))
     except:
         d = None
     try:
@@ -319,7 +319,7 @@ def get_detalle(request):
 def get_cortes(request):
     data = []
     usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
-    queryset = Corte.objects.filter(user=usuario, estado='PENDIENTE')
+    queryset = Gestion.objects.filter(user=usuario, estado='PENDIENTE')
     if queryset:
         for c in queryset:
             data.append(c.to_json())
@@ -392,7 +392,7 @@ def get_gestion(request):
 
 
 def cartera_user(user):
-    isc = Detalle.objects.filter(estado='PENDIENTE', user=user
+    isc = Factura.objects.filter(estado='PENDIENTE', user=user
     ).order_by('idcliente').values_list(
         'idcliente', flat=True)
     cs = Cliente.objects.filter(id__in=isc)

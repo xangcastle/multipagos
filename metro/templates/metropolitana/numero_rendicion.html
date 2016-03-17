@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+{% extends "admin/change_form.html" %}
 
 {% block content %}
 
@@ -8,7 +8,7 @@
 
     {% csrf_token %}
 
-    {{ form }}
+    {{ form.as_p }}
 
     <p>se generara este numero de rendicion de los siguientes ciclos:</p>
 
