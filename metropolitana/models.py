@@ -178,7 +178,7 @@ class Paquete(base):
     valor_pagar = models.FloatField(null=True, blank=True)
     numero_fiscal = models.PositiveIntegerField(null=True, blank=True)
     factura_interna = models.PositiveIntegerField(null=True, blank=True)
-    telefono_contacto = models.CharField(max_length=70, null=True, blank=True)
+    telefono_contacto = models.CharField(max_length=255, null=True, blank=True)
     entrega = models.NullBooleanField(default=False,
         verbose_name='Comprobante POD')
     comprobante = models.FileField(upload_to=generar_ruta_comprobante,
