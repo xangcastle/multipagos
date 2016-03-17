@@ -388,7 +388,6 @@ class Paquete(base):
                 self.save()
 
     def save(self, *args, **kwargs):
-        self.lotificado = self.get_lotificado()
         self.entrega = self.get_entregado()
         self.estado = self.get_estado()
         if not self.cerrado:

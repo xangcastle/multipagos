@@ -125,6 +125,7 @@ class MultiFileField(FileField):
                 if file and not file._committed:
                     # Commit the file to storage prior to saving the model
                     file.save(file.name, file, save=False)
+                    #file.save(file.name, file, save=True)
         if clear:
             fs = copy.copy(file_list)
             for file in clear:
