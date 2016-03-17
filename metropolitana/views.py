@@ -94,7 +94,7 @@ def calcular_entregas(barrio):
 def calcular_cobros(barrio):
     return Gestion.objects.filter(barrio=barrio, estado='PENDIENTE',
         user__isnull=True,
-        tipo_gestion=TipoGestion.objects.get(code='0003')).count()
+        tipo_gestion=TipoGestion.objects.get(code='0002')).count()
 
 
 def calcular_verificaciones(barrio):
@@ -198,9 +198,9 @@ def asignar_facturas(barrio, user, cantidad, fecha):
     return ps
 
 
-def asignar_clientes(barrio, user, cantidad, fecha):
-    ps = Cliente.objects.filter(has_pend=True,
-        barrio=barrio)[:cantidad]
+def asignar_cobros(barrio, user, cantidad, fecha):
+    ps = Gestion.objects.filter(estado='PENDIENTE', barrio=barrio,
+        tipo_gestion=TipoGestion.objects.get(code='0002'))[:cantidad]
     for p in ps:
         p.user = user
         p.save()

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from metropolitana.models import get_media_url, Zona
+from metropolitana.models import get_media_url, Zona, Departamento
 
 
 class UserProfile(models.Model):
@@ -12,6 +12,10 @@ class UserProfile(models.Model):
         null=True, blank=True)
     zonas = models.ManyToManyField(Zona, null=True, blank=True)
     celular = models.CharField(max_length=14, null=True)
+    is_supervisor = models.BooleanField(default=False,
+        verbose_name="es un supervisor?")
+    departamentos = models.ManyToManyField(Departamento, null=True,
+        verbose_name="departamentos que atiende")
 
     def __unicode__(self):
         return "user " + self.user.username

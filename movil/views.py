@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Factura, Cliente, Gestion, TipoGestion
+from cartera.models import Cliente, Gestion, TipoGestion, Factura
 
 
 @csrf_exempt
@@ -28,7 +28,8 @@ def get_user(request):
 @csrf_exempt
 def get_paquetes(request):
     usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
-    queryset = Paquete.objects.filter(user=usuario, estado='PENDIENTE')
+    queryset = Paquete.objects.filter(user=usuario, estado='PENDIENTE',
+        cerrado=False)
     if queryset:
         data = serializers.serialize('json', queryset)
         struct = json.loads(data)
@@ -261,7 +262,6 @@ def get_cartera(request):
         obj_json['telefonos'] = c.telefonos
         obj_json['comentario'] = c.comentario
         facs = []
-        pmsas = []
         for f in c.facturas():
             fac_json = {}
             fac_json['Pk'] = f.id
@@ -270,17 +270,9 @@ def get_cartera(request):
             fac_json['saldo_pend_factura'] = f.saldo_pend_factura
             fac_json['fecha_fact'] = str(f.fecha_fact)
             fac_json['fecha_venc'] = str(f.fecha_venc)
-            fac_json['tipo_mora'] = f.tipo_mora
+            fac_json['tipo_mora'] = f.tipo_mora.name
             facs.append(fac_json)
         obj_json['facturas'] = facs
-        for p in c.promesas():
-            prm_json = {}
-            prm_json['Pk'] = p.id
-            prm_json['user'] = p.user.username
-            prm_json['fecha_promesa'] = str(p.fecha_promesa)
-            prm_json['fecha_pago'] = str(p.fecha_pago)
-            pmsas.append(prm_json)
-        obj_json['promesas'] = pmsas
         data.append(obj_json)
     data = json.dumps(data)
     response = HttpResponse(data, content_type='application/json')
@@ -392,8 +384,9 @@ def get_gestion(request):
 
 
 def cartera_user(user):
-    isc = Factura.objects.filter(estado='PENDIENTE', user=user
-    ).order_by('idcliente').values_list(
-        'idcliente', flat=True)
+    isc = Gestion.objects.filter(estado='PENDIENTE', user=user,
+    tipo_gestion=TipoGestion.objects.get(code='0002')
+    ).order_by('cliente').values_list(
+        'cliente', flat=True)
     cs = Cliente.objects.filter(id__in=isc)
     return cs
