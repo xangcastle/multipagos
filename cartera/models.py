@@ -346,7 +346,7 @@ class import_model(models.Model):
 
     def integrar(self):
         self.get_factura()
-        #self.delete()
+        self.delete()
 
     class Meta:
         verbose_name = "registro"
