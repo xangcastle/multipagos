@@ -26,12 +26,55 @@
 
 <!-- CONTENT -->
 {% block content %}
+
+    <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/tipsy/1.0/javascripts/jquery.tipsy.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://xliberation.com/parse/colortable/css/schemer.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/tipsy/1.0/stylesheets/tipsy.css">
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/tipsy/1.0/javascripts/jquery.tipsy.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://xliberation.com/parse/colortable/css/schemer.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/tipsy/1.0/stylesheets/tipsy.css">
+
 {% load puntos %}
 {% get_puntos as facturas %}
 
 {% load barrios %}
 {% get_barrios_huerfanos as huerfanos %}
-<style>
+
+{% load estadisticas %}
+{% get_estadisticas_all as sts %}
+
+{% load entrega_diaria %}
+{% get_entrega_diaria as datos %}
+
+<div id="barrios_huerfanos" class="box">
+    <h2>Barrios huerfanos</h2>
+    <table>
+    <thead>
+        <tr>
+            <th>Codigo Barrio</th>
+            <th>Nombre del Barrio</th>
+            <th>Departamento</th>
+            <th>Municipio</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for b in huerfanos %}
+        <tr>
+            <td>{{ b.code }}</td>
+            <td>{{ b.name }}</td>
+            <td>{{ b.departamento.name }}</td>
+            <td>{{ b.municipio.name }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+</div>
+<div id="mapa_seguimiento"  class="box">
+	<style>
 
     #map {
         width: 600px;
@@ -67,38 +110,9 @@
     }
 
 </style>
-<div id="barrios_huerfanos" class="box">
-    <h2>Barrios huerfanos</h2>
-    <table>
-    <thead>
-        <tr>
-            <th>Codigo Barrio</th>
-            <th>Nombre del Barrio</th>
-            <th>Departamento</th>
-            <th>Municipio</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for b in huerfanos %}
-        <tr>
-            <td>{{ b.code }}</td>
-            <td>{{ b.name }}</td>
-            <td>{{ b.departamento.name }}</td>
-            <td>{{ b.municipio.name }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-    </table>
-</div>
-<div id="mapa_seguimiento"  class="box">
     <h2>Mapa de Seguimiento</h2>
     <div id="map"></div>
-    <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
-<script src="https://d3js.org/d3.v3.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/tipsy/1.0/javascripts/jquery.tipsy.js"></script>
-<link rel="stylesheet" type="text/css" href="http://xliberation.com/parse/colortable/css/schemer.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/tipsy/1.0/stylesheets/tipsy.css">
 <script>
 
     var map = new google.maps.Map(d3.select("#map").node(), {
@@ -169,37 +183,9 @@
     });
 </script>
 </div>
-<div id="mapa_seguimiento"  class="box box-double">
+<div id="estadisticas_entregas"  class="box box-double">
     <h2>Estadisticas de Entregas</h2>
     <div id='dashboard'></div>
-<div id="chart_div"></div>
-{% load estadisticas %}
-{% get_estadisticas_all as sts %}
-{% load entrega_diaria %}
-{% get_entrega_diaria as datos %}
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">
-    google.load('visualization', '1', {'packages':['motionchart']});
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var options = {}
-        options['width'] = "1200px"
-        options['height'] = "600px"
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Nombre');
-        data.addColumn('date', 'Dia');
-        data.addColumn('string', 'Departamento');
-        data.addColumn('number', 'Entregas');
-        data.addColumn('number', 'Rezago');
-        data.addRows([
-            {% for d in datos %}
-            ['{{ d.username }}',  new Date ({{ d.fecha }}), '{{ d.departamento }}', {{ d.entregas }}, {{ d.rezago }}],
-            {% endfor %}
-        ]);
-        var chart = new google.visualization.MotionChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
-</script>
 <style>
     path {  stroke: #fff; }
     path:hover {  opacity:0.9; }
@@ -236,10 +222,6 @@
 
 </style>
 </div>
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/tipsy/1.0/javascripts/jquery.tipsy.js"></script>
-<link rel="stylesheet" type="text/css" href="http://xliberation.com/parse/colortable/css/schemer.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/tipsy/1.0/stylesheets/tipsy.css">
 <style>
     .tiptable TD
     {
@@ -570,7 +552,37 @@
 
 
 </script>
+
+<div id="entrega_diaria" class="box box-double">
+	<h2>Seguimiento por Gestor</h2>
+<div id="chart_div"></div>
+<script type="text/javascript">
+    google.load('visualization', '1', {'packages':['motionchart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var options = {}
+        options['width'] = "1200px"
+        options['height'] = "600px"
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Nombre');
+        data.addColumn('date', 'Dia');
+        data.addColumn('string', 'Departamento');
+        data.addColumn('number', 'Entregas');
+        data.addColumn('number', 'Rezago');
+        data.addRows([
+            {% for d in datos %}
+            ['{{ d.username }}',  new Date ({{ d.fecha }}), '{{ d.departamento }}', {{ d.entregas }}, {{ d.rezago }}],
+            {% endfor %}
+        ]);
+        var chart = new google.visualization.MotionChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>
 </div>
+
+</div>
+
+
 
 {% endblock %}
 
