@@ -319,7 +319,11 @@ class import_model(models.Model):
         return c
 
     def get_factura(self):
-        f, created = Factura.objects.get_or_create(no_cupon=self.no_cupon)
+        if self.no_cupon:
+            f, created = Factura.objects.get_or_create(no_cupon=self.no_cupon)
+        if not self.no_cupon and self.factura_interna:
+            f, created = Factura.objects.get_or_create(
+                factura_interna=self.factura_interna)
         f.cliente = self.get_cliente()
         f.tipo_mora = self.get_mora()
         if not self.factura:
@@ -335,9 +339,9 @@ class import_model(models.Model):
             f.mes = self.mes
         if not self.ano:
             f.ano = self.ano
-        if not self.fecha_fact:
+        if self.fecha_fact:
             f.fecha_fact = self.fecha_fact
-        if not self.fecha_venc:
+        if self.fecha_venc:
             f.fecha_venc = self.fecha_venc
         f.saldo = self.saldo_pend_factura
         f.save()
