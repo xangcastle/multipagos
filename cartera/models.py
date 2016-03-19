@@ -57,7 +57,7 @@ class Cliente(Entidad):
     position_ver = models.BooleanField(default=False,
         verbose_name="con geoposicion verificada")
     comentario = models.CharField(max_length=125, null=True, blank=True)
-    telefonos = models.CharField(max_length=65, null=True, blank=True)
+    telefonos = models.CharField(max_length=265, null=True, blank=True)
     direccion = models.CharField(max_length=255, null=True, blank=True)
     tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True,
         on_delete=models.SET_NULL)
