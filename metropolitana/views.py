@@ -203,6 +203,7 @@ def asignar_cobros(barrio, user, cantidad, fecha):
         tipo_gestion=TipoGestion.objects.get(code='0002'))[:cantidad]
     for p in ps:
         p.user = user
+        p.fecha_asignacion = fecha
         p.save()
     return ps
 
