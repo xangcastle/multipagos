@@ -29,5 +29,7 @@ urlpatterns = patterns('',
         name='get_ciclo'),
     url(r'^get_gestion/$', 'movil.views.get_gestion',
         name='get_gestion'),
+    url(r'^get_verificacion_sms/$', 'movil.views.get_verificacion_sms',
+        name='get_verificacion_sms'),
 )
 
