@@ -377,9 +377,9 @@ def get_gestion(request):
     except:
         u = None
     if tg and c and u:
-        g = Gestion(cliente=c, user=u, tipo_gestion=tg,
-            observaciones=obj_json['observaciones'],
-            fecha=obj_json['fecha'])
+        g = Gestion.objects.get(cliente=c, user=u, estado='PENDIENTE')
+        g.observaciones = obj_json['observaciones']
+        g.fecha = obj_json['fecha']
         g.save()
         obj_json['Mensaje'] = "gestion guardada con exito"
     else:

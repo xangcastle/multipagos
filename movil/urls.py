@@ -27,5 +27,7 @@ urlpatterns = patterns('',
         name='get_corte'),
     url(r'^get_ciclo/$', 'movil.views.get_ciclo',
         name='get_ciclo'),
+    url(r'^get_gestion/$', 'movil.views.get_gestion',
+        name='get_gestion'),
 )
 
