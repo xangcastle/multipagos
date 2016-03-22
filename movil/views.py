@@ -8,7 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Cliente, Gestion, TipoResultado, Factura
+from cartera.models import Cliente, Gestion, TipoResultado, Factura,\
+TipoGestion
 
 
 @csrf_exempt
