@@ -382,6 +382,8 @@ def get_gestion(request):
             fecha=obj_json['fecha'])
         g.save()
         obj_json['Mensaje'] = "gestion guardada con exito"
+    else:
+        obj_json['Mensaje'] = "faltan datos"
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
 
