@@ -203,17 +203,17 @@ def integrar(ps):
     for d in ds:
         qs = ps.filter(departamento=d.departamento)
         qs.update(iddepartamento=d.get_departamento().id)
-    ms = ps.order_by('departamento', 'municipio').distinct(
-        'departamento', 'municipio')
+    ms = ps.order_by('iddepartamento', 'municipio').distinct(
+        'iddepartamento', 'municipio')
     for m in ms:
-        qs = ps.filter(departamento=m.departamento,
+        qs = ps.filter(iddepartamento=m.iddepartamento,
             municipio=m.municipio)
         qs.update(idmunicipio=m.get_municipio().id)
-    bs = ps.order_by('departamento', 'municipio', 'barrio').distinct(
-        'departamento', 'municipio', 'barrio')
+    bs = ps.order_by('iddepartamento', 'idmunicipio', 'barrio').distinct(
+        'iddepartamento', 'idmunicipio', 'barrio')
     for b in bs:
-        qs = ps.filter(departamento=b.departamento,
-            municipio=b.municipio, barrio=b.barrio)
+        qs = ps.filter(iddepartamento=b.iddepartamento,
+            idmunicipio=b.idmunicipio, barrio=b.barrio)
         qs.update(idbarrio=b.get_barrio().id)
     ps.update(integrado=True, estado='PENDIENTE')
     message += "integrado, total de verificaciones = %s end %s departamentos" \

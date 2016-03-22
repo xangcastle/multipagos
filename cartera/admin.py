@@ -138,3 +138,10 @@ class gestion_admin(admin.ModelAdmin):
     search_fields = ('cliente__name', 'cliente__contrato', 'user__username')
 
 admin.site.register(Gestion, gestion_admin)
+
+
+class resultado_admin(admin.ModelAdmin):
+    list_display = ('signo', 'descripcion', 'resultado')
+
+
+admin.site.register(TipoResultado, resultado_admin)

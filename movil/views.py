@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Cliente, Gestion, TipoGestion, Factura
+from cartera.models import Cliente, Gestion, TipoResultado, Factura
 
 
 @csrf_exempt
@@ -364,7 +364,7 @@ def get_gestion(request):
     obj_json['fecha_promesa'] = request.POST.get('fecha_promesa', '')
     obj_json['observaciones'] = request.POST.get('observaciones', '')
     try:
-        tg = TipoGestion.objects.get(signo=obj_json['tipo_gestion'])
+        tg = TipoResultado.objects.get(signo=obj_json['tipo_gestion'])
     except:
         tg = None
     try:
@@ -372,7 +372,7 @@ def get_gestion(request):
     except:
         c = None
     try:
-        u = TipoGestion.objects.get(id=obj_json['user'])
+        u = User.objects.get(id=obj_json['user'])
     except:
         u = None
     if tg and c and u:
