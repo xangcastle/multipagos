@@ -380,14 +380,17 @@ def get_gestion(request):
     except:
         u = None
     if tg and c and u:
-        g = Gestion.objects.get(cliente=c, user=u, estado='PENDIENTE')
-        g.tipo_resultado = tg
-        g.observaciones = obj_json['observaciones']
-        g.fecha_gestion = obj_json['fecha']
-        g.fecha_promesa = obj_json['fecha_promesa']
-        g.estado = 'REALIZADO'
-        g.save()
-        obj_json['Mensaje'] = "gestion guardada con exito"
+        try:
+            g = Gestion.objects.get(cliente=c, user=u, estado='PENDIENTE')
+            g.tipo_resultado = tg
+            g.observaciones = obj_json['observaciones']
+            g.fecha_gestion = obj_json['fecha']
+            g.fecha_promesa = obj_json['fecha_promesa']
+            g.estado = 'REALIZADO'
+            g.save()
+            obj_json['Mensaje'] = "gestion guardada con exito"
+        except:
+            obj_json['Mensaje'] = "esta gestion ya fue subida anteriormente"
     else:
         obj_json['Mensaje'] = "faltan datos"
     data = json.dumps(obj_json)
