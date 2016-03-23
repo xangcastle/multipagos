@@ -386,6 +386,11 @@ def get_gestion(request):
             g.observaciones = obj_json['observaciones']
             g.fecha_gestion = obj_json['fecha']
             g.fecha_promesa = obj_json['fecha_promesa']
+            try:
+                g.position = Geoposition(obj_json['Latitude'],
+                    obj_json['Longitude'])
+            except:
+                pass
             g.estado = 'REALIZADO'
             g.save()
             obj_json['Mensaje'] = "gestion guardada con exito"
