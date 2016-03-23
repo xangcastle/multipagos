@@ -132,7 +132,7 @@ class gestion_admin(admin.ModelAdmin):
     date_hierarchy = "fecha_gestion"
     list_display = ('cliente', 'departamento', 'municipio', 'barrio',
         'tipo_gestion', 'fecha_asignacion', 'fecha_vencimiento',
-        'fecha_gestion', 'tipo_resultado', 'estado')
+        'fecha_gestion', 'tipo_resultado', 'user', 'estado')
     list_filter = ('departamento', 'municipio', 'barrio', 'tipo_gestion',
         'estado', 'user')
 
