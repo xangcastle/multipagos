@@ -200,8 +200,11 @@ def get_verificacion(request):
     if v:
         v.user = u
         v.fecha_entrega = obj_json['Fecha']
-        v.position = Geoposition(obj_json['Latitude'],
-            obj_json['Longitude'])
+        try:
+            v.position = Geoposition(obj_json['Latitude'],
+                obj_json['Longitude'])
+        except:
+            pass
         v.estado = obj_json['Estado']
         v.direccion_corr = obj_json['direccion_corr']
         v.tipo_vivienda = obj_json['tipo_vivienda']
@@ -419,8 +422,11 @@ def get_verificacion_sms(request):
     if v:
         v.user = u
         v.fecha_entrega = obj_json['Fecha']
-        v.position = Geoposition(obj_json['Latitude'],
-            obj_json['Longitude'])
+        try:
+            v.position = Geoposition(obj_json['Latitude'],
+                obj_json['Longitude'])
+        except:
+            pass
         v.estado = obj_json['Estado']
         obj_json['Mensaje'] = "Verificacion cargada Correctamente"
         v.save()
