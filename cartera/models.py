@@ -423,12 +423,12 @@ class Gestion(models.Model):
         obj['pk'] = self.id
         obj['fecha_asignacion'] = str(self.fecha_asignacion)
         obj['cliente_pk'] = str(self.cliente.id)
-        obj['cliente_nombre'] = str(self.cliente.name)
-        obj['departamento'] = str(self.cliente.departamento.name)
-        obj['municipio'] = str(self.cliente.municipio.name)
-        obj['barrio'] = str(self.cliente.barrio.name)
-        obj['direccion'] = str(self.cliente.direccion)
-        obj['telefonos'] = str(self.cliente.telefonos)
+        obj['cliente_nombre'] = self.cliente.name
+        obj['departamento'] = self.cliente.departamento.name
+        obj['municipio'] = self.cliente.municipio.name
+        obj['barrio'] = self.cliente.barrio.name
+        obj['direccion'] = self.cliente.direccion
+        obj['telefonos'] = self.cliente.telefonos
         return obj
 
     class Meta:
