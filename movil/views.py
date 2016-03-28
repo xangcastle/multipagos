@@ -317,7 +317,8 @@ def get_detalle(request):
 def get_cortes(request):
     data = []
     usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
-    queryset = Gestion.objects.filter(user=usuario, estado='PENDIENTE')
+    queryset = Gestion.objects.filter(user=usuario, estado='PENDIENTE',
+        tipo_gestion=TipoGestion.objects.get(code='0003'))
     if queryset:
         for c in queryset:
             data.append(c.to_json())
