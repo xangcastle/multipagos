@@ -422,14 +422,13 @@ class Gestion(models.Model):
         obj = {}
         obj['pk'] = self.id
         obj['fecha_asignacion'] = str(self.fecha_asignacion)
-        obj['numero'] = str(self.numero)
         obj['cliente_pk'] = str(self.cliente.id)
         obj['cliente_nombre'] = str(self.cliente.name)
-        obj['departamento'] = str(self.departamento.name)
-        obj['municipio'] = str(self.municipio.name)
-        obj['barrio'] = str(self.barrio.name)
-        obj['direccion'] = str(self.direccion)
-        obj['telefonos'] = str(self.telefonos)
+        obj['departamento'] = str(self.cliente.departamento.name)
+        obj['municipio'] = str(self.cliente.municipio.name)
+        obj['barrio'] = str(self.cliente.barrio.name)
+        obj['direccion'] = str(self.cliente.direccion)
+        obj['telefonos'] = str(self.cliente.telefonos)
         return obj
 
     class Meta:
@@ -485,7 +484,8 @@ def integrar_importacion(ps):
         ms = queryset.order_by('localidad').distinct('localidad')
         for m in ms:
             mcipio = m.get_municipio()
-            queryset = ps.filter(departamento=d.departamento, localidad=d.localidad)
+            queryset = ps.filter(departamento=d.departamento,
+                localidad=d.localidad)
             bs = queryset.order_by('barr_contacto').distinct('barr_contacto')
             for b in bs:
                 brrio = b.get_barrio()
