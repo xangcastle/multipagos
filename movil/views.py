@@ -347,7 +347,7 @@ def put_corte(request):
 
 @csrf_exempt
 def get_corte(request):
-    o = Corte.objects.get(id=int(request.POST.get('Pk', '')))
+    o = Gestion.objects.get(id=int(request.POST.get('Pk', '')))
     o.fecha = request.POST.get('Fecha', '')
     o.user = User.objects.get(id=int(request.POST.get('Usuario', '')))
     o.position = Geoposition(request.POST.get('Latitude', ''),
