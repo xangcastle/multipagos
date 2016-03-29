@@ -81,7 +81,7 @@ class paquete_admin(ImportExportModelAdmin):
                             ('numero_fiscal', 'factura_interna', 'entrega'))}),
                 ('Entrega y Digitalizacion', {
                 'classes': ('grp-collapse grp-open',),
-                'fields': (('comprobante', 'colector'),
+                'fields': (('comprobante', 'user'),
                             ('archivo', 'consecutivo', 'tipificacion'),
                             ('parentezco', 'recibe', 'fecha_entrega'),
                             'position', 'imagen')}))
