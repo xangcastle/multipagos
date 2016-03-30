@@ -123,11 +123,8 @@ class Cliente(Entidad):
             o.zona = self.zona
         if self.position:
             o.position = self.position
-        if self.user:
-            o.user = self.user
+        o.user = None
         o.save()
-        self.has_pend = True
-        self.save()
         return o
 
     def get_knowed_position(self):
