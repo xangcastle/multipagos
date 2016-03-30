@@ -405,7 +405,7 @@ def get_gestion(request):
 
 def cartera_user(user):
     isc = Gestion.objects.filter(estado='PENDIENTE', user=user,
-    tipo_gestion=TipoGestion.objects.get(code='0002')
+    tipo_gestion__in=TipoGestion.objects.filter(code__in=['0002', '0003'])
     ).order_by('cliente').values_list(
         'cliente', flat=True)
     cs = Cliente.objects.filter(id__in=isc)
