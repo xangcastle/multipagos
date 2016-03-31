@@ -88,7 +88,7 @@ def descarga(request):
 
 def get_entregas(barrio):
     return Paquete.objects.filter(idbarrio=barrio, estado='PENDIENTE',
-        cerrado=False, user__isnull=True).count()
+        cerrado=False, user__isnull=True)
 
 
 def calcular_entregas(barrio):
