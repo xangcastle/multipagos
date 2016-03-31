@@ -370,6 +370,7 @@ class Factura(models.Model):
     gestionada = models.BooleanField(default=False)
     monto_abonado = models.FloatField(default=0.0)
     saldo = models.FloatField(null=True)
+    fecha_pago = models.DateField(null=True)
 
     def get_saldo(self):
         if self.saldo_pend_factura and self.monto_abonado:
@@ -484,6 +485,29 @@ class AsignacionCliente(models.Model):
         unique_together = ('user', 'cliente', 'tipo_gestion')
         verbose_name = 'usuario'
         verbose_name_plural = 'usuarios asignados'
+
+
+class RebajaCartera(models.Model):
+    no_cupon = models.CharField(max_length=65, null=True)
+    fecha_pago = models.DateField(null=True)
+    abono = models.FloatField(null=True)
+
+    class Meta:
+        verbose_name = "registro"
+        verbose_name_plural = "importacion de rebajas de cartera"
+
+    def integrar(self):
+        try:
+            f = Factura.objects.get(no_cupon=self.no_cupon)
+            f.gestionada = True
+            f.monto_abonado = self.abono
+            f.fecha_pago = self.fecha_pago
+            f.saldo = f.saldo_pend_factura - f.monto_abonado
+            f.save()
+            self.delete()
+        except:
+            if not self.no_cupon:
+                self.delete()
 
 
 def integrar_importacion(ps):

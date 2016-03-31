@@ -102,7 +102,7 @@ def get_cobros(barrio):
 
 
 def calcular_cobros(barrio):
-    return get_cobros.count()
+    return get_cobros(barrio).count()
 
 
 def get_verificaciones(barrio):
@@ -111,7 +111,7 @@ def get_verificaciones(barrio):
 
 
 def calcular_verificaciones(barrio):
-    return get_verificaciones.count()
+    return get_verificaciones(barrio).count()
 
 
 def usuarios_asignados(zona):

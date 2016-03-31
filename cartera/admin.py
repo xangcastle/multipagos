@@ -18,11 +18,26 @@ class import_model_admin(ImportExportModelAdmin):
             q.integrar()
         self.message_user(request, "integracion de registros exitosa")
     action_integrar.short_description = \
-    "actualizar cartera mora y rebajas"
+    "actualizar cartera mora"
 
     actions = [action_integrar]
 
 admin.site.register(import_model, import_model_admin)
+
+
+class rebaja_cartera_admin(ImportExportModelAdmin):
+    list_display = ('no_cupon', 'fecha_pago', 'abono')
+
+    def action_integrar(self, request, queryset):
+        for q in queryset:
+            q.integrar()
+        self.message_user(request, "integracion de registros exitosa")
+    action_integrar.short_description = \
+    "actualizar rebaja de cartera"
+
+    actions = [action_integrar]
+
+admin.site.register(RebajaCartera, rebaja_cartera_admin)
 
 
 class base_tabular(admin.TabularInline):
