@@ -42,7 +42,6 @@ def get_or_create_entidad(instance, name):
 
 
 class Cliente(Entidad):
-    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     identificacion = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
     departamento = models.ForeignKey(Departamento, null=True, blank=True,
@@ -470,6 +469,21 @@ class TipoMora(models.Model):
 
     class Meta:
         ordering = ['dias', ]
+
+
+class AsignacionCliente(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    cliente = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL)
+    tipo_gestion = models.ForeignKey(TipoGestion, null=True,
+        on_delete=models.SET_NULL)
+
+    def __unicode__(self):
+        return self.cliente.name + ' - ' + self.user.username
+
+    class Meta:
+        unique_together = ('user', 'cliente', 'tipo_gestion')
+        verbose_name = 'usuario'
+        verbose_name_plural = 'usuarios asignados'
 
 
 def integrar_importacion(ps):

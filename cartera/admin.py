@@ -37,6 +37,10 @@ class detalle_cartera(base_tabular):
     readonly_fields = ('factura', 'factura_interna', 'no_cupon', 'no_fiscal',
         'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'saldo')
 
+class usuarios_asignados(base_tabular):
+    model = AsignacionCliente
+    fields = ('user', 'tipo_gestion')
+
 
 class cliente_admin(admin.ModelAdmin):
     list_display = ('contrato', 'name', 'identificacion', 'saldo_total',
@@ -71,7 +75,7 @@ class cliente_admin(admin.ModelAdmin):
                 #'fields': ('position', )
         #}),
                             )
-    inlines = [detalle_cartera]
+    inlines = [detalle_cartera, usuarios_asignados]
 
     actions = ['action_orden_corte', 'generar_gestion']
 
