@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from metropolitana.models import get_media_url, Zona, Departamento
+from cartera.models import TipoGestion
 
 
 class UserProfile(models.Model):
@@ -11,6 +12,8 @@ class UserProfile(models.Model):
     foto = models.ImageField(upload_to=get_media_url,
         null=True, blank=True)
     zonas = models.ManyToManyField(Zona, null=True, blank=True)
+    tipo_gestion = models.ManyToManyField(TipoGestion, null=True, blank=True,
+        verbose_name="tipos de gestiones que realiza")
     celular = models.CharField(max_length=14, null=True)
     is_supervisor = models.BooleanField(default=False,
         verbose_name="es un supervisor?")
@@ -22,7 +25,7 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name = 'usuario'
-        verbose_name_plural = "usuarios de entrega"
+        verbose_name_plural = "usuarios de app movil"
 
 from math import radians, cos, sin, asin, sqrt
 
