@@ -95,15 +95,23 @@ def calcular_entregas(barrio):
     return get_entregas(barrio).count()
 
 
-def calcular_cobros(barrio):
+def get_cobros(barrio):
     return Gestion.objects.filter(barrio=barrio, estado='PENDIENTE',
         user__isnull=True,
-        tipo_gestion=TipoGestion.objects.get(code='0002')).count()
+        tipo_gestion=TipoGestion.objects.get(code='0002'))
+
+
+def calcular_cobros(barrio):
+    return get_cobros.count()
+
+
+def get_verificaciones(barrio):
+    return Verificacion.objects.filter(idbarrio=barrio,
+        estado='PENDIENTE', user__isnull=True)
 
 
 def calcular_verificaciones(barrio):
-    return Verificacion.objects.filter(idbarrio=barrio,
-        estado='PENDIENTE', user__isnull=True).count()
+    return get_verificaciones.count()
 
 
 def usuarios_asignados(zona):
@@ -202,8 +210,7 @@ def asignar_facturas(barrio, user, cantidad, fecha):
 
 
 def asignar_cobros(barrio, user, cantidad, fecha):
-    ps = Gestion.objects.filter(estado='PENDIENTE', barrio=barrio,
-        tipo_gestion=TipoGestion.objects.get(code='0002'))[:cantidad]
+    ps = get_cobros(barrio)[:cantidad]
     for p in ps:
         p.user = user
         p.fecha_asignacion = fecha
@@ -212,8 +219,7 @@ def asignar_cobros(barrio, user, cantidad, fecha):
 
 
 def asignar_verificaciones(barrio, user, cantidad, fecha):
-    ps = Verificacion.objects.filter(estado='PENDIENTE',
-        idbarrio=barrio)[:cantidad]
+    ps = get_verificaciones(barrio)[:cantidad]
     for p in ps:
         p.user = user
         p.fecha_asignacion_user = fecha
