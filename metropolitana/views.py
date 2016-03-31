@@ -86,9 +86,13 @@ def descarga(request):
     return response
 
 
-def calcular_entregas(barrio):
+def get_entregas(barrio):
     return Paquete.objects.filter(idbarrio=barrio, estado='PENDIENTE',
         cerrado=False, user__isnull=True).count()
+
+
+def calcular_entregas(barrio):
+    return get_entregas(barrio).count()
 
 
 def calcular_cobros(barrio):
@@ -189,8 +193,7 @@ def asignacion_paquete(request):
 
 
 def asignar_facturas(barrio, user, cantidad, fecha):
-    ps = Paquete.objects.filter(estado='PENDIENTE',
-        idbarrio=barrio)[:cantidad]
+    ps = get_entregas(barrio)[:cantidad]
     for p in ps:
         p.user = user
         p.fecha_asignacion_user = fecha
