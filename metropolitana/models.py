@@ -178,11 +178,15 @@ class Paquete(base):
     valor_pagar = models.FloatField(null=True, blank=True)
     numero_fiscal = models.PositiveIntegerField(null=True, blank=True)
     factura_interna = models.PositiveIntegerField(null=True, blank=True)
-    telefono_contacto = models.CharField(max_length=1000, null=True, blank=True)
+    telefono_contacto = models.CharField(max_length=70, null=True, blank=True)
     entrega = models.NullBooleanField(default=False,
         verbose_name='Comprobante POD')
     comprobante = models.FileField(upload_to=generar_ruta_comprobante,
         null=True, blank=True)
+    colector = models.ForeignKey('Colector', null=True, blank=True)
+    lote = models.ForeignKey('Lote', null=True, blank=True,
+        on_delete=models.SET_NULL)
+    lotificado = models.NullBooleanField(default=False)
     cerrado = models.NullBooleanField(default=False)
     barra = models.CharField(max_length=30, null=True, blank=True)
     orden_impresion = models.PositiveIntegerField(null=True, blank=True)
@@ -388,6 +392,7 @@ class Paquete(base):
                 self.save()
 
     def save(self, *args, **kwargs):
+        self.lotificado = self.get_lotificado()
         self.entrega = self.get_entregado()
         self.estado = self.get_estado()
         if not self.cerrado:
@@ -416,25 +421,110 @@ class Tipificacion(models.Model):
         verbose_name_plural = "tipificaciones"
 
 
+class Lote(base):
+    fecha = models.DateTimeField(auto_now=True, null=True)
+    numero = models.PositiveIntegerField()
+    departamento = models.ForeignKey('Departamento', null=True, blank=True)
+    municipio = models.ForeignKey('Municipio', null=True, blank=True)
+    barrio = models.ForeignKey('Barrio', null=True, blank=True)
+    colector = models.ForeignKey('Colector', null=True, blank=True)
+    avance = models.CharField(max_length=10, null=True, blank=True,
+        verbose_name='porcentaje de avance', default='0.00 %')
+    cantidad_paquetes = models.PositiveIntegerField(null=True, blank=True,
+    verbose_name='cantidad de facturas', default=0)
+    entregados = models.PositiveIntegerField(null=True, blank=True,
+        default=0, verbose_name='entregadas')
+    cerrado = models.BooleanField(default=False)
+    asignado = models.BooleanField(default=False)
+    ciclo = models.PositiveIntegerField(null=True, blank=True)
+    mes = models.PositiveIntegerField(null=True, blank=True)
+    ano = models.PositiveIntegerField(null=True, blank=True)
+
+    def get_numero(self):
+        objs = Lote.objects.all()
+        if objs:
+            return objs.aggregate(Max('numero'))['numero__max'] + 1
+        else:
+            return 1
+
+    def get_asignado(self):
+        if self.colector:
+            return True
+        else:
+            return False
+
+    def paquetes(self):
+        return Paquete.objects.filter(lote=self)
+
+    def pendientes(self):
+        return self.paquetes().exclude(entrega=True)
+
+    def asignar(self):
+        if self.pendientes():
+            for p in self.pendientes():
+                p.colector = self.colector
+                p.save()
+
+    def get_ciclo(self):
+        if self.paquetes():
+            return self.paquetes()[0].ciclo
+        else:
+            return None
+
+    def get_mes(self):
+        if self.paquetes():
+            return self.paquetes()[0].mes
+        else:
+            return None
+
+    def get_ano(self):
+        if self.paquetes():
+            return self.paquetes()[0].ano
+        else:
+            return None
+
+    def calcular(self):
+        if self.paquetes():
+            self.cantidad_paquetes = int(self.paquetes().count())
+            self.entregados = self.paquetes().filter(entrega=True).count()
+            self.avance = str(((self.entregados * 100) /
+            self.cantidad_paquetes)).zfill(3) \
+            + ' %'
+
+    def save(self, *args, **kwargs):
+        if not self.numero:
+            self.numero = self.get_numero()
+        self.asignado = self.get_asignado()
+        self.calcular()
+        if self.cerrado:
+            self.ciclo = self.get_ciclo()
+            self.mes = self.get_mes()
+            self.ano = self.get_ano()
+        super(Lote, self).save()
+
+    def delete(self, *args, **kwargs):
+        pks = self.paquetes()
+        super(Lote, self).delete()
+        for p in pks:
+            p.lotificado = False
+            p.save()
+
+    def __unicode__(self):
+        return 'Lote ' + str(self.numero)
+
+
+class Colector(Entidad):
+    foto = models.FileField(upload_to=get_media_url, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'colectores'
+
+
 class Departamento(Entidad):
     name_alt = models.CharField(max_length=75, null=True, blank=True,
         verbose_name="nombre alternativo",
         help_text="se usa para evitar la duplicidad")
     codigo_telefonico = models.CharField(max_length=5, null=True, blank=True)
-
-    def crear_zona_master(self):
-        mns = Municipio.objects.filter(departamento=self)
-        if mns:
-            zs = Zona.objects.filter(departamento=self)
-            zs.delete()
-            z = Zona()
-            z.name = self.name
-            z.departamento = self
-            z.municipio = mns[0]
-            z.save()
-            codes = Barrio.objects.filter(
-                departamento=self).values_list('code', flat=True)
-            reasignar_barrios(z, codes)
 
 
 class Municipio(Entidad):
@@ -515,6 +605,32 @@ class Cliente(Entidad):
         super(Cliente, self).save()
 
 
+def lotificar(paquetes):
+    paquetes = paquetes.order_by('departamento', 'municipio', 'barrio',
+        'direccion')
+    lote_anterior = None
+    for p in paquetes:
+        if not p.lote:
+            lote, created = Lote.objects.get_or_create(
+                departamento=p.iddepartamento,
+                municipio=p.idmunicipio,
+                barrio=p.idbarrio, cerrado=False)
+            p.lote = lote
+            p.entrega = False
+            p.save()
+
+            if not lote_anterior:
+                lote_anterior = Lote.objects.get(id=lote.id)
+            else:
+                if not lote_anterior.id == lote.id:
+                    lote_anterior.cerrado = True
+                    lote_anterior.save()
+                    lote_anterior = Lote.objects.get(id=lote.id)
+    if lote_anterior:
+        lote_anterior.cerrado = True
+        lote_anterior.save()
+
+
 class base_vista(models.Model):
 
     def save(self, *args, **kwargs):
@@ -535,6 +651,8 @@ class Estadistica(base_vista):
         db_column='iddepartamento')
     municipio = models.ForeignKey(Municipio, blank=True, null=True,
         db_column='idmunicipio')
+    colector = models.ForeignKey(Colector, blank=True, null=True,
+        db_column='colector_id')
     total = models.FloatField(blank=True, null=True)
     entregados = models.FloatField(blank=True, null=True)
     pendientes = models.FloatField(blank=True, null=True)

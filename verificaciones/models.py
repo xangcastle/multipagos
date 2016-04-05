@@ -24,7 +24,6 @@ class Verificacion(models.Model):
     servicio = models.CharField(max_length=200, null=True, blank=True)
     categoria = models.CharField(max_length=65, null=True, blank=True)
     sucursal = models.CharField(max_length=65, null=True, blank=True)
-    vendedor = models.CharField(max_length=165, null=True, blank=True)
     departamento = models.CharField(max_length=125, null=True, blank=True)
     municipio = models.CharField(max_length=125, null=True, blank=True)
     barrio = models.CharField(max_length=125, null=True, blank=True)

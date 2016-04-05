@@ -9,7 +9,7 @@ import metropolitana.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('metropolitana', '0023_auto_20160317_0221'),
+        ('metropolitana', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

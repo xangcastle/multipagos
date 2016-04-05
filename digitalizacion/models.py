@@ -169,17 +169,21 @@ def get_path(indexacion, filename):
 
 
 class Indexacion(models.Model):
-    fecha = models.DateField(auto_now_add=True, null=True)
+    fecha = models.DateTimeField(auto_now=True)
     archivos = MultiFileField(upload_to=get_path, null=True, blank=True)
     carpeta = models.CharField(max_length=8, null=True)
     make_ocr = models.BooleanField(default=False, verbose_name="hacer ocr")
 
     def path(self):
+        if not self.carpeta:
+            self.carpeta = id_generator()
+            self.save()
         return os.path.join(settings.MEDIA_ROOT, 'Indexacion', self.carpeta)
 
     def url(self):
         if not self.carpeta:
             self.carpeta = id_generator()
+            self.save()
         return os.path.join('/media', 'Indexacion', self.carpeta)
 
     def comprobantes(self):
@@ -217,13 +221,12 @@ class Indexacion(models.Model):
         return str(self.fecha) + " - " + str(self.carpeta)
 
     def save(self, *args, **kwargs):
-        if not self.carpeta:
-            self.carpeta = id_generator()
         super(Indexacion, self).save()
         preparar_carpeta(self.path())
 
 
 class Tar(models.Model):
+    archivo = models.FileField(upload_to='TEMP')
     archivos = MultiFileField(null=True, blank=True)
     aplicar_ocr = models.BooleanField(default=False)
 

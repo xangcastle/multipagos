@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import digitalizacion.models
 from django.conf import settings
 import multifilefield.models
 import metropolitana.models
@@ -10,7 +11,7 @@ import metropolitana.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('metropolitana', '0016_auto_20150904_2122'),
+        ('metropolitana', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -77,12 +78,28 @@ class Migration(migrations.Migration):
                 ('entrega', models.NullBooleanField(default=False, verbose_name=b'entregada')),
                 ('entrega_numero', models.IntegerField(null=True, verbose_name=b'numero de rendicion', blank=True)),
                 ('comprobante', models.FileField(null=True, upload_to=metropolitana.models.generar_ruta_comprobante, blank=True)),
+                ('exportado', models.BooleanField(default=False)),
             ],
             options={
                 'verbose_name': 'comprobante',
                 'db_table': 'metropolitana_paquete',
                 'managed': False,
                 'verbose_name_plural': 'carga de imagenes manual',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Empleado',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('idempleado', models.PositiveIntegerField(null=True, verbose_name=b'codigo de empleado', blank=True)),
+                ('nombre', models.CharField(max_length=120, null=True, blank=True)),
+                ('cedula', models.CharField(max_length=14, null=True, blank=True)),
+                ('gerencia', models.CharField(max_length=65, null=True, blank=True)),
+                ('localidad', models.CharField(max_length=65, null=True, blank=True)),
+                ('ecuenta', models.FileField(upload_to=metropolitana.models.get_media_url, null=True, verbose_name=b'estado de cuenta', blank=True)),
+            ],
+            options={
             },
             bases=(models.Model,),
         ),
@@ -108,10 +125,27 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('fecha', models.DateTimeField(auto_now=True)),
-                ('archivos', multifilefield.models.MultiFileField(upload_to=b'')),
+                ('archivos', multifilefield.models.MultiFileField(null=True, upload_to=digitalizacion.models.get_path, blank=True)),
+                ('carpeta', models.CharField(max_length=8, null=True)),
+                ('make_ocr', models.BooleanField(default=False, verbose_name=b'hacer ocr')),
             ],
             options={
+                'verbose_name': 'archivos pdf',
                 'verbose_name_plural': 'carga de imagenes masiva',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Tar',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('archivo', models.FileField(upload_to=b'TEMP')),
+                ('archivos', multifilefield.models.MultiFileField(null=True, upload_to=b'', blank=True)),
+                ('aplicar_ocr', models.BooleanField(default=False)),
+            ],
+            options={
+                'verbose_name': 'archivos',
+                'verbose_name_plural': 'carga de archivos',
             },
             bases=(models.Model,),
         ),

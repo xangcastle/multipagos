@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from .models import *
 from digitalizacion.models import *
+from cartera.models import *
 from verificaciones.models import *
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -12,8 +13,8 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from movil.models import UserProfile
 from django.contrib.auth.models import User
-from cartera.models import import_model as Factura, Cliente, Gestion, \
-TipoGestion
+from cartera.models import Detalle
+from datetime import datetime
 
 
 def home(request):
@@ -86,32 +87,19 @@ def descarga(request):
     return response
 
 
-def get_entregas(barrio):
-    return Paquete.objects.filter(idbarrio=barrio, estado='PENDIENTE',
-        cerrado=False, user__isnull=True)
-
-
 def calcular_entregas(barrio):
-    return get_entregas(barrio).count()
-
-
-def get_cobros(barrio):
-    return Gestion.objects.filter(barrio=barrio, estado='PENDIENTE',
-        user__isnull=True,
-        tipo_gestion=TipoGestion.objects.get(code='0002'))
+    return Paquete.objects.filter(idbarrio=barrio, estado='PENDIENTE',
+        cerrado=False, user__isnull=True).count()
 
 
 def calcular_cobros(barrio):
-    return get_cobros(barrio).count()
-
-
-def get_verificaciones(barrio):
-    return Verificacion.objects.filter(idbarrio=barrio,
-        estado='PENDIENTE', user__isnull=True)
+    return Detalle.objects.filter(idbarrio=barrio, estado='PENDIENTE',
+        user__isnull=True).count()
 
 
 def calcular_verificaciones(barrio):
-    return get_verificaciones(barrio).count()
+    return Verificacion.objects.filter(idbarrio=barrio,
+        estado='PENDIENTE', user__isnull=True).count()
 
 
 def usuarios_asignados(zona):
@@ -201,7 +189,8 @@ def asignacion_paquete(request):
 
 
 def asignar_facturas(barrio, user, cantidad, fecha):
-    ps = get_entregas(barrio)[:cantidad]
+    ps = Paquete.objects.filter(estado='PENDIENTE',
+        idbarrio=barrio)[:cantidad]
     for p in ps:
         p.user = user
         p.fecha_asignacion_user = fecha
@@ -210,16 +199,18 @@ def asignar_facturas(barrio, user, cantidad, fecha):
 
 
 def asignar_cobros(barrio, user, cantidad, fecha):
-    ps = get_cobros(barrio)[:cantidad]
+    ps = Detalle.objects.filter(estado='PENDIENTE',
+        idbarrio=barrio)[:cantidad]
     for p in ps:
         p.user = user
-        p.fecha_asignacion = fecha
+        p.fecha_asignacion_user = fecha
         p.save()
     return ps
 
 
 def asignar_verificaciones(barrio, user, cantidad, fecha):
-    ps = get_verificaciones(barrio)[:cantidad]
+    ps = Verificaciones.objects.filter(estado='PENDIENTE',
+        idbarrio=barrio)[:cantidad]
     for p in ps:
         p.user = user
         p.fecha_asignacion_user = fecha
@@ -238,7 +229,7 @@ def telecobranza(request):
 
 
 def crear_import_model(paquete):
-    i, created = Factura.objects.get_or_create(no_cupon=paquete.cupon)
+    i = Detalle()
     i.suscriptor = paquete.cliente
     i.contrato = paquete.contrato
     i.departamento = paquete.departamento
@@ -249,16 +240,22 @@ def crear_import_model(paquete):
     i.idbarrio = paquete.idbarrio
     i.servicio = paquete.servicio
     i.factura = paquete.factura
-    i.factura_interna = paquete.factura_interna
     i.no_cupon = paquete.cupon
     i.mes = paquete.mes
     i.ciclo = paquete.ciclo
     i.ano = paquete.ano
     i.tipo_mora = 'AL_DIA'
-    i.tel_contacto = ', '.join([paquete.telefono, paquete.telefono_contacto])
+    i.tel_contacto = paquete.telefono_contacto
     i.direccion = paquete.direccion
+    i.factura_interna = paquete.factura_interna
     i.saldo_pend_factura = paquete.total_mes_factura
     i.comentario = "Cartera Corriente"
+    i.position = paquete.position
+    i.integrado = True
+    i.estado = 'PENDIENTE'
+    i.idtipo_mora = i.get_mora()
+    i.idcliente = i.get_cliente()
+    i.fecha_asignacion = datetime.now()
     i.save()
 
 
