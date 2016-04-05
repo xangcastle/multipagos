@@ -4,5 +4,5 @@
 /metro/static
 /media
 /static
-*/migrations
+#*/migrations
 /venv
