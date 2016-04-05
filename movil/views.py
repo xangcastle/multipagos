@@ -8,7 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
-from cartera.models import Detalle, Cliente, Corte, Gestion, TipoGestion
+from cartera.models import Cliente, Gestion, TipoResultado, Factura,\
+TipoGestion
 
 
 @csrf_exempt
@@ -28,7 +29,8 @@ def get_user(request):
 @csrf_exempt
 def get_paquetes(request):
     usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
-    queryset = Paquete.objects.filter(user=usuario, estado='PENDIENTE')
+    queryset = Paquete.objects.filter(user=usuario, estado='PENDIENTE',
+        cerrado=False)
     if queryset:
         data = serializers.serialize('json', queryset)
         struct = json.loads(data)
@@ -198,8 +200,11 @@ def get_verificacion(request):
     if v:
         v.user = u
         v.fecha_entrega = obj_json['Fecha']
-        v.position = Geoposition(obj_json['Latitude'],
-            obj_json['Longitude'])
+        try:
+            v.position = Geoposition(obj_json['Latitude'],
+                obj_json['Longitude'])
+        except:
+            pass
         v.estado = obj_json['Estado']
         v.direccion_corr = obj_json['direccion_corr']
         v.tipo_vivienda = obj_json['tipo_vivienda']
@@ -260,8 +265,9 @@ def get_cartera(request):
         obj_json['direccion'] = c.direccion
         obj_json['telefonos'] = c.telefonos
         obj_json['comentario'] = c.comentario
+        obj_json['saldo'] = c.saldo_total
+        obj_json['ciclo'] = c.ciclo
         facs = []
-        pmsas = []
         for f in c.facturas():
             fac_json = {}
             fac_json['Pk'] = f.id
@@ -270,17 +276,9 @@ def get_cartera(request):
             fac_json['saldo_pend_factura'] = f.saldo_pend_factura
             fac_json['fecha_fact'] = str(f.fecha_fact)
             fac_json['fecha_venc'] = str(f.fecha_venc)
-            fac_json['tipo_mora'] = f.tipo_mora
+            fac_json['tipo_mora'] = f.tipo_mora.name
             facs.append(fac_json)
         obj_json['facturas'] = facs
-        for p in c.promesas():
-            prm_json = {}
-            prm_json['Pk'] = p.id
-            prm_json['user'] = p.user.username
-            prm_json['fecha_promesa'] = str(p.fecha_promesa)
-            prm_json['fecha_pago'] = str(p.fecha_pago)
-            pmsas.append(prm_json)
-        obj_json['promesas'] = pmsas
         data.append(obj_json)
     data = json.dumps(data)
     response = HttpResponse(data, content_type='application/json')
@@ -295,7 +293,7 @@ def get_cartera(request):
 def get_detalle(request):
     obj_json = {'Mensaje': ''}
     try:
-        d = Detalle.objects.get(id=int(request.POST.get('Pk')))
+        d = Factura.objects.get(id=int(request.POST.get('Pk')))
     except:
         d = None
     try:
@@ -319,7 +317,8 @@ def get_detalle(request):
 def get_cortes(request):
     data = []
     usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
-    queryset = Corte.objects.filter(user=usuario, estado='PENDIENTE')
+    queryset = Gestion.objects.filter(user=usuario, estado='PENDIENTE',
+        tipo_gestion=TipoGestion.objects.get(code='0003'))
     if queryset:
         for c in queryset:
             data.append(c.to_json())
@@ -348,7 +347,7 @@ def put_corte(request):
 
 @csrf_exempt
 def get_corte(request):
-    o = Corte.objects.get(id=int(request.POST.get('Pk', '')))
+    o = Gestion.objects.get(id=int(request.POST.get('Pk', '')))
     o.fecha = request.POST.get('Fecha', '')
     o.user = User.objects.get(id=int(request.POST.get('Usuario', '')))
     o.position = Geoposition(request.POST.get('Latitude', ''),
@@ -370,7 +369,7 @@ def get_gestion(request):
     obj_json['fecha_promesa'] = request.POST.get('fecha_promesa', '')
     obj_json['observaciones'] = request.POST.get('observaciones', '')
     try:
-        tg = TipoGestion.objects.get(signo=obj_json['tipo_gestion'])
+        tg = TipoResultado.objects.get(signo=obj_json['tipo_gestion'])
     except:
         tg = None
     try:
@@ -378,22 +377,70 @@ def get_gestion(request):
     except:
         c = None
     try:
-        u = TipoGestion.objects.get(id=obj_json['user'])
+        u = User.objects.get(id=obj_json['user'])
     except:
         u = None
     if tg and c and u:
-        g = Gestion(cliente=c, user=u, tipo_gestion=tg,
-            observaciones=obj_json['observaciones'],
-            fecha=obj_json['fecha'])
-        g.save()
-        obj_json['Mensaje'] = "gestion guardada con exito"
+        try:
+            g = Gestion.objects.get(cliente=c, user=u, estado='PENDIENTE')
+            g.tipo_resultado = tg
+            g.observaciones = obj_json['observaciones']
+            g.fecha_gestion = obj_json['fecha']
+            g.fecha_promesa = obj_json['fecha_promesa']
+            try:
+                g.position = Geoposition(obj_json['Latitude'],
+                    obj_json['Longitude'])
+            except:
+                pass
+            g.estado = 'REALIZADO'
+            g.save()
+            obj_json['Mensaje'] = "gestion guardada con exito"
+        except:
+            obj_json['Mensaje'] = "esta gestion ya fue subida anteriormente"
+    else:
+        obj_json['Mensaje'] = "faltan datos"
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
 
 
 def cartera_user(user):
-    isc = Detalle.objects.filter(estado='PENDIENTE', user=user
-    ).order_by('idcliente').values_list(
-        'idcliente', flat=True)
+    isc = Gestion.objects.filter(estado='PENDIENTE', user=user,
+    tipo_gestion__in=TipoGestion.objects.filter(code__in=['0002', '0003'])
+    ).order_by('cliente').values_list(
+        'cliente', flat=True)
     cs = Cliente.objects.filter(id__in=isc)
     return cs
+
+
+@csrf_exempt
+def get_verificacion_sms(request):
+    obj_json = {}
+    obj_json['Pk'] = request.POST.get('Pk', '')
+    obj_json['IdUsuario'] = request.POST.get('IdUsuario', '')
+    obj_json['Fecha'] = str(request.POST.get('Fecha', ''))
+    obj_json['Latitude'] = request.POST.get('Latitude', '')
+    obj_json['Longitude'] = request.POST.get('Longitude', '')
+    obj_json['Estado'] = request.POST.get('Estado', '')
+
+    obj_json['Mensaje'] = ''
+    try:
+        u = User.objects.get(id=int(obj_json['IdUsuario']))
+    except:
+        u = None
+    try:
+        v = Verificacion.objects.get(id=int(obj_json['Pk']))
+    except:
+        v = None
+    if v:
+        v.user = u
+        v.fecha_entrega = obj_json['Fecha']
+        try:
+            v.position = Geoposition(obj_json['Latitude'],
+                obj_json['Longitude'])
+        except:
+            pass
+        v.estado = obj_json['Estado']
+        obj_json['Mensaje'] = "Verificacion cargada Correctamente"
+        v.save()
+    data = json.dumps(obj_json)
+    return HttpResponse(data, content_type='application/json')

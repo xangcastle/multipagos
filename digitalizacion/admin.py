@@ -74,7 +74,8 @@ admin.site.register(import_paquete, ImportExportModelAdmin)
 
 class indexacion_admin(ImportExportModelAdmin):
     date_hierarchy = "fecha"
-    list_display = ('fecha', 'total', 'resumen_por_ciclo', 'carga_manual')
+    list_display = ('fecha', 'total', 'resumen_por_ciclo', 'carga_manual',
+        'carpeta', 'path')
     fields = ('archivos', 'make_ocr')
     actions = ['action_indexar']
 

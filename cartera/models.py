@@ -3,9 +3,8 @@ from metropolitana.models import Departamento, Municipio, Barrio, Entidad, \
 Zona, get_code, get_zona
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
-from django.db.models import Max
-from datetime import datetime
 from django.db.models import Sum
+from datetime import datetime
 
 
 def devolver_mayor(a, b):
@@ -13,7 +12,7 @@ def devolver_mayor(a, b):
         return a
     else:
         return b
-    if a > b:
+    if len(a) > len(b):
         return a
     else:
         return b
@@ -42,97 +41,40 @@ def get_or_create_entidad(instance, name):
     return o
 
 
-class Entrega(models.Model):
-    factura = models.CharField(max_length=70, null=True, blank=True)
-    contrato = models.CharField(max_length=65, null=True, blank=True)
-    cliente = models.CharField(max_length=150, null=True, blank=True)
-    direccion = models.TextField(null=True, blank=True)
-    ciclo = models.PositiveIntegerField(null=True, blank=True)
-    mes = models.PositiveIntegerField(null=True, blank=True)
-    ano = models.PositiveIntegerField(null=True, blank=True)
-    idbarrio = models.ForeignKey(Barrio, null=True, blank=True,
-        db_column='idbarrio', verbose_name='barrio')
-    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
-        db_column='iddepartamento', verbose_name='departamento')
-    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True,
-        db_column='idmunicipio', verbose_name='municipio')
-    cupon = models.PositiveIntegerField(null=True, blank=True)
-    total_mes_factura = models.FloatField(null=True, blank=True)
-    valor_pagar = models.FloatField(null=True, blank=True)
-    numero_fiscal = models.PositiveIntegerField(null=True, blank=True)
-    factura_interna = models.PositiveIntegerField(null=True, blank=True)
-    telefono_contacto = models.CharField(max_length=70, null=True, blank=True)
-    position = GeopositionField(null=True, blank=True)
-    user = models.ForeignKey(User, null=True, blank=True)
-    fecha_entrega = models.DateTimeField(null=True, blank=True)
-    parentezco = models.CharField(max_length=75, null=True, blank=True)
-    recibe = models.CharField(max_length=75, null=True, blank=True)
-    ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
-                          ('PENDIENTE', 'PENDIENTE'),
-                          ('REZAGADO', 'REZAGADO'),
-                         )
-    estado = models.CharField(max_length=65, null=True, blank=True,
-        choices=ESTADOS_DE_ENTREGA)
-    idcliente = models.ForeignKey('Cliente', null=True, blank=True,
-        db_column='idcliente', on_delete=models.SET_NULL)
-
-    def get_cliente(self):
-        c = None
-        if self.contrato:
-            try:
-                c, create = Cliente.objects.get_or_create(
-                    contrato=self.contrato)
-                c.code = devolver_mayor(self.cliente, c.code)
-                c.name = devolver_mayor(self.suscriptor, c.name)
-                c.departamento = self.iddepartamento
-                c.municipio = self.idmunicipio
-                c.barrio = self.idbarrio
-                c.direccion = devolver_mayor(self.direccion, c.direccion)
-                c.save()
-            except:
-                c = None
-        return c
-
-    class Meta:
-        managed = False
-        db_table = "metropolitana_paquete"
-
-
-class CarteraMorosa(models.Manager):
-    def get_queryset(self):
-        return super(CarteraMorosa, self).get_queryset().filter(
-            tipo_mora__in=TipoMora.objects.all())
-
-
 class Cliente(Entidad):
     identificacion = models.CharField(max_length=65, null=True, blank=True)
     contrato = models.CharField(max_length=65, null=True, blank=True)
     departamento = models.ForeignKey(Departamento, null=True, blank=True,
-        related_name="cartera_cliente_departamento")
+        related_name="cartera_cliente_departamento", on_delete=models.SET_NULL)
     municipio = models.ForeignKey(Municipio, null=True, blank=True,
-        related_name="cartera_cliente_municipio")
+        related_name="cartera_cliente_municipio", on_delete=models.SET_NULL)
     barrio = models.ForeignKey(Barrio, null=True, blank=True,
-        related_name="cartera_cliente_barrio")
+        related_name="cartera_cliente_barrio", on_delete=models.SET_NULL)
     zona = models.ForeignKey(Zona, null=True, blank=True,
-        related_name="cartera_cliente_zona")
+        related_name="cartera_cliente_zona", on_delete=models.SET_NULL)
     position = GeopositionField(null=True, blank=True)
     position_ver = models.BooleanField(default=False,
         verbose_name="con geoposicion verificada")
     comentario = models.CharField(max_length=125, null=True, blank=True)
-    telefonos = models.CharField(max_length=65, null=True, blank=True)
+    telefonos = models.CharField(max_length=265, null=True, blank=True)
     direccion = models.CharField(max_length=255, null=True, blank=True)
-    tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
+    tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True,
+        on_delete=models.SET_NULL)
     saldo_total = models.FloatField(null=True, blank=True)
     ciclo = models.PositiveIntegerField(null=True, blank=True)
-
-    objects = models.Manager()
-    morosos = CarteraMorosa()
+    estado_corte = models.CharField(max_length=165, null=True, blank=True)
+    fecha_instalacion = models.DateField(null=True, blank=True)
+    descr_plan = models.CharField(max_length=165, null=True, blank=True)
+    tecnologia = models.CharField(max_length=125, null=True, blank=True)
+    canal_venta = models.CharField(max_length=125, null=True, blank=True)
+    ejecutivo_venta = models.CharField(max_length=125, null=True, blank=True)
+    facturas_generadas = models.IntegerField(null=True, blank=True)
+    facturas_pagadas = models.IntegerField(null=True, blank=True)
+    has_pend = models.BooleanField(default=False,
+        verbose_name="con gestiones pendientes")
 
     def facturas(self):
-        return Detalle.objects.filter(idcliente=self)
-
-    def promesas(self):
-        return PromesaPago.objects.filter(cliente=self)
+        return Factura.objects.filter(cliente=self, saldo__gt=0.0)
 
     def get_estado_mora(self):
         if self.facturas():
@@ -148,28 +90,41 @@ class Cliente(Entidad):
         else:
             return 0.0
 
+    def add_saldo(self, monto):
+        if self.saldo_total:
+            self.saldo_total += monto
+        else:
+            self.saldo_total = monto
+
+    def actualizar_saldo(self):
+        self.saldo_total = self.get_saldo()
+        self.save()
+
     def get_direccion(self):
         if self.facturas():
             return self.facturas().order_by('-fecha_fact')[0].direccion
         else:
             return None
 
-    def generar_orden_corte(self):
-        o, create = Corte.objects.get_or_create(cliente=self,
-            estado='PENDIENTE')
+    def generar_gestion(self, tipo):
+        o, create = Gestion.objects.get_or_create(cliente=self,
+            estado='PENDIENTE', tipo_gestion=tipo)
         o.fecha_asignacion = datetime.now()
+        if self.departamento:
+            o.departamento = self.departamento
+        if self.municipio:
+            o.municipio = self.municipio
+        if self.barrio:
+            o.barrio = self.barrio
+        if not self.zona and self.barrio:
+            self.zona = get_zona(self.barrio)
+            self.save()
+            o.zona = self.zona
         if self.position:
             o.position = self.position
-        o.departamento = self.departamento
-        o.municipio = self.municipio
-        o.barrio = self.barrio
-        o.direccion = self.direccion
-        o.telefonos = self.telefonos
+        o.user = None
         o.save()
         return o
-
-    def entregas(self):
-        return Entrega.objects.filter(contrato=self.contrato)
 
     def get_knowed_position(self):
         if self.entregas():
@@ -204,11 +159,9 @@ class Cliente(Entidad):
         else:
             return False
 
-    def add_saldo(self, monto):
-        if self.saldo_total:
-            self.saldo_total += monto
-        else:
-            self.saldo_total = monto
+    def __unicode__(self):
+        return ' '.join([
+            str(self.contrato), self.name])
 
     def save(self, *args, **kwargs):
         if not self.code:
@@ -217,7 +170,7 @@ class Cliente(Entidad):
         super(Cliente, self).save()
 
 
-class base_detalle(models.Model):
+class import_model(models.Model):
     cliente = models.CharField(max_length=65, null=True, blank=True)
     producto = models.CharField(max_length=65, null=True, blank=True)
     categoria = models.CharField(max_length=65, null=True, blank=True)
@@ -288,99 +241,33 @@ class base_detalle(models.Model):
     def get_municipio(self):
         m = None
         try:
-            if self.localidad and self.iddepartamento:
-                m = Municipio.objects.get(departamento=self.iddepartamento,
+            if self.localidad:
+                m = Municipio.objects.get(departamento=self.get_departamento(),
                     name_alt=self.localidad)
         except:
             m, created = Municipio.objects.get_or_create(
-                departamento=self.iddepartamento, name=self.localidad)
+                departamento=self.get_departamento(), name=self.localidad)
         return m
 
     def get_barrio(self):
         b = None
         try:
-            if self.barr_contacto and self.idmunicipio and self.iddepartamento:
+            if self.barr_contacto:
                 b, created = Barrio.objects.get_or_create(
-                departamento=self.iddepartamento,
-                municipio=self.idmunicipio, name=self.barr_contacto)
+                departamento=self.get_departamento(),
+                municipio=self.get_municipio(), name=self.barr_contacto)
         except:
-            b = Barrio.objects.filter(departamento=self.iddepartamento,
-                municipio=self.idmunicipio, name=self.barr_contacto)[0]
+            b = Barrio.objects.filter(departamento=self.get_departamento(),
+                municipio=self.get_municipio(), name=self.barr_contacto)[0]
         return b
-
-    def get_cliente(self):
-        c, create = Cliente.objects.get_or_create(
-            contrato=self.contrato)
-        c.code = devolver_mayor(self.cliente, c.code)
-        c.name = devolver_mayor(self.suscriptor, c.name)
-        c.identificacion = devolver_mayor(self.nit, c.identificacion)
-        c.telefonos = devolver_mayor(self.telefonos(), c.telefonos)
-        c.direccion = self.direccion
-        c.ciclo = self.ciclo
-        c.comentario = self.comentario
-        c.add_saldo(self.saldo_pend_factura)
-        if self.iddepartamento:
-            c.departamento = self.iddepartamento
-        if self.idmunicipio:
-            c.municipio = self.idmunicipio
-        if self.idbarrio:
-            c.barrio = self.idbarrio
-            c.zona = get_zona(self.idbarrio)
-        if self.idtipo_mora:
-            c.idtipo_mora = self.idtipo_mora
-        c.save()
-        return c
 
     def get_mora(self):
         m = None
         if self.tipo_mora:
-            try:
-                m, created = TipoMora.objects.get_or_create(name=self.tipo_mora)
-            except:
-                pass
+            m, created = TipoMora.objects.get_or_create(name=self.tipo_mora)
         else:
-            m = TipoMora.objects.get(name='AL_DIA')
+            m, created = TipoMora.objects.get_or_create(name='AL_DIA')
         return m
-
-    class Meta:
-        abstract = True
-
-
-class Detalle(base_detalle):
-    idtipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
-    ESTADOS_DE_ENTREGA = (('PENDIENTE', 'PENDIENTE'),
-                          ('VISITADO', 'VISITADO'),
-                          ('LLAMADO', 'LLAMADO'),
-                          ('CON PROMESA DE PAGO', 'CON PROMESA DE PAGO'),
-                          ('PAGAGO', 'PAGADO'),
-                         )
-    estado = models.CharField(max_length=65, null=True, blank=True,
-        choices=ESTADOS_DE_ENTREGA)
-    iddepartamento = models.ForeignKey(Departamento, null=True, blank=True,
-        verbose_name='departamento')
-    idmunicipio = models.ForeignKey(Municipio, null=True, blank=True,
-        verbose_name='municipio')
-    idbarrio = models.ForeignKey(Barrio, null=True, blank=True,
-        verbose_name='barrio')
-    position = GeopositionField(null=True, blank=True)
-    fecha_entrega = models.DateTimeField(null=True, blank=True)
-    user = models.ForeignKey(User, null=True, blank=True)
-    monto = models.FloatField(null=True, blank=True)
-    idcliente = models.ForeignKey(Cliente, null=True, blank=True,
-        on_delete=models.SET_NULL)
-    integrado = models.NullBooleanField()
-    pagado = models.NullBooleanField()
-    fecha_asignacion_user = models.DateField(null=True, blank=True)
-
-    def get_pagado(self):
-        if self.monto and self.monto >= self.saldo_pend_factura:
-            return True
-        else:
-            return False
-
-    def save(self, *args, **kwargs):
-        self.pagado = self.get_pagado()
-        super(Detalle, self).save()
 
     def telefonos(self):
         dt = []
@@ -390,131 +277,169 @@ class Detalle(base_detalle):
             dt.append(self.tel_contacto_cliente)
         return ', '.join(dt)
 
+    def get_cliente(self):
+        c, create = Cliente.objects.get_or_create(
+            contrato=self.contrato)
+        c.code = devolver_mayor(self.cliente, c.code)
+        c.name = devolver_mayor(self.suscriptor, c.name)
+        c.identificacion = devolver_mayor(self.nit, c.identificacion)
+        c.telefonos = devolver_mayor(self.telefonos(), c.telefonos)
+        if not c.direccion:
+            c.direccion = self.direccion
+        if not c.ciclo:
+            c.ciclo = self.ciclo
+        if not c.comentario:
+            c.comentario = self.comentario
+        c.saldo_total = c.get_saldo()
+        if not c.departamento:
+            c.departamento = self.get_departamento()
+        if not c.municipio:
+            c.municipio = self.get_municipio()
+        if not c.barrio:
+            c.barrio = self.get_barrio()
+        if not c.zona:
+            c.zona = get_zona(self.get_barrio())
+        if not c.tipo_mora:
+            c.tipo_mora = self.get_mora()
+        c.estado_corte = self.estado_corte
+        c.fecha_instalacion = devolver_mayor(c.fecha_instalacion,
+            self.fecha_instalacion)
+        c.descr_plan = devolver_mayor(self.descr_plan, c.descr_plan)
+        c.tecnologia = devolver_mayor(self.tecnologia, c.tecnologia)
+        c.canal_venta = devolver_mayor(self.canal_venta, c.canal_venta)
+        c.ejecutivo_venta = devolver_mayor(self.ejecutivo_venta,
+            c.ejecutivo_venta)
+        c.facturas_generadas = self.facturas_generadas
+        c.facturas_pagadas = self.facturas_pagadas
+        c.save()
+        return c
+
+    def get_factura(self):
+        if self.no_cupon:
+            f, created = Factura.objects.get_or_create(no_cupon=self.no_cupon)
+        if not self.no_cupon and self.factura_interna:
+            f, created = Factura.objects.get_or_create(
+                factura_interna=self.factura_interna)
+        f.cliente = self.get_cliente()
+        f.tipo_mora = self.get_mora()
+        if not self.factura:
+            f.factura = self.factura
+        if not self.factura_interna:
+            f.factura_interna = self.factura_interna
+        if not self.no_fiscal:
+            f.no_fiscal = self.no_fiscal
+        f.saldo_pend_factura = self.saldo_pend_factura
+        if not self.ciclo:
+            f.ciclo = self.ciclo
+        if not self.mes:
+            f.mes = self.mes
+        if not self.ano:
+            f.ano = self.ano
+        if self.fecha_fact:
+            f.fecha_fact = self.fecha_fact
+        if self.fecha_venc:
+            f.fecha_venc = self.fecha_venc
+        f.saldo = self.saldo_pend_factura
+        f.save()
+        f.cliente.actualizar_saldo()
+        return f
+
+    def integrar(self):
+        self.get_factura()
+        self.delete()
+
+    class Meta:
+        verbose_name = "registro"
+        verbose_name_plural = "importacion de datos"
+
+
+class Factura(models.Model):
+    cliente = models.ForeignKey(Cliente, null=True, blank=True,
+        on_delete=models.SET_NULL)
+    tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True)
+    factura = models.CharField(max_length=65, null=True, blank=True)
+    factura_interna = models.CharField(max_length=65, null=True, blank=True)
+    no_cupon = models.CharField(max_length=65, null=True, blank=True)
+    no_fiscal = models.CharField(max_length=65, null=True, blank=True)
+    saldo_pend_factura = models.FloatField(null=True, blank=True)
+    ciclo = models.PositiveIntegerField(null=True, blank=True)
+    ano = models.PositiveIntegerField(null=True, blank=True)
+    mes = models.PositiveIntegerField(null=True, blank=True)
+    fecha_fact = models.DateField(null=True, blank=True)
+    fecha_venc = models.DateField(null=True, blank=True)
+    gestionada = models.BooleanField(default=False)
+    monto_abonado = models.FloatField(default=0.0)
+    saldo = models.FloatField(null=True)
+    fecha_pago = models.DateField(null=True)
+
+    def get_saldo(self):
+        if self.saldo_pend_factura and self.monto_abonado:
+            return self.saldo_pend_factura - self.monto_abonado
+        else:
+            return self.saldo_pend_factura
+
+    def save(self, *args, **kwargs):
+        self.saldo = self.get_saldo()
+        super(Factura, self).save()
+
     class Meta:
         verbose_name_plural = "detalle de mora"
         verbose_name = "factura"
 
 
-class cartera_corriente(models.Manager):
-
-    def get_queryset(self):
-        return super(cartera_corriente, self).get_queryset().filter(
-            tipo_mora__isnull=True)
-
-
-class import_manager(models.Manager):
-
-    def get_queryset(self):
-        return super(import_manager, self).get_queryset().filter(
-            id=0)
-
-
-def actualizar_info(det, imp):
-    for field in imp._meta.get_all_field_names():
-        if not field == 'id':
-            det[field] = imp[field]
-    det.integrado = False
-    det.estado = 'PENDIENTE'
-    det.save()
-
-
-class import_model(base_detalle):
-
-    def integrar(self):
-        if self.no_cupon:
-            f, created = Detalle.objects.get_or_create(no_cupon=self.no_cupon)
-            actualizar_info(f, self)
-            self.delete()
-        if not self.no_cupon and self.factura_interna:
-            f, created = Detalle.objects.get_or_create(
-                factura_interna=self.factura_interna)
-            actualizar_info(f, self)
-
-
-class Corte(models.Model):
+class Gestion(models.Model):
     cliente = models.ForeignKey(Cliente)
-    fecha_asignacion = models.DateTimeField(null=True)
-    user_solicita = models.ForeignKey(User, null=True,
-        related_name='usuario_que_solicita')
+    departamento = models.ForeignKey(Departamento, null=True, blank=True)
+    municipio = models.ForeignKey(Municipio, null=True, blank=True)
+    barrio = models.ForeignKey(Barrio, null=True, blank=True)
+    zona = models.ForeignKey(Zona, null=True, blank=True)
+    position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True)
-    fecha = models.DateTimeField(null=True)
-    numero = models.IntegerField(null=True)
-    position = GeopositionField(null=True)
-    departamento = models.ForeignKey(Departamento, null=True)
-    municipio = models.ForeignKey(Municipio, null=True)
-    barrio = models.ForeignKey(Barrio, null=True)
-    comentario = models.CharField(max_length=125, null=True, blank=True)
-    telefonos = models.CharField(max_length=65, null=True, blank=True)
-    direccion = models.CharField(max_length=255, null=True, blank=True)
-    ESTADOS_DE_CORTE = (
+    fecha_asignacion = models.DateTimeField(null=True)
+    fecha_vencimiento = models.DateTimeField(null=True)
+    fecha_gestion = models.DateTimeField(null=True)
+    tipo_gestion = models.ForeignKey('TipoGestion', null=True)
+    tipo_resultado = models.ForeignKey('TipoResultado', null=True)
+    fecha_promesa = models.DateField(null=True,
+        verbose_name="fecha de promesa de pago")
+    observaciones = models.CharField(max_length=255, null=True)
+    monto = models.FloatField(default=0.0)
+    ESTADOS_GESTION = (
         ('PENDIENTE', 'PENDIENTE'),
-        ('CORTADO', 'CORTADO'),
-        ('ANULADO', 'ANULADO'),
+        ('REALIZADO', 'REALIZADO'),
+        ('VENCIDO', 'VENCIDO'),
         )
-    estado = models.CharField(max_length=50, choices=ESTADOS_DE_CORTE,
-        default='PENDIENTE')
+    estado = models.CharField(max_length=65, default='PENDIENTE',
+        choices=ESTADOS_GESTION)
 
     def __unicode__(self):
-        return 'orde de corte # %s' % self.numero
-
-    def get_numero(self):
-        queryset = type(self).objects.all()
-        if queryset.count() > 0:
-            mayor = queryset.aggregate(Max('numero'))['numero__max']
-            return (mayor + 1)
-        else:
-            return 1
-
-    def save(self, *args, **kwargs):
-        if not self.numero:
-            self.numero = self.get_numero()
-        super(Corte, self).save()
-
-    class Meta:
-        verbose_name = 'orden'
-        verbose_name_plural = 'ordenes de corte'
+        return str(self.tipo_gestion) + ' ' + self.cliente.name
 
     def to_json(self):
         obj = {}
         obj['pk'] = self.id
         obj['fecha_asignacion'] = str(self.fecha_asignacion)
-        obj['numero'] = str(self.numero)
         obj['cliente_pk'] = str(self.cliente.id)
-        obj['cliente_nombre'] = str(self.cliente.name)
-        obj['departamento'] = str(self.departamento.name)
-        obj['municipio'] = str(self.municipio.name)
-        obj['barrio'] = str(self.barrio.name)
-        obj['direccion'] = str(self.direccion)
-        obj['telefonos'] = str(self.telefonos)
+        obj['cliente_nombre'] = self.cliente.name
+        obj['departamento'] = self.cliente.departamento.name
+        obj['municipio'] = self.cliente.municipio.name
+        obj['barrio'] = self.cliente.barrio.name
+        obj['direccion'] = self.cliente.direccion
+        obj['telefonos'] = self.cliente.telefonos
         return obj
 
+    class Meta:
+        verbose_name_plural = "gestiones"
 
-class PromesaPago(models.Model):
 
-    cliente = models.ForeignKey(Cliente)
-    corte = models.ForeignKey(Corte)
-    user = models.ForeignKey(User)
-    fecha_promesa = models.DateTimeField(auto_now_add=True)
-    fecha_pago = models.DateField()
-
-    def __unicode__(self):
-        return '%s %s' % (self.cliente.name, str(self.fecha_pago))
+class TipoGestion(Entidad):
 
     class Meta:
-        verbose_name_plural = 'promesas de pagos'
-        verbose_name = 'promesa de pago'
+        verbose_name = "tipo de gestion"
+        verbose_name_plural = "tipos de gestiones"
 
 
-class Gestion(models.Model):
-    cliente = models.ForeignKey(Cliente)
-    user = models.ForeignKey(User)
-    fecha = models.DateTimeField(null=True)
-    tipo_gestion = models.ForeignKey('TipoGestion', null=True)
-    fecha_promesa = models.DateField(null=True)
-    observaciones = models.CharField(max_length=255, null=True)
-
-
-class TipoGestion(models.Model):
+class TipoResultado(models.Model):
     signo = models.CharField(max_length=4)
     descripcion = models.CharField(max_length=255)
     RESULTADOS = (
@@ -547,80 +472,69 @@ class TipoMora(models.Model):
         ordering = ['dias', ]
 
 
-class PromosionVigente(models.Model):
-    def get_queryset(self):
-        return super(PromosionVigente, self).get_queryset().filter(
-            estado='VIGENTE')
-
-
-class Promosion(models.Model):
-    idcliente = models.ForeignKey(Cliente, null=True, blank=True)
-    contrato = models.CharField(max_length=65, null=True, blank=True)
-    descuento = models.FloatField(null=True, blank=True)
-    fecha_baja = models.DateField(null=True, blank=True)
-    fecha_vence = models.DateField(null=True, blank=True)
-    ESTADOS_PROMOSION = (
-    ('VIGENTE', 'VIGENTE'),
-    ('VENCIDA', 'VENCIDA'),
-        )
-    estado = models.CharField(max_length=125, null=True, blank=True,
-        choices=ESTADOS_PROMOSION)
-
-    def get_estado(self):
-        if self.fecha_vence <= datetime.now():
-            return 'VENCIDA'
-        else:
-            return 'VIGENTE'
-
-    objects = models.Manager()
-    objects = PromosionVigente()
-
-    def get_cliente(self):
-        c = None
-        if self.contrato(self):
-            c, created = Cliente.objects.get_or_create(contrato=self.contrato)
-        return c
-
-    def save(self, *args, **kwargs):
-        self.estado = self.get_estado()
-        super(Promosion, self).save()
+class AsignacionCliente(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    cliente = models.ForeignKey(Cliente, null=True, on_delete=models.SET_NULL)
+    tipo_gestion = models.ForeignKey(TipoGestion, null=True,
+        on_delete=models.SET_NULL)
 
     def __unicode__(self):
-        return str(self.fecha_vence)
-
-    @property
-    def integrado(self):
-        if self.idcliente:
-            return True
-        else:
-            return False
+        return self.cliente.name + ' - ' + self.user.username
 
     class Meta:
-        verbose_name_plural = "promosiones"
+        unique_together = ('user', 'cliente', 'tipo_gestion')
+        verbose_name = 'usuario'
+        verbose_name_plural = 'usuarios asignados'
 
 
-def integrar_detalle(ps):
+class RebajaCartera(models.Model):
+    no_cupon = models.CharField(max_length=65, null=True)
+    fecha_pago = models.DateField(null=True)
+    abono = models.FloatField(null=True)
+
+    class Meta:
+        verbose_name = "registro"
+        verbose_name_plural = "importacion de rebajas de cartera"
+
+    def integrar(self):
+        try:
+            f = Factura.objects.get(no_cupon=self.no_cupon)
+            f.gestionada = True
+            f.monto_abonado = self.abono
+            f.fecha_pago = self.fecha_pago
+            f.saldo = f.saldo_pend_factura - f.monto_abonado
+            f.save()
+            self.delete()
+        except:
+            if not self.no_cupon:
+                self.delete()
+
+
+def integrar_importacion(ps):
     message = ""
     ds = ps.order_by('departamento').distinct('departamento')
     for d in ds:
-        qs = ps.filter(departamento=d.departamento)
-        qs.update(iddepartamento=d.get_departamento().id)
-    ms = ps.order_by('departamento', 'localidad').distinct(
-        'departamento', 'localidad')
-    for m in ms:
-        qs = ps.filter(departamento=m.departamento,
-            localidad=m.localidad)
-        qs.update(idmunicipio=m.get_municipio().id)
-    bs = ps.order_by('departamento', 'localidad', 'barr_contacto').distinct(
-        'departamento', 'localidad', 'barr_contacto')
-    for b in bs:
-        qs = ps.filter(departamento=b.departamento,
-            localidad=b.localidad, barr_contacto=b.barr_contacto)
-        qs.update(idbarrio=b.get_barrio().id)
-    cs = ps.order_by('contrato').distinct('contrato')
-    for c in cs:
-        qs = ps.filter(contrato=c.contrato)
-        qs.update(idcliente=c.get_cliente().id, integrado=True)
+        depto = d.get_departamento()
+        queryset = ps.filter(departamento=d.departamento)
+        ms = queryset.order_by('localidad').distinct('localidad')
+        for m in ms:
+            mcipio = m.get_municipio()
+            queryset = ps.filter(departamento=d.departamento,
+                localidad=d.localidad)
+            bs = queryset.order_by('barr_contacto').distinct('barr_contacto')
+            for b in bs:
+                brrio = b.get_barrio()
+                queryset = ps.filter(departamento=d.departamento,
+                    localidad=d.localidad, barr_contacto=d.barr_contacto)
+                cs = queryset.order_by('contrato').distinct('contrato')
+                for c in cs:
+                    cl, created = Cliente.objects.get_or_create(
+                        contrato=c.contrato)
+                    cl.name = c.suscriptor
+                    cl.departamento = depto
+                    cl.municipio = mcipio
+                    cl.barrio = brrio
+                    cl.save()
     message += "integrado, total de facturas = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message

@@ -72,7 +72,7 @@ class paquete_admin(ImportExportModelAdmin):
                 'fields': (('factura', 'cliente', 'contrato'),
                             ('ciclo', 'mes', 'ano'),
                             ('iddepartamento', 'idmunicipio', 'barrio'),
-                            ('direccion', 'lote'),
+                            ('direccion',),
                             ('telefono_contacto', 'ruta', 'zona'))}),
                 ('Datos de Facturacion', {
                 'classes': ('grp-collapse grp-open',),
@@ -81,7 +81,7 @@ class paquete_admin(ImportExportModelAdmin):
                             ('numero_fiscal', 'factura_interna', 'entrega'))}),
                 ('Entrega y Digitalizacion', {
                 'classes': ('grp-collapse grp-open',),
-                'fields': (('comprobante', 'colector'),
+                'fields': (('comprobante', 'user'),
                             ('archivo', 'consecutivo', 'tipificacion'),
                             ('parentezco', 'recibe', 'fecha_entrega'),
                             'position', 'imagen')}))
@@ -93,17 +93,13 @@ class paquete_admin(ImportExportModelAdmin):
         'mes', 'ano', 'departamento', 'municipio', 'barrio', 'direccion',
         'telefono_contacto', 'ruta', 'zona', 'segmento', 'tarifa', 'servicio',
         'cupon', 'total_mes_factura', 'valor_pagar', 'numero_fiscal',
-        'factura_interna', 'entrega', 'lote', 'colector', 'tipificacion',
+        'factura_interna', 'entrega', 'tipificacion',
         'archivo', 'consecutivo', 'parentezco', 'recibe',
         'fecha_entrega')
-    actions = ['action_integrar', 'action_lotificar', 'action_imprimir',
+    actions = ['action_integrar', 'action_imprimir',
         'action_exportar', 'generar_pods']
 
     change_list_template = 'admin/metropolitana/paquete/change_list.html'
-
-    def action_lotificar(self, request, queryset):
-        lotificar(queryset)
-    action_lotificar.short_description = 'lotificar facturas seleccionadas'
 
     def action_integrar(self, request, queryset):
         msj = integrar(queryset)
@@ -146,59 +142,6 @@ class cliente_admin(entidad_admin):
         'direccion', 'telefono_contacto', 'valor_pagar')
     list_filter = ('departamento', 'municipio', 'barrio', 'segmento', 'tarifa',
         'servicio')
-
-
-class facturas_asignadas(base_tabular):
-    model = Paquete
-    fields = ('factura', 'cliente', 'comprobante', 'tipificacion',
-        'telefono_contacto')
-    readonly_fields = ('factura', 'cliente', 'telefono_contacto')
-    ordering = ('cliente', )
-    #sortable_field_name = 'consecutivo'
-
-
-class lote_admin(ImportExportModelAdmin):
-    date_hierarchy = 'fecha'
-    search_fields = ('numero', 'colector__name', 'departamento__name',
-        )
-    list_display = ('numero', 'municipio', 'departamento', 'barrio',
-        'cerrado', 'cantidad_paquetes', 'entregados', 'avance', 'asignado',
-        'colector', 'ciclo', 'mes', 'ano')
-    list_filter = ('municipio', 'departamento', 'asignado', 'colector',
-        'ciclo', 'mes', 'ano')
-
-    fieldsets = (
-        ('Datos del Lote', {'classes': ('grp-collapse grp-open',),
-            'fields': (('numero', 'colector'), ('municipio', 'departamento'),
-                'barrio', ('cantidad_paquetes', 'entregados', 'avance'))}),
-                )
-
-    readonly_fields = ('numero', 'municipio', 'departamento', 'barrio',
-        'cantidad_paquetes', 'entregados', 'avance')
-    inlines = [facturas_asignadas]
-    #actions = ['generar_comprobantes']
-
-    def generar_comprobantes(self, request, queryset):
-        paginas = []
-        id_unico = False
-        if queryset.count() == 1:
-            id_unico = True
-        comprobantes = Paquete.objects.filter(
-            lote__in=queryset).order_by('lote', 'consecutivo')
-        if comprobantes:
-            pagina = {'comprobantes': []}
-            for c in comprobantes:
-                pagina['comprobantes'].append(c)
-                if len(pagina['comprobantes']) == 4:
-                    paginas.append(pagina)
-                    pagina = {'comprobantes': []}
-            if len(pagina['comprobantes']) > 0:
-                paginas.append(pagina)
-        ctx = {'queryset': queryset, 'id_unico': id_unico, 'paginas': paginas}
-        return render_to_response('metropolitana/comprobante.html',
-            ctx, context_instance=RequestContext(request))
-    generar_comprobantes.short_description = \
-    "Generar comprobantes de los lotes selecionados"
 
 
 class estadistica_departamento(base_tabular):
@@ -387,7 +330,6 @@ class up_admin(ImportExportModelAdmin):
 
 
 admin.site.register(Paquete, paquete_admin)
-admin.site.register(Lote, lote_admin)
 admin.site.register(EstadisticaCiclo, estadistica_ciclo)
 admin.site.register(Tipificacion, tipificacion_admin)
 admin.site.register(Barrio, barrio_admin)
