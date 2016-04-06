@@ -510,6 +510,54 @@ class RebajaCartera(models.Model):
                 self.delete()
 
 
+class NewGestion(models.Model):
+    contrato_cliente = models.CharField(max_length=65, null=True, blank=True)
+    user_id = models.CharField(max_length=65, null=True, blank=True)
+    gestion_code = models.CharField(max_length=65, null=True, blank=True)
+    fecha_asignacion = models.DateField(null=True)
+    fecha_vence = models.DateField(null=True)
+
+    def get_cliente(self):
+        try:
+            c = Cliente.objects.get(contrato=self.contrato_cliente)
+        except:
+            c = None
+        return c
+
+    def get_gestion(self):
+        try:
+            c = TipoGestion.objects.get(code=self.gestion_code)
+        except:
+            c = None
+        return c
+
+    def get_user(self):
+        try:
+            c = User.objects.get(id=int(self.user_id))
+        except:
+            c = None
+        return c
+
+    def integrar(self):
+        c = self.get_cliente()
+        tg = self.get_gestion()
+        u = self.get_user()
+        if c and tg and u:
+            g = c.generar_gestion(tg)
+            g.user = u
+            g.fecha_asignacion = self.fecha_asignacion
+            g.fecha_vencimiento = self.fecha_vence
+            g.save()
+            self.delete()
+
+    def __unicode__(self):
+        return ' - '.join([self.contrato_cliente, self.gestion_code])
+
+    def save(self, *args, **kwargs):
+        super(NewGestion, self).save()
+        self.integrar()
+
+
 def integrar_importacion(ps):
     message = ""
     ds = ps.order_by('departamento').distinct('departamento')

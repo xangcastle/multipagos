@@ -25,6 +25,13 @@ class import_model_admin(ImportExportModelAdmin):
 admin.site.register(import_model, import_model_admin)
 
 
+class new_gestion_admin(ImportExportModelAdmin):
+    list_display = ('contrato_cliente', 'user_id', 'gestion_code',
+        'fecha_asignacion', 'fecha_vence')
+
+admin.site.register(NewGestion, new_gestion_admin)
+
+
 class rebaja_cartera_admin(ImportExportModelAdmin):
     list_display = ('no_cupon', 'fecha_pago', 'abono')
 

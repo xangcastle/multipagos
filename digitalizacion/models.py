@@ -169,7 +169,7 @@ def get_path(indexacion, filename):
 
 
 class Indexacion(models.Model):
-    fecha = models.DateField(auto_now_add=True, null=True)
+    fecha = models.DateTimeField(auto_now_add=True, null=True)
     archivos = MultiFileField(upload_to=get_path, null=True, blank=True)
     carpeta = models.CharField(max_length=8, null=True)
     make_ocr = models.BooleanField(default=False, verbose_name="hacer ocr")
