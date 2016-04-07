@@ -29,6 +29,15 @@ class new_gestion_admin(ImportExportModelAdmin):
     list_display = ('contrato_cliente', 'user_id', 'gestion_code',
         'fecha_asignacion', 'fecha_vence')
 
+    def action_integrar(self, request, queryset):
+        for q in queryset:
+            q.integrar()
+        self.message_user(request, "integracion de registros exitosa")
+    action_integrar.short_description = \
+    "actualizar cartera mora"
+
+    actions = [action_integrar]
+
 admin.site.register(NewGestion, new_gestion_admin)
 
 
