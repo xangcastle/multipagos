@@ -370,7 +370,7 @@ class Factura(models.Model):
     gestionada = models.BooleanField(default=False)
     monto_abonado = models.FloatField(default=0.0)
     saldo = models.FloatField(null=True)
-    fecha_pago = models.DateField(null=True)
+    fecha_pago = models.DateTimeField(null=True)
 
     def get_saldo(self):
         if self.saldo_pend_factura and self.monto_abonado:
