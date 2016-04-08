@@ -296,11 +296,17 @@ def get_detalle(request):
         d = Factura.objects.get(id=int(request.POST.get('Pk')))
     except:
         d = None
+    try:
+        u = Factura.objects.get(id=int(request.POST.get('Usuario')))
+    except:
+        u = None
     if d:
         d.fecha_pago = request.POST.get('Fecha', '')
         d.monto_abonado = float(request.POST.get('Monto', ''))
         d.saldo = d.saldo_pend_factura - d.monto_abonado
         d.gestionada = True
+        d.cliente.actualizar_saldo()
+        d.user = u
         d.save()
         obj_json['Mensaje'] = 'Registro grabado con exito'
     data = json.dumps(obj_json)
@@ -362,6 +368,8 @@ def get_gestion(request):
     obj_json['fecha'] = request.POST.get('fecha', '')
     obj_json['fecha_promesa'] = request.POST.get('fecha_promesa', '')
     obj_json['observaciones'] = request.POST.get('observaciones', '')
+    obj_json['Latitude'] = request.POST.get('Latitude', '')
+    obj_json['Longitude'] = request.POST.get('Longitude', '')
     try:
         tg = TipoResultado.objects.get(signo=obj_json['tipo_gestion'])
     except:

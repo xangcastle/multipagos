@@ -86,7 +86,7 @@ class Cliente(Entidad):
     def get_saldo(self):
         if self.facturas():
             return self.facturas().aggregate(
-                Sum('saldo_pend_factura'))['saldo_pend_factura__sum']
+                Sum('saldo'))['saldo__sum']
         else:
             return 0.0
 
@@ -371,6 +371,7 @@ class Factura(models.Model):
     monto_abonado = models.FloatField(default=0.0)
     saldo = models.FloatField(null=True)
     fecha_pago = models.DateTimeField(null=True)
+    user = models.ForeignKey(User, null=True)
 
     def get_saldo(self):
         if self.saldo_pend_factura and self.monto_abonado:

@@ -63,10 +63,12 @@ class base_tabular(admin.TabularInline):
 
 class detalle_cartera(base_tabular):
     model = Factura
-    fields = ('factura', 'factura_interna', 'no_cupon', 'no_fiscal',
-        'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'saldo')
+    fields = ('factura', 'factura_interna', 'no_cupon',
+        'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'saldo',
+        'user', 'fecha_pago')
     readonly_fields = ('factura', 'factura_interna', 'no_cupon', 'no_fiscal',
         'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'saldo')
+
 
 class usuarios_asignados(base_tabular):
     model = AsignacionCliente
