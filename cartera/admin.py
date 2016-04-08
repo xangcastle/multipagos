@@ -67,7 +67,8 @@ class detalle_cartera(base_tabular):
         'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'saldo',
         'user', 'fecha_pago')
     readonly_fields = ('factura', 'factura_interna', 'no_cupon', 'no_fiscal',
-        'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'saldo')
+        'fecha_fact', 'fecha_venc', 'tipo_mora', 'saldo_pend_factura', 'saldo',
+        'user', 'fecha_pago')
 
 
 class usuarios_asignados(base_tabular):
