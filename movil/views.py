@@ -297,7 +297,7 @@ def get_detalle(request):
     except:
         d = None
     try:
-        u = Factura.objects.get(id=int(request.POST.get('Usuario')))
+        u = User.objects.get(id=int(request.POST.get('Usuario')))
     except:
         u = None
     if d:
