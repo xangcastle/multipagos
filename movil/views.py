@@ -298,7 +298,7 @@ def get_detalle(request):
         d = None
     if d:
         d.fecha_pago = request.POST.get('Fecha', '')
-        d.monto_abonado = request.POST.get('Monto', '')
+        d.monto_abonado = float(request.POST.get('Monto', ''))
         d.saldo = d.saldo_pend_factura - d.monto_abonado
         d.gestionada = True
         d.save()
