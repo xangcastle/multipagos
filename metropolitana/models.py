@@ -911,12 +911,18 @@ class uPaquete(models.Model):
     #position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True, blank=True)
     fecha_entrega = models.DateTimeField(null=True, blank=True)
+    username = models.CharField(max_length=25, null=True)
     ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
                           ('PENDIENTE', 'PENDIENTE'),
                           ('REZAGADO', 'REZAGADO'),
                          )
     estado = models.CharField(max_length=65, null=True, blank=True,
         choices=ESTADOS_DE_ENTREGA)
+
+    def save(self, *args, **kwargs):
+        if not self.user and self.username:
+            self.user = User.objects.get(username=self.username)
+        super(uPaquete, self).save()
 
     class Meta:
         db_table = 'metropolitana_paquete'
