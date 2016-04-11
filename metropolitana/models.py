@@ -226,7 +226,10 @@ class Paquete(base):
             telefonos.append(self.telefono)
         if self.telefono_contacto:
             telefonos.append(self.telefono_contacto)
-        return ', '.join(telefonos)
+        if len(telefonos) > 0:
+            return ', '.join(telefonos)
+        else:
+            return ''
 
     def link_comprobante(self):
         if self.comprobante:

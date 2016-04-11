@@ -255,7 +255,7 @@ def crear_import_model(paquete):
     i.ciclo = paquete.ciclo
     i.ano = paquete.ano
     i.tipo_mora = 'AL_DIA'
-    i.tel_contacto = ', '.join([paquete.telefono, paquete.telefono_contacto])
+    i.tel_contacto = paquete.get_telefono()
     i.direccion = paquete.direccion
     i.saldo_pend_factura = paquete.total_mes_factura
     i.comentario = "Cartera Corriente"
