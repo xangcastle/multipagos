@@ -315,17 +315,43 @@ def get_detalle(request):
 
 @csrf_exempt
 def get_cortes(request):
-    data = []
     usuario = User.objects.get(id=int(request.POST.get('usuario', '')))
-    queryset = Gestion.objects.filter(user=usuario, estado='PENDIENTE',
-        tipo_gestion=TipoGestion.objects.get(code='0003'))
-    if queryset:
-        for c in queryset:
-            data.append(c.to_json())
-        data = json.dumps(data)
-    else:
-        data = None
-    return HttpResponse(data, content_type='application/json')
+    data = []
+    queryset = cortes_user(usuario)
+    for c in queryset:
+        obj_json = {}
+        obj_json['code'] = c.id
+        obj_json['name'] = c.name
+        obj_json['contrato'] = c.contrato
+        obj_json['identificacion'] = c.identificacion
+        obj_json['departamento'] = c.departamento.name
+        obj_json['municipio'] = c.municipio.name
+        obj_json['barrio'] = c.barrio.name
+        obj_json['direccion'] = c.direccion
+        obj_json['telefonos'] = c.telefonos
+        obj_json['comentario'] = c.comentario
+        obj_json['saldo'] = c.saldo_total
+        obj_json['ciclo'] = c.ciclo
+        facs = []
+        for f in c.facturas():
+            fac_json = {}
+            fac_json['Pk'] = f.id
+            fac_json['factura_interna'] = f.factura_interna
+            fac_json['no_cupon'] = f.no_cupon
+            fac_json['saldo_pend_factura'] = f.saldo_pend_factura
+            fac_json['fecha_fact'] = str(f.fecha_fact)
+            fac_json['fecha_venc'] = str(f.fecha_venc)
+            fac_json['tipo_mora'] = f.tipo_mora.name
+            facs.append(fac_json)
+        obj_json['facturas'] = facs
+        data.append(obj_json)
+    data = json.dumps(data)
+    response = HttpResponse(data, content_type='application/json')
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    response["Access-Control-Max-Age"] = "1000"
+    response["Access-Control-Allow-Headers"] = "*"
+    return response
 
 
 @csrf_exempt
@@ -407,7 +433,16 @@ def get_gestion(request):
 
 def cartera_user(user):
     isc = Gestion.objects.filter(estado='PENDIENTE', user=user,
-    tipo_gestion__in=TipoGestion.objects.filter(code__in=['0002', '0003'])
+    tipo_gestion__in=TipoGestion.objects.filter(code__in=['0002'])
+    ).order_by('cliente').values_list(
+        'cliente', flat=True)
+    cs = Cliente.objects.filter(id__in=isc)
+    return cs
+
+
+def cortes_user(user):
+    isc = Gestion.objects.filter(estado='PENDIENTE', user=user,
+    tipo_gestion__in=TipoGestion.objects.filter(code__in=['000'])
     ).order_by('cliente').values_list(
         'cliente', flat=True)
     cs = Cliente.objects.filter(id__in=isc)

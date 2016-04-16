@@ -123,6 +123,9 @@ class cliente_admin(admin.ModelAdmin):
         _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
         tipo = forms.ModelChoiceField(
             queryset=TipoGestion.objects.all().order_by('code'))
+        user = forms.ModelChoiceField(
+            queryset=User.objects.all().order_by('username'))
+        fecha_asignacion = forms.DateField()
 
     def generar_gestion(self, request, queryset):
         form = None

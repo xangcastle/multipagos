@@ -194,8 +194,22 @@ class Verificacion(models.Model):
         else:
             self.pago_instalacion = False
 
+    def integrar(self):
+        if not self.iddepartamento:
+            self.iddepartamento = self.get_departamento()
+        if not self.idmunicipio:
+            self.idmunicipio = self.get_municipio()
+        if not self.idmunicipio:
+            self.idbarrio = self.get_barrio()
+        if not self.estado:
+            self.estado = 'PENDIENTE'
+
     class Meta:
         verbose_name_plural = "verificaciones"
+
+    def save(self, *args, **kwargs):
+        self.integrar()
+        super(Verificacion, self).save()
 
 
 def integrar(ps):
