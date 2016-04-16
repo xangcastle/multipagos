@@ -126,6 +126,7 @@ class cliente_admin(admin.ModelAdmin):
         user = forms.ModelChoiceField(
             queryset=User.objects.all().order_by('username'))
         fecha_asignacion = forms.DateField()
+        fecha_vencimiento = forms.DateField()
 
     def generar_gestion(self, request, queryset):
         form = None
@@ -133,9 +134,16 @@ class cliente_admin(admin.ModelAdmin):
             form = self.tipo_gestion(request.POST)
             if form.is_valid():
                 tipo = form.cleaned_data['tipo']
+                user = form.cleaned_data['user']
+                fecha = form.cleaned_data['fecha_asignacion']
+                fecha_vence = form.cleaned_data['fecha_vencimiento']
                 print(tipo)
                 for c in queryset:
-                    c.generar_gestion(tipo)
+                    g = c.generar_gestion(tipo)
+                    g.user = user
+                    g.fecha_asignacion = fecha
+                    g.fecha_vencimiento = fecha_vence
+                    g.save()
                 self.message_user(request, "Gestiones generadas con exito")
                 return HttpResponseRedirect("/admin/cartera/cliente")
             else:
