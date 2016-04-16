@@ -442,7 +442,7 @@ def cartera_user(user):
 
 def cortes_user(user):
     isc = Gestion.objects.filter(estado='PENDIENTE', user=user,
-    tipo_gestion__in=TipoGestion.objects.filter(code__in=['000'])
+    tipo_gestion__in=TipoGestion.objects.filter(code__in=['0003'])
     ).order_by('cliente').values_list(
         'cliente', flat=True)
     cs = Cliente.objects.filter(id__in=isc)
