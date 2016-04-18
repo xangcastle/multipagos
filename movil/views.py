@@ -391,6 +391,7 @@ def get_gestion(request):
     obj_json['contrato'] = request.POST.get('contrato', '')
     obj_json['user'] = request.POST.get('user', '')
     obj_json['tipo_gestion'] = request.POST.get('tipo_gestion', '')
+    obj_json['codigo_gestion'] = request.POST.get('codigo_gestion', '')
     obj_json['fecha'] = request.POST.get('fecha', '')
     obj_json['fecha_promesa'] = request.POST.get('fecha_promesa', '')
     obj_json['observaciones'] = request.POST.get('observaciones', '')
@@ -401,6 +402,10 @@ def get_gestion(request):
     except:
         tg = None
     try:
+        cg = TipoGestion.objects.get(code=obj_json['codigo_gestion'])
+    except:
+        cg = None
+    try:
         c = Cliente.objects.get(contrato=obj_json['contrato'])
     except:
         c = None
@@ -410,7 +415,8 @@ def get_gestion(request):
         u = None
     if tg and c and u:
         try:
-            g = Gestion.objects.get(cliente=c, user=u, estado='PENDIENTE')
+            g = Gestion.objects.get(cliente=c, user=u, estado='PENDIENTE',
+                tipo_gestion=cg)
             g.tipo_resultado = tg
             g.observaciones = obj_json['observaciones']
             g.fecha_gestion = obj_json['fecha']
