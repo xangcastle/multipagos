@@ -416,7 +416,6 @@ def get_gestion(request):
     if tg and c and u:
         try:
             g = Gestion.objects.get(cliente=c, user=u, estado='PENDIENTE')
-            g.tipo_gestion = cg
             g.tipo_resultado = tg
             g.observaciones = obj_json['observaciones']
             g.fecha_gestion = obj_json['fecha']
