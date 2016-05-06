@@ -106,7 +106,7 @@ class Cliente(Entidad):
         else:
             return None
 
-    def generar_gestion(self, tipo):
+    def generar_gestion(self, tipo, user=None):
         o, create = Gestion.objects.get_or_create(cliente=self,
             estado='PENDIENTE', tipo_gestion=tipo)
         o.fecha_asignacion = datetime.now()
@@ -119,10 +119,14 @@ class Cliente(Entidad):
         if not self.zona and self.barrio:
             self.zona = get_zona(self.barrio)
             self.save()
-            o.zona = self.zona
+        o.zona = self.zona
         if self.position:
             o.position = self.position
-        o.user = None
+        if not self.ciclo:
+            self.ciclo = self.get_ciclo()
+            self.save()
+        o.ciclo = self.ciclo
+        o.user = user
         o.save()
         return o
 
@@ -393,6 +397,7 @@ class Gestion(models.Model):
     departamento = models.ForeignKey(Departamento, null=True, blank=True)
     municipio = models.ForeignKey(Municipio, null=True, blank=True)
     barrio = models.ForeignKey(Barrio, null=True, blank=True)
+    ciclo = models.PositiveIntegerField(null=True, blank=True)
     zona = models.ForeignKey(Zona, null=True, blank=True)
     position = GeopositionField(null=True, blank=True)
     user = models.ForeignKey(User, null=True)

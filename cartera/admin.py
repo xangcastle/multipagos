@@ -6,6 +6,7 @@ from django import forms
 from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
+from daterange_filter.filter import DateRangeFilter
 
 
 class import_model_admin(ImportExportModelAdmin):
@@ -179,11 +180,11 @@ admin.site.register(TipoMora, tipo_mora_admin)
 
 class gestion_admin(admin.ModelAdmin):
     date_hierarchy = "fecha_gestion"
-    list_display = ('cliente', 'departamento', 'municipio', 'barrio',
+    list_display = ('cliente', 'ciclo', 'departamento', 'municipio', 'barrio',
         'tipo_gestion', 'fecha_asignacion', 'fecha_vencimiento',
         'fecha_gestion', 'tipo_resultado', 'user', 'estado')
-    list_filter = ('departamento', 'municipio', 'barrio', 'tipo_gestion',
-        'estado', 'user')
+    list_filter = (('fecha_gestion', DateRangeFilter), 'departamento',
+        'municipio', 'barrio', 'tipo_gestion', 'estado', 'user')
     readonly_fields = ('cliente', 'departamento', 'municipio', 'barrio',
         'tipo_gestion', 'fecha_asignacion', 'fecha_vencimiento',
         'fecha_gestion', 'tipo_resultado', 'user', 'estado')
