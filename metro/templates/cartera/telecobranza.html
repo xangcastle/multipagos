@@ -61,9 +61,9 @@
                     <tr>
                         <td>{{ f.factura }}</td>
                         <td>{{ f.saldo }}</td>
-                        <td>{{ f.fecha_fact }}</td>
-                        <td>{{ f.fecha_venc }}</td>
-                        <td>{{ f.fecha_pago }}</td>
+                        <td>{{ f.fecha_fact|date:"Y-m-d h:i a" }}</td>
+                        <td>{{ f.fecha_venc|date:"Y-m-d h:i a" }}</td>
+                        <td>{{ f.fecha_pago|date:"Y-m-d h:i a" }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -84,7 +84,7 @@
                     <tr>
                         <td>{{ g.tipo_gestion }}</td>
                         <td>{{ g.user }}</td>
-                        <td>{{ g.fecha_gestion }}</td>
+                        <td>{{ g.fecha_gestion|date:"Y-m-d h:i a" }}</td>
                         <td>{{ g.tipo_resultado }}</td>
                         <td>{{ g.observaciones }}</td>
                     </tr>
