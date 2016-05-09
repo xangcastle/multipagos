@@ -77,7 +77,8 @@ class Cliente(Entidad):
         return Factura.objects.filter(cliente=self, saldo__gt=0.0)
 
     def gestiones(self):
-        return Gestion.objects.filter(cliente=self).order_by("fecha_gestion")
+        return Gestion.objects.filter(cliente=self).exclude(
+            estado='PENDIENTE').order_by("fecha_gestion")
 
     def get_estado_mora(self):
         if self.facturas():

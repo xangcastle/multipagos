@@ -329,7 +329,7 @@ class Paquete(base):
 
     def get_barra(self):
         if self.contrato and self.ciclo and self.mes and self.ano:
-            return str(self.contrato) + str(self.ciclo) \
+            return str(self.contrato) + str(self.ciclo).zfill(2) \
             + str(self.mes).zfill(2) \
             + str(self.ano)
         else:
