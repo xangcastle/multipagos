@@ -91,6 +91,15 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="form-group">
+                <label for="tipo_resultado">Tipo de Resultados</label>
+                <select id="tipo_resultado" class="form-control" name="tipo_resultado">
+                    <option value={{ t.id }}>------</option>
+                    {% for t in resultados %}
+                    <option value={{ t.id }}>------</option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
     </div>
     </div>
