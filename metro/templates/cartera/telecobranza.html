@@ -96,7 +96,7 @@
                 <select id="tipo_resultado" class="form-control" name="tipo_resultado">
                     <option value={{ t.id }}>------</option>
                     {% for t in resultados %}
-                    <option value={{ t.id }}>------</option>
+                    <option value={{ t.id }}>{{ t.descripcion }}</option>
                     {% endfor %}
                 </select>
             </div>
