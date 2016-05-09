@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^adminactions/', include('adminactions.urls')),
     url(r'^autocomplete/', include('autocomplete_light.urls')),
     url(r'^entregas/', include('metropolitana.urls')),
+    url(r'^cartera/', include('cartera.urls')),
     url(r'^movil/', include('movil.urls')),
     url(r'^digitalizacion/', include('digitalizacion.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -76,6 +76,9 @@ class Cliente(Entidad):
     def facturas(self):
         return Factura.objects.filter(cliente=self, saldo__gt=0.0)
 
+    def gestiones(self):
+        return Gestion.objects.filter(cliente=self).order_by("fecha_gestion")
+
     def get_estado_mora(self):
         if self.facturas():
             for f in self.facturas():

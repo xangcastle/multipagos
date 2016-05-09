@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Formulario Telecobranza">
+    <meta name="author" content="Cesar abel">
+    <title>Telecobranza</title>
+    <link href="/static/metropolitana/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+    <body>
+    <h2> Gestion de Llamada al Cliente</h2>
+    <form class="form">
+    <div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" value="{{ cliente.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="identificacion">Identificacion</label>
+                <input type="text" class="form-control" id="identificacion" value="{{ cliente.identificacion }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Contrato</label>
+                <input type="text" class="form-control" id="contrato" value="{{ cliente.contrato }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="departamento">Departamento</label>
+                <input type="text" class="form-control" id="departamento" value="{{ cliente.departamento.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="municipio">Municipio</label>
+                <input type="text" class="form-control" id="municipio" value="{{ cliente.municipio.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="barrio">Barrio</label>
+                <input type="text" class="form-control" id="barrio" value="{{ cliente.barrio.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="direccion">Direccion</label>
+                <textarea class="form-control" id="direccion" readonly>{{ cliente.direccion }}</textarea>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3>Facturas Pendientes</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Factura</th>
+                        <th>Saldo</th>
+                        <th>Fecha Factura</th>
+                        <th>Fecha de Vencimiento</th>
+                        <th>Fecha de Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in cliente.facturas %}
+                    <tr>
+                        <td>{{ f.factura }}</td>
+                        <td>{{ f.saldo }}</td>
+                        <td>{{ f.fecha_fact }}</td>
+                        <td>{{ f.fecha_venc }}</td>
+                        <td>{{ f.fecha_pago }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Gestiones Anteriores</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Tipo Gestion</th>
+                        <th>Usuario</th>
+                        <th>Fecha Gestion</th>
+                        <th>Resultado</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in cliente.gestiones %}
+                    <tr>
+                        <td>{{ g.tipo_gestion }}</td>
+                        <td>{{ g.user }}</td>
+                        <td>{{ g.fecha_gestion }}</td>
+                        <td>{{ g.tipo_resultado }}</td>
+                        <td>{{ g.observaciones }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    </form>
+    <script>window.jQuery || document.write('<script src="/static/metropolitana/js/jquery.js"><\/script>')</script>
+    <script src="/static/metropolitana/js/bootstrap.min.js"></script>
+    </body>
+</html>
