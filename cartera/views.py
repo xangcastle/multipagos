@@ -32,6 +32,7 @@ def grabar_gestion_telefonica(request):
     g.tipo_resultado = TipoResultado.objects.get(
         id=int(request.POST.get('tipo_resultado', '')))
     g.observaciones = request.POST.get('observaciones', '')
+    g.estado = "REALIZADO"
     g.save()
     result = model_to_dict(g)
     data = json.dumps(result)
