@@ -5,5 +5,7 @@ from .views import *
 urlpatterns = patterns('cartera.views',
     url(r'^telecobranza/$',
     telecobranza, name='telecobranza'),
+    url(r'^grabar_gestion_telefonica/$', 'grabar_gestion_telefonica',
+        name='grabar_gestion_telefonica'),
 )
 

@@ -12,6 +12,7 @@
     <body>
 
     <form class="form">
+    {% csrf_token %}
     <div class="container">
     <div class="row">
         <h2> Gestion de Llamada al Cliente</h2>
@@ -137,7 +138,7 @@
                   format: 'yyyy-mm-dd'
               });
             });
-            var grabar_factura = function(){
+            var grabar_gestion = function(){
               var form = $('form');
               $.ajax("/cartera/grabar_gestion_telefonica/",{
                   type: "POST",
@@ -146,15 +147,8 @@
                     console.log(response);
                   }
                 });
-                limpiar_factura();
-                $('#mensajes')
-                  .empty()
-                  .html('<div class="alert alert-success">Factura Grabada con Exito!</div>');
-
             }
-            $('button').on('click', function(){
-                window.close();
-            });
+            $('button').on('click', grabar_gestion);
         </script>
     </body>
 </html>
