@@ -130,6 +130,10 @@ class Cliente(Entidad):
             self.ciclo = self.get_ciclo()
             self.save()
         o.ciclo = self.ciclo
+        o.contrato = self.contrato
+        o.comentario = self.comentario
+        o.tipo_mora = self.tipo_mora
+        o.descr_plan = self.descr_plan
         o.user = user
         o.save()
         return o
@@ -413,7 +417,11 @@ class Gestion(models.Model):
     fecha_promesa = models.DateField(null=True,
         verbose_name="fecha de promesa de pago")
     observaciones = models.CharField(max_length=255, null=True)
-    monto = models.FloatField(default=0.0)
+    contrato = models.CharField(max_length=65, null=True, blank=True)
+    comentario = models.CharField(max_length=125, null=True, blank=True)
+    tipo_mora = models.ForeignKey('TipoMora', null=True, blank=True,
+            on_delete=models.SET_NULL)
+    descr_plan = models.CharField(max_length=165, null=True, blank=True)
     ESTADOS_GESTION = (
         ('PENDIENTE', 'PENDIENTE'),
         ('REALIZADO', 'REALIZADO'),
