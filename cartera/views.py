@@ -2,6 +2,8 @@ from .models import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
+import json
 
 
 @login_required(login_url='/admin/login/')
@@ -31,7 +33,7 @@ def grabar_gestion_telefonica(request):
         id=int(request.POST.get('tipo_resultado', '')))
     g.observaciones = request.POST.get('observaciones', '')
     g.save()
-    data = serializers.serialize('json', g)
-    struct = json.loads(data)
-    data = json.dumps(struct)
+    result = model_to_dict(g)
+    data = json.dumps(result)
+    print(data)
     return HttpResponse(data, content_type='application/json')

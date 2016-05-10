@@ -144,9 +144,10 @@
                   type: "POST",
                   data: form.serialize(),
                   success: function(response) {
-                    $('form').empty();
+                    console.log(response);
                   }
                 });
+                $('form').empty();
             }
             $('button').on('click', grabar_gestion);
         </script>
