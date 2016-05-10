@@ -12,6 +12,16 @@
   <div id="map" style="width: 800px; height: 600px;"></div>
 
   <script type="text/javascript">
+      var get_content = function(contrato, nombre, usuario, fecha){
+        var content = '<div class="marker-content">' +
+        '<table><tbody>'+
+        '<tr>fecha</tr>'+
+        '<tr>contrato + nombre</tr>'+
+        '<tr>usuario</tr>'+
+        '</tbody></table></div>';
+        return content;
+        }
+
     var locations = [
     {% for f in facturas %}
       ['{{ f.contrato }}', '{{ f.nombre }}', '{{ f.label }}', {{ f.latitude }}, {{ f.longitude }}, '{{ f.usuario }}', '{{ f.fecha }}'],
@@ -34,19 +44,9 @@
         map: map,
         label: locations[i][2]
       });
-
-    funtion get_content(contrato, nombre, usuario, fecha){
-        var content = '<div class="marker-content">' +
-        '<table><tbody>'+
-        '<tr>fecha</tr>'+
-        '<tr>contrato + nombre</tr>'+
-        '<tr>usuario</tr>'+
-        '</tbody></table></div>';
-        return content;
-        }
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          infowindow.setContent(get_content(locations[i][0], locations[i][1], locations[i][5], locations[i][6]);
+          infowindow.setContent(get_content(locations[i][0], locations[i][1], locations[i][5], locations[i][6]));
           infowindow.open(map, marker);
         }
       })(marker, i));
