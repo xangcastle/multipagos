@@ -9,7 +9,7 @@ register = template.Library()
 
 
 def get_label(gestion):
-    if gestion.tipo_gestion.code=='0002':
+    if gestion.tipo_gestion.code == '0002':
         return "C"
     else:
         return "S"
@@ -40,7 +40,6 @@ class puntos_Node(template.Node):
         for g in Gestion.objects.filter(fecha_gestion__day=datetime.now().day,
             fecha_gestion__month=datetime.now().month,
             fecha_gestion__year=datetime.now().year):
-            obj = {}
             if g.position:
                 obj['contrato'] = g.cliente.contrato
                 obj['nombre'] = g.cliente.name
@@ -54,7 +53,6 @@ class puntos_Node(template.Node):
             fecha_entrega__day=datetime.now().day,
             fecha_entrega__month=datetime.now().month,
             fecha_entrega__year=datetime.now().year):
-            obj = {}
             if g.position:
                 obj['contrato'] = g.contrato
                 obj['nombre'] = g.nombre_cliente

@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     url(r'^cartera/', include('cartera.urls')),
     url(r'^movil/', include('movil.urls')),
     url(r'^digitalizacion/', include('digitalizacion.urls')),
+    url(r'^report_builder/', include('report_builder.urls'))
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
