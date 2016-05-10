@@ -4,13 +4,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from ajax_select import urls as ajax_select_urls
 import autocomplete_light
+from metropolitana.views import home
 
 autocomplete_light.autodiscover()
 admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'metropolitana.views.home', name='home'),
+    url(r'^$', home.as_view(), name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),

@@ -16,8 +16,8 @@ from cartera.models import import_model as Factura, Cliente, Gestion, \
 TipoGestion
 
 
-def home(request):
-    return HttpResponseRedirect("/admin")
+class home(TemplateView):
+    template_name = "metropolitana/index.html"
 
 
 class indexar(TemplateView):
