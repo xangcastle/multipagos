@@ -13,13 +13,13 @@
 
   <script type="text/javascript">
       var get_content = function(contrato, nombre, usuario, fecha){
-        var content = '<div class="marker-content">' +
-        '<table><tbody>'+
-        '<tr>fecha</tr>'+
-        '<tr>contrato + nombre</tr>'+
-        '<tr>usuario</tr>'+
-        '</tbody></table></div>';
-        return $(content);
+        var content = '<div class="marker-content">';
+        content += '<table><tbody>';
+        content += '<tr>fecha</tr>';
+        content += '<tr>contrato + ' ' + nombre</tr>';
+        content += '<tr>usuario</tr>';
+        content += '</tbody></table></div>';
+        return content;
         }
 
     var locations = [
