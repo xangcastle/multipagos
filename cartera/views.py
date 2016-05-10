@@ -19,3 +19,16 @@ def telecobranza(request):
 
     return render_to_response(template_name, data, context_instance=context)
 
+
+def grabar_gestion_telefonica(request):
+    data = []
+    cliente = Cliente.objects.get(contrato=request.POST.get('contrato', ''))
+    g = cliente.generar_gestion(TipoGestion.objects.get(code='0001'),
+        request.user)
+    g.fecha_gestion = datetime.now()
+    g.fecha_promesa = request.POST.get('fecha_promesa', '')
+    g.tipo_resultado = TipoResultado.objects.get(
+        id=int(request.POST.get('tipo_resultado', '')))
+    g.observaciones = request.POST.get('observaciones', '')
+    g.save()
+    return HttpResponse(data, content_type='application/json')
