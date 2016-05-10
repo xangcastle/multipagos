@@ -31,4 +31,7 @@ def grabar_gestion_telefonica(request):
         id=int(request.POST.get('tipo_resultado', '')))
     g.observaciones = request.POST.get('observaciones', '')
     g.save()
+    data = serializers.serialize('json', g)
+    struct = json.loads(data)
+    data = json.dumps(struct)
     return HttpResponse(data, content_type='application/json')
