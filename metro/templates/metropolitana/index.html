@@ -15,9 +15,9 @@
       var get_content = function(contrato, nombre, usuario, fecha){
         var content = '<div class="marker-content">';
         content += '<table><tbody>';
-        content += '<tr>' + fecha + '</tr>';
-        content += '<tr>' + contrato + ' ' + nombre + '</tr>';
-        content += '<tr>' + usuario + '</tr>';
+        content += '<tr><td>' + fecha + '</td></tr>';
+        content += '<tr><td>' + contrato + ' ' + nombre + '</td></tr>';
+        content += '<tr><td>' + usuario + '</td></tr>';
         content += '</tbody></table></div>';
         return content;
         }
