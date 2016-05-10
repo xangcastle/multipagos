@@ -14,7 +14,7 @@
   <script type="text/javascript">
     var locations = [
     {% for f in facturas %}
-      ['{{ f.contrato }}', {{ f.nombre }}, {{ f.label }}, {{ f.latitude }}, {{ f.longitude }}, {{ f.usuario }}, {{ f.fecha }}],
+      [{{ f.contrato }}, '{{ f.nombre }}', {{ f.label }}, {{ f.latitude }}, {{ f.longitude }}, {{ f.usuario }}, {{ f.fecha }}],
     {% endfor %}
     ];
 

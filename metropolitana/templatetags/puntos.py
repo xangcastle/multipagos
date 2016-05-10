@@ -10,9 +10,9 @@ register = template.Library()
 
 def get_label(gestion):
     if gestion.tipo_gestion.code=='0002':
-        return "V"
-    else:
         return "C"
+    else:
+        return "S"
 
 
 class puntos_Node(template.Node):
@@ -49,6 +49,20 @@ class puntos_Node(template.Node):
                 obj['longitude'] = g.position.longitude
                 obj['usuario'] = g.user.username
                 obj['fecha'] = str(g.fecha_gestion)
+                data.append(obj)
+        for g in Verificacion.objects.filter(
+            fecha_entrega__day=datetime.now().day,
+            fecha_entrega__month=datetime.now().month,
+            fecha_entrega__year=datetime.now().year):
+            obj = {}
+            if g.position:
+                obj['contrato'] = g.contrato
+                obj['nombre'] = g.nombre_cliente
+                obj['label'] = "V"
+                obj['latitude'] = g.position.latitude
+                obj['longitude'] = g.position.longitude
+                obj['usuario'] = g.user.username
+                obj['fecha'] = str(g.fecha_entrega)
                 data.append(obj)
         context[self.varname] = data
         return ''
