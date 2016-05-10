@@ -24,11 +24,11 @@ class puntos_Node(template.Node):
 
     def render(self, context):
         data = []
+        obj = {}
         for p in Paquete.objects.filter(fecha_entrega__day=datetime.now().day,
             fecha_entrega__month=datetime.now().month,
             fecha_entrega__year=datetime.now().year):
             if p.position:
-                obj = {}
                 obj['contrato'] = p.contrato
                 obj['nombre'] = p.cliente
                 obj['label'] = "E"
@@ -41,13 +41,15 @@ class puntos_Node(template.Node):
             fecha_gestion__month=datetime.now().month,
             fecha_gestion__year=datetime.now().year):
             obj = {}
-            obj['contrato'] = g.cliente.contrato
-            obj['nombre'] = g.cliente.name
-            obj['label'] = get_label(g)
-            obj['latitude'] = g.position.latitude
-            obj['longitude'] = g.position.longitude
-            obj['usuario'] = g.user.username
-            obj['fecha'] = str(g.fecha_gestion)
+            if g.position:
+                obj['contrato'] = g.cliente.contrato
+                obj['nombre'] = g.cliente.name
+                obj['label'] = get_label(g)
+                obj['latitude'] = g.position.latitude
+                obj['longitude'] = g.position.longitude
+                obj['usuario'] = g.user.username
+                obj['fecha'] = str(g.fecha_gestion)
+                data.append(obj)
         context[self.varname] = data
         return ''
 
