@@ -10,9 +10,12 @@
     <link href="/static/metropolitana/css/bootstrap.min.css" rel="stylesheet">
   </head>
     <body>
-    <h2> Gestion de Llamada al Cliente</h2>
+
     <form class="form">
     <div class="container">
+    <div class="row">
+        <h2> Gestion de Llamada al Cliente</h2>
+    </div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -26,6 +29,10 @@
             <div class="form-group">
                 <label for="nombre">Contrato</label>
                 <input type="text" class="form-control" id="contrato" value="{{ cliente.contrato }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="ciclo">Ciclo</label>
+                <input type="text" class="form-control" id="ciclo" value="{{ cliente.ciclo }}" readonly>
             </div>
             <div class="form-group">
                 <label for="departamento">Departamento</label>
@@ -100,11 +107,39 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-group">
+                <label for="observaciones">Observaciones</label>
+                <textarea class="form-control" id="observaciones" name="observaciones"></textarea>
+            </div>
+            <label for="fecha_promesa">Fecha de Promesa de Pago</label>
+            <div class="form-group">
+                <div class='input-group date' id='fecha_promesa' name="fecha_promesa">
+                    <input type='text' class="form-control"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary">Grabar</button>
         </div>
     </div>
     </div>
     </form>
     <script>window.jQuery || document.write('<script src="/static/metropolitana/js/jquery.js"><\/script>')</script>
+
+
+    <script src="/static/metropolitana/js/moment.min.js"></script>
     <script src="/static/metropolitana/js/bootstrap.min.js"></script>
+    <script src="/static/metropolitana/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+            $(function () {
+                $('#fecha_promesa').datepicker({
+                  format: 'yyyy-mm-dd'
+              });
+            });
+            $('button').on('click', function(){
+                window.close();
+            });
+        </script>
     </body>
 </html>
