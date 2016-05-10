@@ -14,7 +14,7 @@
   <script type="text/javascript">
     var locations = [
     {% for f in facturas %}
-      ['{{ f.user.username }}-{{ f.hora_entrega }}', {{ f.position.longitude }}, {{ f.position.latitude }}, 4],
+      ['{{ f.user.username }}-{{ f.hora_entrega }}', {{ f.position.latitude }}, {{ f.position.longitude }}, 4],
     {% endfor %}
     ];
 
