@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
-from metropolitana.models import *
+from metropolitana.models import Paquete
+from cartera.models import Gestion
+from verificaciones.models import Verificacion
 from datetime import datetime
 from django import template
 
 register = template.Library()
+
+
+def get_label(gestion):
+    if gestion.tipo_gestion.code=='0002':
+        return "V"
+    else:
+        return "C"
 
 
 class puntos_Node(template.Node):
@@ -19,7 +28,26 @@ class puntos_Node(template.Node):
             fecha_entrega__month=datetime.now().month,
             fecha_entrega__year=datetime.now().year):
             if p.position:
-                data.append(p)
+                obj = {}
+                obj['contrato'] = p.contrato
+                obj['nombre'] = p.cliente
+                obj['label'] = "E"
+                obj['latitude'] = p.position.latitude
+                obj['longitude'] = p.position.longitude
+                obj['usuario'] = p.user.username
+                obj['fecha'] = str(p.fecha_entrega)
+                data.append(obj)
+        for g in Gestion.objects.filter(fecha_gestion__day=datetime.now().day,
+            fecha_gestion__month=datetime.now().month,
+            fecha_gestion__year=datetime.now().year):
+            obj = {}
+            obj['contrato'] = g.cliente.contrato
+            obj['nombre'] = g.cliente.name
+            obj['label'] = get_label(g)
+            obj['latitude'] = g.position.latitude
+            obj['longitude'] = g.position.longitude
+            obj['usuario'] = g.user.username
+            obj['fecha'] = str(g.fecha_gestion)
         context[self.varname] = data
         return ''
 

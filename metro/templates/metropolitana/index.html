@@ -14,7 +14,7 @@
   <script type="text/javascript">
     var locations = [
     {% for f in facturas %}
-      ['{{ f.user.username }}-{{ f.hora_entrega }}', {{ f.position.latitude }}, {{ f.position.longitude }}, 4],
+      ['{{ f.contrato }}', {{ f.nombre }}, {{ f.label }}, {{ f.latitude }}, {{ f.longitude }}, {{ f.usuario }}, {{ f.fecha }}],
     {% endfor %}
     ];
 
@@ -30,14 +30,23 @@
 
     for (i = 0; i < locations.length; i++) {
       marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        position: new google.maps.LatLng(locations[i][3], locations[i][4]),
         map: map,
-        icon: "https://d30y9cdsu7xlg0.cloudfront.net/png/26575-200.png"
+        label: locations[i][2]
       });
 
+    funtion get_content(contrato, nombre, usuario, fecha){
+        var content = '<div class="marker-content">' +
+        '<table><tbody>'+
+        '<tr>fecha</tr>'+
+        '<tr>contrato + nombre</tr>'+
+        '<tr>usuario</tr>'+
+        '</tbody></table></div>';
+        return content;
+        }
       google.maps.event.addListener(marker, 'click', (function(marker, i) {
         return function() {
-          infowindow.setContent(locations[i][0]);
+          infowindow.setContent(get_content(locations[i][0], locations[i][1], locations[i][5], locations[i][6]);
           infowindow.open(map, marker);
         }
       })(marker, i));
