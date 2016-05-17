@@ -10,6 +10,13 @@ from django.contrib.auth.models import User
 import time
 
 
+def smart_text(text):
+    try:
+        return text
+    except:
+        return '~'
+
+
 def get_code(entidad, length=4):
         model = type(entidad)
         code = ''
@@ -454,8 +461,9 @@ class Barrio(Entidad):
     revizado = models.NullBooleanField()
 
     def __unicode__(self):
-        return '%s-%s %s %s' % (self.code, self.name,
-            self.municipio.name, self.departamento.name)
+        return '%s-%s %s %s' % (smart_text(self.code), smart_text(self.name),
+            smart_text(self.municipio.name),
+            smart_text(self.departamento.name))
 
     def get_revizado(self):
         if self.relative_position:
