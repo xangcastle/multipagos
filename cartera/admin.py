@@ -81,7 +81,7 @@ class cliente_admin(admin.ModelAdmin):
     list_display = ('contrato', 'name', 'identificacion', 'saldo_total',
         'comentario', 'tipo_mora', 'ciclo', 'departamento', 'municipio',
         'barrio', 'zona', 'estado_corte')
-    list_filter = ('departamento', 'municipio', 'barrio',
+    list_filter = ('departamento', 'municipio',
         'tipo_mora', 'ciclo', 'comentario', 'zona', 'estado_corte', 'has_pend')
     search_fields = ('code', 'name', 'identificacion', 'contrato')
     readonly_fields = ('code', 'name', 'identificacion', 'departamento',
