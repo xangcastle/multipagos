@@ -37,6 +37,7 @@ class puntos_Node(template.Node):
                 obj['longitude'] = p.position.longitude
                 obj['usuario'] = p.user.username
                 obj['fecha'] = str(p.fecha_entrega)
+                obj['resultado'] = p.tipificacion.causa
                 data.append(obj)
         for g in Gestion.objects.filter(fecha_gestion__day=datetime.now().day,
             fecha_gestion__month=datetime.now().month,
@@ -50,6 +51,7 @@ class puntos_Node(template.Node):
                 obj['longitude'] = g.position.longitude
                 obj['usuario'] = g.user.username
                 obj['fecha'] = str(g.fecha_gestion)
+                obj['resultado'] = g.tipo_resultado.descripcion
                 data.append(obj)
         for g in Verificacion.objects.filter(
             fecha_entrega__day=datetime.now().day,
@@ -64,6 +66,7 @@ class puntos_Node(template.Node):
                 obj['longitude'] = g.position.longitude
                 obj['usuario'] = g.user.username
                 obj['fecha'] = str(g.fecha_entrega)
+                obj['resultado'] = g.estado
                 data.append(obj)
         context[self.varname] = data
         return ''
