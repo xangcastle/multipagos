@@ -50,8 +50,8 @@
 	  <ul class="nav nav-sidebar">
 		<li><a href="/" class="home">Mapa de Seguimiento</a></li>
 		<li><a href="/home/barrios_huerfanos" class="barrios">Barrios Huerfanos</a></li>
-		<li><a href="#" class="reporte">Reporte de Gestiones</a></li>
-		<li><a href="#" class="asignacion">Panel de Asignacion</a></li>
+		<li><a href="/home/reporte_gestiones" class="reporte">Reporte de Gestiones</a></li>
+		<li><a href="/home/panel_asignacion" class="asignacion">Panel de Asignacion</a></li>
 	  </ul>
 	  {% endblock sitebar %}
 	</div>
@@ -74,13 +74,14 @@
 <script src="/static/metropolitana/js/bootstrap.min.js"></script>
 <script src="/static/metropolitana/js/vendor/holder.min.js"></script>
 <script src="/static/metropolitana/js/ie10-viewport-bug-workaround.js"></script>
+{% block extrahead %}{% endblock extrahead %}
 <script>
 {% block javascript %}
 {% load puntos %}
 {% get_puntos as facturas %}
 var ventana_ancho = $(window).width();
 var ventana_alto = $(window).height();
-$("#content").append($('<div id="map" style="width: '+ (ventana_ancho * 0.8) +'px; height: '+ (ventana_alto * 0.8) +'px;"></div>'));
+$("#content").append($('<div id="map" style="width: '+ (ventana_ancho * 0.78) +'px; height: '+ (ventana_alto * 0.75) +'px;"></div>'));
 var get_content = function(contrato, nombre, usuario, fecha, resultado, direccion){
 			var content = '<div class="marker-content">';
 			content += '<table><tbody>';
