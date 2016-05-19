@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from ajax_select import urls as ajax_select_urls
 import autocomplete_light
-from metropolitana.views import home
+from home.views import index as home
 
 autocomplete_light.autodiscover()
 admin.autodiscover()

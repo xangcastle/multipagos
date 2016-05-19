@@ -17,7 +17,7 @@ TipoGestion
 
 
 class home(TemplateView):
-    template_name = "metropolitana/index.html"
+    template_name = "base/base.html"
 
 
 class indexar(TemplateView):
