@@ -32,6 +32,7 @@ class puntos_Node(template.Node):
                 obj = {}
                 obj['contrato'] = p.contrato
                 obj['nombre'] = p.cliente
+                obj['direccion'] = p.direccion
                 obj['label'] = "E"
                 obj['latitude'] = p.position.latitude
                 obj['longitude'] = p.position.longitude
@@ -46,6 +47,7 @@ class puntos_Node(template.Node):
                 obj = {}
                 obj['contrato'] = g.cliente.contrato
                 obj['nombre'] = g.cliente.name
+                obj['direccion'] = g.cliente.direccion
                 obj['label'] = get_label(g)
                 obj['latitude'] = g.position.latitude
                 obj['longitude'] = g.position.longitude
@@ -61,6 +63,7 @@ class puntos_Node(template.Node):
                 obj = {}
                 obj['contrato'] = g.contrato
                 obj['nombre'] = g.nombre_cliente
+                obj['direccion'] = g.direccion
                 obj['label'] = "V"
                 obj['latitude'] = g.position.latitude
                 obj['longitude'] = g.position.longitude
