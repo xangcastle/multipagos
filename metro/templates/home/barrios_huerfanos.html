@@ -87,15 +87,13 @@
 				<label for="zona">Seleccionar Zona</label>
 				<select id="zona" class="form-control" name="zona">
 					<option value="">---</option>
-					{% for t in tipo_pagos %}
-					<option value={{ t.id }}>{{ t.name }}</option>
-					{% endfor %}
 				</select>
 			</div>
 		  </div>
 		</div>
 		<div class="modal-footer">
 		  <div class="alert" id="mensaje"></div>
+		  <input type="hidden" id="idbarrio"></input>
 		  <button type="button" class="btn btn-success" id="asignar_barrio">Asignar</button>
 		</div>
 	  </div>
@@ -104,9 +102,19 @@
 {% endblock modal %}
 
 {% block javascript %}
-var funka = function(){
-		console.log('funka!');
-	}
+
+var asignar_barrio = function(){
+	var modal = $('#barrioModal');
+	$.ajax("/home/asignar_barrio/", {
+			type: "POST",
+			data: {"idbarrio": modal.find('#idbarrio').val(), "idzona": modal.find('#zona').val()},
+			success: function(data){
+				var tr = $('#huerfanos tbody').find('#' + modal.find('#idbarrio').val());
+				tr.remove();
+				modal.modal("hide");
+			}
+	});
+}
 
 var mostrar_barrio = function(){
 	var modal = $('#barrioModal');
@@ -114,6 +122,7 @@ var mostrar_barrio = function(){
 	type: "POST",
 	data: {'id': $(this).attr('id')},
 	success: function(data){
+	  modal.find('#idbarrio').val(data.id);
 	  modal.find('#code').val(data.code);
 	  modal.find('#name').val(data.name);
 	  modal.find('#departamento').val(data.departamento);
@@ -140,7 +149,8 @@ var mostrar_barrio = function(){
   modal.modal('show');
 }
 $(document).on('ready', function(){
-	$('#huerfanos tbody').on('dblclick', 'tr', mostrar_barrio);
+	$('#huerfanos tbody').on('click', 'tr', mostrar_barrio);
+	$('#asignar_barrio').on('click', asignar_barrio);
 	});
 {% endblock javascript %}
 {% block active %}barrios{% endblock active %}

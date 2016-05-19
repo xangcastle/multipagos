@@ -471,6 +471,7 @@ class Barrio(Entidad):
 
     def to_json(self):
         obj = {}
+        obj['id'] = self.id
         obj['code'] = self.code
         obj['name'] = self.name
         obj['departamento'] = self.departamento.name
@@ -513,10 +514,16 @@ class Zona(Entidad):
                 zb, create = zona_barrio.objects.get_or_create(zona=self,
                     barrio=b)
 
+    def add_barrio(self, barrio):
+        zb, created = zona_barrio.objects.get_or_create(barrio=barrio)
+        zb.zona = self
+        zb.orden = None
+        zb.save()
+
 
 class zona_barrio(models.Model):
-    zona = models.ForeignKey(Zona)
-    barrio = models.ForeignKey(Barrio)
+    zona = models.ForeignKey(Zona, null=True)
+    barrio = models.ForeignKey(Barrio, null=True)
     orden = models.IntegerField(null=True)
 
     class Meta:

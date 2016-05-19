@@ -1,5 +1,5 @@
 from django.views.generic.base import TemplateView
-from metropolitana.models import Barrio
+from metropolitana.models import Barrio, Zona
 import json
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
@@ -27,4 +27,15 @@ def info_barrio(request):
             data = json.dumps(result)
     else:
         data = []
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def asignar_barrio(request):
+    result = []
+    if request.is_ajax:
+        barrio = Barrio.objects.get(id=request.POST.get('idbarrio', None))
+        zona = Zona.objects.get(id=request.POST.get('idzona', None))
+        zona.add_barrio(barrio)
+    data = json.dumps(model_to_dict(zona))
     return HttpResponse(data, content_type='application/json')
