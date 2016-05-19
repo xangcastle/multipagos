@@ -134,10 +134,8 @@ var mostrar_barrio = function(){
 		row.append($('<td></td>').html(value));
 		referencias.append(row);
 		  });
-	  var blank = $('<option value="">---</option>');
 	  var zona = $('#zona');
 	  zona.empty();
-	  zona.append(blank);
 	  $.each(data.zonas, function(key, value){
 		  var option = $('<option></option>')
 				.val(value[0])
