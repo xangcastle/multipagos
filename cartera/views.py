@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 import json
+from django.http import HttpResponse
 
 
 @login_required(login_url='/admin/login/')

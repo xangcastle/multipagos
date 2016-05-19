@@ -7,6 +7,8 @@ from django.core.context_processors import csrf
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from daterange_filter.filter import DateRangeFilter
+import xlwt
+from django.http import HttpResponse
 
 
 class import_model_admin(ImportExportModelAdmin):
@@ -190,6 +192,71 @@ class gestion_admin(admin.ModelAdmin):
         'fecha_gestion', 'tipo_resultado', 'user', 'estado')
 
     search_fields = ('cliente__name', 'cliente__contrato', 'user__username')
+
+    actions = ['reporte_gestiones']
+
+    def format_fecha(self, fecha):
+        if not fecha:
+            return ""
+        else:
+            return fecha.strftime('%x')
+
+    def format_resultado(self, resultado):
+        if not resultado:
+            return ""
+        else:
+            return resultado.resultado
+
+    def format_descripcion(self, resultado):
+        if not resultado:
+            return ""
+        else:
+            return resultado.descripcion
+
+    def reporte_gestiones(self, request, queryset):
+        book = xlwt.Workbook(encoding='utf8')
+        sheet = book.add_sheet('untitled')
+
+        default_style = xlwt.Style.default_style
+
+        values_list = queryset
+        sheet.write(0, 0, 'contrato', style=default_style)
+        sheet.write(0, 1, 'nombre del cliente', style=default_style)
+        sheet.write(0, 2, 'ciclo', style=default_style)
+        sheet.write(0, 3, 'servicio', style=default_style)
+        sheet.write(0, 4, 'gestion', style=default_style)
+        sheet.write(0, 5, 'resultado de gestion', style=default_style)
+        sheet.write(0, 6, 'motivo de no pago', style=default_style)
+        sheet.write(0, 7, 'comentario', style=default_style)
+        sheet.write(0, 8, 'fecha de compromiso de pago', style=default_style)
+        sheet.write(0, 9, 'fecha de gestion', style=default_style)
+
+        for row, gestion in enumerate(values_list):
+            sheet.write(row + 1, 0, gestion.cliente.contrato,
+                style=default_style)
+            sheet.write(row + 1, 1, gestion.cliente.name, style=default_style)
+            sheet.write(row + 1, 2, gestion.cliente.ciclo, style=default_style)
+            sheet.write(row + 1, 3, gestion.cliente.descr_plan,
+                style=default_style)
+            sheet.write(row + 1, 4, gestion.tipo_gestion.name,
+                style=default_style)
+            sheet.write(row + 1, 5,
+                self.format_resultado(gestion.tipo_resultado),
+                style=default_style)
+            sheet.write(row + 1, 6,
+                self.format_descripcion(gestion.tipo_resultado),
+                style=default_style)
+            sheet.write(row + 1, 7, gestion.comentario, style=default_style)
+            sheet.write(row + 1, 8, self.format_fecha(gestion.fecha_promesa),
+                style=default_style)
+            sheet.write(row + 1, 9, self.format_fecha(gestion.fecha_gestion),
+                style=default_style)
+
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = \
+        'attachment; filename=Reporte de gestiones.xls'
+        book.save(response)
+        return response
 
 admin.site.register(Gestion, gestion_admin)
 
