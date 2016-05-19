@@ -60,8 +60,6 @@
 	  <h1 class="page-header">{% block name %}Mapa de Seguimiento{% endblock name %}</h1>
 	  <div class="row placeholders">
 			{% block content %}
-			{% load puntos %}
-			{% get_puntos as facturas %}
 			<div id="map" style="width: 1200px; height: 600px;"></div>
 			{% endblock content %}
 	  </div>
@@ -78,6 +76,9 @@
 <script src="/static/metropolitana/js/ie10-viewport-bug-workaround.js"></script>
 <script>
 {% block javascript %}
+
+			{% load puntos %}
+			{% get_puntos as facturas %}
 var get_content = function(contrato, nombre, usuario, fecha){
 			var content = '<div class="marker-content">';
 			content += '<table><tbody>';
