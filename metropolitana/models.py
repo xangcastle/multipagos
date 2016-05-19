@@ -8,6 +8,7 @@ import subprocess
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 import time
+from django.forms.models import model_to_dict
 
 
 def smart_text(text):
@@ -464,6 +465,23 @@ class Barrio(Entidad):
         return '%s-%s %s %s' % (smart_text(self.code), smart_text(self.name),
             smart_text(self.municipio.name),
             smart_text(self.departamento.name))
+
+    def related_zones(self):
+        return Zona.objects.filter(departamento=self.departamento)
+
+    def to_json(self):
+        obj = {}
+        obj['code'] = self.code
+        obj['name'] = self.name
+        obj['departamento'] = self.departamento.name
+        obj['municipio'] = self.municipio.name
+        obj['referencias'] = []
+        obj['zonas'] = []
+        for d in Paquete.objects.filter(idbarrio=self):
+            obj['referencias'].append(d.direccion)
+        for z in self.related_zones():
+            obj['zonas'].append([z.id, z.name])
+        return obj
 
     def get_revizado(self):
         if self.relative_position:

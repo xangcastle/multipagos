@@ -1,0 +1,146 @@
+{% extends "home/base.html" %}
+
+{% block name %}Barrios Huerfanos{% endblock name %}
+
+
+{% block content %}
+{% load barrios %}
+{% get_barrios_huerfanos as huerfanos %}
+<h2 class="sub-header">Haga dobleclick para asignar una zona.</h2>
+<div class="table-responsive">
+	<table class="table table-striped" id="huerfanos">
+		<thead>
+			<tr>
+				<th>Codigo Barrio</th>
+				<th>Nombre Barrio</th>
+				<th>Departamento</th>
+				<th>Municipio</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for b in huerfanos %}
+			<tr id="{{ b.id }}">
+				<td>{{ b.code }}</td>
+				<td>{{ b.name }}</td>
+				<td>{{ b.departamento.name }}</td>
+				<td>{{ b.municipio.name }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock content %}
+
+{% block modal %}
+<div class="modal fade" id="barrioModal" role="dialog">
+
+<div class="modal-dialog modal-lg">
+	<!-- Modal content-->
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Asignar Barrio</h4>
+		</div>
+		<div class="modal-body">
+		  <div class="row">
+			<div class="col-md-6">
+			  <div class="form-group">
+				  <label for="code">Codigo</label>
+				  <input type="text" class="form-control" id="code" readonly name="code">
+			  </div>
+			</div>
+			<div class="col-md-6">
+			  <div class="form-group">
+				  <label for="name">Nombre</label>
+				  <input type="text" class="form-control" id="name" readonly name="name">
+			  </div>
+			</div>
+		  </div>
+		  <div class="row">
+			<div class="col-md-6">
+			  <div class="form-group">
+				  <label for="departamento">Departamento</label>
+				  <input type="text" class="form-control" id="departamento" readonly name="departamento">
+			  </div>
+			</div>
+			<div class="col-md-6">
+			  <div class="form-group">
+				  <label for="municipio">Municipio</label>
+				  <input type="text" class="form-control" id="municipio" readonly name="municipio">
+			  </div>
+			</div>
+		  </div>
+		  <div class="row">
+			  <h3>Referencias</h3>
+			<table class="table table-bordered table-responsive table-hover" id="referencias">
+			  <thead>
+				<tr>
+				  <th>Direccion</th>
+				</tr>
+			  </thead>
+			  <tbody>
+			  </tbody>
+			</table>
+		  </div>
+		  <div class="row">
+			  <div class="form-group">
+				<label for="zona">Seleccionar Zona</label>
+				<select id="zona" class="form-control" name="zona">
+					<option value="">---</option>
+					{% for t in tipo_pagos %}
+					<option value={{ t.id }}>{{ t.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		  </div>
+		</div>
+		<div class="modal-footer">
+		  <div class="alert" id="mensaje"></div>
+		  <button type="button" class="btn btn-success" id="asignar_barrio">Asignar</button>
+		</div>
+	  </div>
+</div>
+</div>
+{% endblock modal %}
+
+{% block javascript %}
+var funka = function(){
+		console.log('funka!');
+	}
+
+var mostrar_barrio = function(){
+	var modal = $('#barrioModal');
+  $.ajax("/home/info_barrio/", {
+	type: "POST",
+	data: {'id': $(this).attr('id')},
+	success: function(data){
+	  modal.find('#code').val(data.code);
+	  modal.find('#name').val(data.name);
+	  modal.find('#departamento').val(data.departamento);
+	  modal.find('#municipio').val(data.municipio);
+	  var referencias = modal.find('#referencias tbody');
+	  referencias.empty();
+	  $.each(data.referencias, function(key, value){
+		var row = $('<tr></tr>');
+		row.append($('<td></td>').html(value));
+		referencias.append(row);
+		  });
+	  var blank = $('<option value="">---</option>');
+	  var zona = $('#zona');
+	  zona.empty();
+	  zona.append(blank);
+	  $.each(data.zonas, function(key, value){
+		  var option = $('<option></option>')
+				.val(value[0])
+				.html(value[1]);
+		  zona.append(option);
+		  });
+	}
+  })
+  modal.modal('show');
+}
+$(document).on('ready', function(){
+	$('#huerfanos tbody').on('dblclick', 'tr', mostrar_barrio);
+	});
+{% endblock javascript %}
+{% block active %}barrios{% endblock active %}
