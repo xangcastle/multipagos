@@ -81,19 +81,20 @@
 var ventana_ancho = $(window).width();
 var ventana_alto = $(window).height();
 $("#content").append($('<div id="map" style="width: '+ (ventana_ancho * 0.8) +'px; height: '+ (ventana_alto * 0.8) +'px;"></div>'));
-var get_content = function(contrato, nombre, usuario, fecha){
+var get_content = function(contrato, nombre, usuario, fecha, resultado){
 			var content = '<div class="marker-content">';
 			content += '<table><tbody>';
 			content += '<tr><td>' + fecha + '</td></tr>';
 			content += '<tr><td>' + contrato + ' ' + nombre + '</td></tr>';
 			content += '<tr><td>' + usuario + '</td></tr>';
+			content += '<tr><td>' + resultado + '</td></tr>';
 			content += '</tbody></table></div>';
 			return content;
 			}
 
 		var locations = [
 		{% for f in facturas %}
-		  ['{{ f.contrato }}', '{{ f.nombre }}', '{{ f.label }}', {{ f.latitude }}, {{ f.longitude }}, '{{ f.usuario }}', '{{ f.fecha }}'],
+		  ['{{ f.contrato }}', '{{ f.nombre }}', '{{ f.label }}', {{ f.latitude }}, {{ f.longitude }}, '{{ f.usuario }}', '{{ f.fecha }}', '{{ f.resultado }}'],
 		{% endfor %}
 		];
 
@@ -115,7 +116,7 @@ var get_content = function(contrato, nombre, usuario, fecha){
 		  });
 		  google.maps.event.addListener(marker, 'click', (function(marker, i) {
 			return function() {
-			  infowindow.setContent(get_content(locations[i][0], locations[i][1], locations[i][5], locations[i][6]));
+			  infowindow.setContent(get_content(locations[i][0], locations[i][1], locations[i][5], locations[i][6], locations[i][7]));
 			  infowindow.open(map, marker);
 			}
 		  })(marker, i));
