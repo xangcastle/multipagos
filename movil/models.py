@@ -18,7 +18,7 @@ class UserProfile(models.Model):
     is_supervisor = models.BooleanField(default=False,
         verbose_name="es un supervisor?")
     departamentos = models.ManyToManyField(Departamento, null=True,
-        verbose_name="departamentos que atiende")
+        blank=True, verbose_name="departamentos que atiende")
 
     def __unicode__(self):
         return "user " + self.user.username
