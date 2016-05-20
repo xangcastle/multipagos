@@ -184,7 +184,7 @@ path {  stroke: #fff; }
             .append("g").attr("class", "bar");
 
             //create the rectangles.
-            bars.append("rect")
+            bars.append("rect").transition().duration(500)
             .attr("x", function(d) { return x(d.zona); })
             .attr("y", function(d) { return y(d.total); })
             .attr("width", x.rangeBand())
