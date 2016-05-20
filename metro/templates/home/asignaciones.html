@@ -116,11 +116,13 @@ path {  stroke: #fff; }
 <div>
     <div class="panel panel-default">
         <div class="panel-body" id="panelEntrega">
+            {% if mensaje %}
             <div class="alert alert-{{ msgclass }}">
                 {{ mensaje }}
             </div>
+            {% endif %}
             <div id="histogram"></div>
-            <div style="max-height:400px; overflow-y:auto;">
+            <div style="max-height:350px; overflow-y:auto;">
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -159,7 +161,7 @@ path {  stroke: #fff; }
         function histoGram(id, fD){
             var hG={},    hGDim = {t: 100, r: 0, b: 60, l: 110};
             hGDim.w = 1000 - hGDim.l - hGDim.r,
-                hGDim.h = 500 - hGDim.t - hGDim.b;
+                hGDim.h = 300 - hGDim.t - hGDim.b;
 
             //create svg for histogram.
             var hGsvg = d3.select(id).append("svg")

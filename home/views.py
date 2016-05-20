@@ -127,11 +127,6 @@ class panel_asignacion(TemplateView):
 
     def get_extra_context(self, request, *args, **kwargs):
         context = self.get_context_data()
-        context['mensaje'] = \
-        'En esta seccion usted podra asignar las distintas tareas'
-        context['mensaje'] += \
-        ' en cada barrio a un gestor que trabaje en la zona elegida'
-        context['msgclass'] = 'info'
         context['profile'] = self.get_profile(request.user)
         context['zonas'] = self.get_zonas(context)
         return context
