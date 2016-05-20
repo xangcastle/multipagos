@@ -237,17 +237,20 @@ class reporte_gestiones(TemplateView):
 
     def get_users(self, context):
         users = []
+        data = []
         zonas = Zona.objects.filter(
             departamento__in=context['profile'].departamentos.all()
             ).order_by('name')
         for z in zonas:
             for u in usuarios_asignados(z):
-                obj = {}
-                obj['user'] = u
-                obj['profile'] = self.get_profile(u)
-                obj['asignacion'] = []
-                users.append(obj)
-        return users
+                users.append(u.id)
+        for u in User.objects.filter(id__in=users):
+            obj = {}
+            obj['user'] = u
+            obj['profile'] = self.get_profile(u)
+            obj['asignacion'] = []
+            data.append(obj)
+        return data
 
     def get_extra_context(self, request, *args, **kwargs):
         context = self.get_context_data()
