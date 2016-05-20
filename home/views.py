@@ -22,6 +22,16 @@ class reporte_gestiones(TemplateView):
     template_name = "home/gestiones.html"
 
 
+def get_profile(user):
+    try:
+        return UserProfile.objects.get(user=user)
+    except:
+        profile, created = UserProfile.objects.get_or_create(
+            is_supervisor=False, user=user)
+        profile.save()
+        return profile
+
+
 class panel_asignacion(TemplateView):
     template_name = "home/asignaciones.html"
 
@@ -32,7 +42,7 @@ class panel_asignacion(TemplateView):
         context['mensaje'] += \
         ' en cada barrio a un gestor que trabaje en la zona elegida'
         context['msgclass'] = 'info'
-        context['profile'] = UserProfile.objects.get(user=request.user)
+        context['profile'] = get_profile(request.user)
         context['zonas'] = Zona.objects.filter(
             departamento__in=context['profile'].departamentos.all()
             ).order_by('name')
@@ -40,7 +50,7 @@ class panel_asignacion(TemplateView):
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
-        context['profile'] = UserProfile.objects.get(user=request.user)
+        context['profile'] = get_profile(request.user)
         context['zonas'] = Zona.objects.filter(
             departamento__in=context['profile'].departamentos.all()
             ).order_by('name')
