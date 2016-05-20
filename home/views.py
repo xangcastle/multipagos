@@ -10,6 +10,7 @@ from cartera.models import Gestion, TipoGestion
 from metropolitana.models import Paquete
 from verificaciones.models import Verificacion
 from django.core import serializers
+from datetime import datetime
 
 
 class index(TemplateView):
@@ -235,6 +236,15 @@ class reporte_gestiones(TemplateView):
             profile.save()
             return profile
 
+    def user_distribucion(self, user):
+        return Paquete.objects.filter(user=user, estado='PENDIENTE',
+            fecha_asignacion_user__lte=datetime.now())
+
+    def user_asignado(self, user):
+        asignacion = {}
+        asignacion['distribucion'] = self.user_distribucion(user).count()
+        return asignacion
+
     def get_users(self, context):
         users = []
         data = []
@@ -248,7 +258,7 @@ class reporte_gestiones(TemplateView):
             obj = {}
             obj['user'] = u
             obj['profile'] = self.get_profile(u)
-            obj['asignacion'] = []
+            obj['asignado'] = self.user_asignado(u)
             data.append(obj)
         return data
 
