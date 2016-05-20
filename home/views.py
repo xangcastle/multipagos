@@ -220,10 +220,13 @@ def info_barrio(request):
 
 @csrf_exempt
 def asignar_barrio(request):
-    result = []
     if request.is_ajax:
         barrio = Barrio.objects.get(id=request.POST.get('idbarrio', None))
         zona = Zona.objects.get(id=request.POST.get('idzona', None))
         zona.add_barrio(barrio)
     data = json.dumps(model_to_dict(zona))
     return HttpResponse(data, content_type='application/json')
+
+
+class carga_informacion(TemplateView):
+    template_name = "home/carga.html"

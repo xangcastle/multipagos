@@ -16,4 +16,5 @@ urlpatterns = patterns('home.views',
         login_required(panel_asignacion.as_view(), login_url='/admin/login/'),
         name='panel_asignacion'),
     url(r'^asignar_barrio/$', 'asignar_barrio', name='asignar_barrio'),
+    url(r'^carga_informacion/$', carga_informacion.as_view(), name='carga_informacion'),
 )

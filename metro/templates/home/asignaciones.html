@@ -60,10 +60,58 @@ path {  stroke: #fff; }
     }
 {% endblock css %}
 
+{% block extratools %}
+<span class="label label-info">1</span> Seleccione la zona
+<select id="zonas" runat="server" class="form-control" name="zona">
+    <option selected disabled value="0">---</option>
+    {% for z in zonas %}
+    <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
+    {% endfor %}
+</select>
+<span class="label label-info">2</span> Seleccione el gestor
+<select id="usuario" runat="server" class="form-control" name="usuario" required="required">
+    <option selected disabled value="0">---</option>
+</select>
+<span class="label label-info">3</span> Seleccione la fecha
+<div class="form-group">
+    <div class='input-group date' id='datepicker' name="picker">
+        <input type='text' class="form-control" name="fecha" id="dtpFecha" required />
+        <span class="input-group-addon">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+    </div>
+</div>
+<input type="hidden" id="asignacionActual" />
+<input type="hidden" id="asignacionPendiente" />
+<input type="hidden" id="cobroActual" />
+<input type="hidden" id="cobroPendiente" />
+<input type="hidden" id="verfiActual" />
+<input type="hidden" id="verfPendiente" />
+<li role="presentation"><a> Entrega total<span class="badge" id="asignacionTotal">0</span></a></li>
+<li role="presentation"><a> Cobros total<span class="badge" id="cobroTotal">0</span></a></li>
+<li role="presentation"><a> Verificación total<span class="badge" id="verfTotal">0</span></a></li>
+<li class="list-group-item list-group-item-info">
+    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en distribución</h4>
+    <p class="list-group-item-text" id="horasdistribucion">horas</p>
+</li>
+<li class="list-group-item list-group-item-warning">
+    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en cobranza</h4>
+    <p class="list-group-item-text" id="horascobro">horas</p>
+</li>
+<li class="list-group-item list-group-item-success">
+    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en verificacion</h4>
+    <p class="list-group-item-text" id="horasveficicacion">horas</p>
+</li>
+<li class="list-group-item list-group-item-default">
+    <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Total horas </h4>
+    <p class="list-group-item-text" id="horastotal">horas</p>
+</li>
+<input type='submit' class="btn btn-success" value='Asignar Trabajo'>
+{% endblock extratools %}
+
+
 {% block content %}
-<div id="histogram"></div>
 {% if profile.is_supervisor %}
-<form runat="server" method="post" action".">
 {% csrf_token %}
 <div>
     <div class="panel panel-default">
@@ -71,6 +119,7 @@ path {  stroke: #fff; }
             <div class="alert alert-{{ msgclass }}">
                 {{ mensaje }}
             </div>
+            <div id="histogram"></div>
             <div style="max-height:400px; overflow-y:auto;">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -84,92 +133,9 @@ path {  stroke: #fff; }
                     <tbody></tbody>
                 </table>
             </div>
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="row">
-                        <div class="col-lg-10 col-md-10"><span class="label label-info">1</span> Seleccione la zona</div>
-                        <div class="col-lg-10 col-md-10">
-                            <select id="zonas" runat="server" class="form-control" name="zona">
-                                <option selected disabled value="0">---</option>
-                                {% for z in zonas %}
-                                <option value="{{ z.id }}">{{ z.code }} - {{ z.name }}</option>
-                                {% endfor %}
-                            </select>
-
-                        </div>
-                        <div class="col-lg-10 col-md-10"><span class="label label-info">2</span> Seleccione el gestor</div>
-                        <div class="col-lg-10 col-md-10">
-                            <select id="usuario" runat="server" class="form-control" name="usuario" required="required">
-                                <option selected disabled value="0">---</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-10 col-md-10"><span class="label label-info">3</span> Seleccione la fecha</div>
-                        <div class="col-lg-10 col-md-10">
-                            <div class="form-group">
-                                <div class='input-group date' id='datepicker' name="picker">
-                                    <input type='text' class="form-control" name="fecha" id="dtpFecha" required />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <input type="hidden" id="asignacionActual" />
-                    <input type="hidden" id="asignacionPendiente" />
-                    <input type="hidden" id="cobroActual" />
-                    <input type="hidden" id="cobroPendiente" />
-                    <input type="hidden" id="verfiActual" />
-                    <input type="hidden" id="verfPendiente" />
-
-                    <ul class="nav nav-pills" role="tablist">
-                        <!--<li role="presentation" style="width:200px;visibility"><a>Entrega actual <span class="badge">0</span></a></li>
-<li role="presentation" style="width:200px;"><a>Entrega pendiente <span class="badge">0</span></a></li>-->
-                        <li role="presentation" style="width:200px" class="active"><a> Entrega total<span class="badge" id="asignacionTotal">0</span></a></li>
-                    </ul>
-                    <br />
-                    <ul class="nav nav-pills" role="tablist">
-                        <!--<li role="presentation" style="width:200px;"><a>Cobros actual <span class="badge">0</span></a></li>
-<li role="presentation" style="width:200px;"><a>Cobros pendiente <span class="badge">0</span></a></li>-->
-                        <li role="presentation" style="width:200px" class="active"><a> Cobros total<span class="badge" id="cobroTotal">0</span></a></li>
-                    </ul>
-                    <br />
-                    <ul class="nav nav-pills" role="tablist">
-                        <!--<li role="presentation" style="width:200px;"><a>Verificación actual <span class="badge">0</span></a></li>
-<li role="presentation" style="width:200px;"><a>Verificación pendiente <span class="badge">0</span></a></li>-->
-                        <li role="presentation" style="width:200px" class="active"><a> Verificación total<span class="badge" id="verfTotal">0</span></a></li>
-                    </ul>
-                    <br />
-                </div>
-                <div class="col-lg-3">
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-info">
-                            <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en distribución</h4>
-                            <p class="list-group-item-text" id="horasdistribucion">horas</p>
-                        </li>
-                        <li class="list-group-item list-group-item-warning">
-                            <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en cobranza</h4>
-                            <p class="list-group-item-text" id="horascobro">horas</p>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Horas en verificacion</h4>
-                            <p class="list-group-item-text" id="horasveficicacion">horas</p>
-                        </li>
-                        <li class="list-group-item list-group-item-default">
-                            <h4 class="list-group-item-heading"><span class="fa fa-clock-o" /> Total horas </h4>
-                            <p class="list-group-item-text" id="horastotal">horas</p>
-                        </li>
-                    </ul>
-                </div>
-                <input type='submit' class="btn btn-success" value='Asignar Trabajo'>
-            </div>
-            <br />
         </div>
         <hr />
     </div>
-</form>
 {% else %}
  <h3>Usted no es un supervisor</h3>
 {% endif %}
@@ -268,7 +234,7 @@ path {  stroke: #fff; }
         }
 
     function makeTipsy(d, zona) {
-        var html =  "<h3>"+zona+"</h3><div> Por Tipo de Gestion</div>" +
+        var html =  "<h3>"+zona+"</h3><div> Gestiones Pendientes por Tipo de Gestion</div>" +
             "<table class='tiptable'><tbody>"
         for (var i = 0; i < d.length; i++) {
             html += makeATableRow (d[i][0],d[i][1],d[i][2])
