@@ -1,0 +1,55 @@
+{% extends "home/base.html" %}
+{% block name %}Carga de Informacion al Sistema{% endblock name %}
+{% block active %}carga{% endblock active %}
+
+{% block css %}
+.upload-option:hover, .upload-option h4:hover {
+    background-color: #428BCA;
+    color: white;
+}
+.upload-option {
+    min-height: 200px;
+}
+{% endblock css %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class=" well upload-option">
+            <label>Subir listado de clientes para Distribucion de Facturas</label>
+            <a class="btn btn-lg btn-info" href="/admin/digitalizacion/import_paquete/import/" target="blank">
+                <span class="glyphicon glyphicon-cloud"></span> Upload
+            </a>
+            <p>Descarga un Formato en Blanco desde
+                <a href="/admin/digitalizacion/import_paquete/export/" target="blank">aqui</a>
+            </p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class=" well upload-option">
+            <label>Subir Cartera de Clientes Morosos</label>
+            <a class="btn btn-lg btn-info" href="/admin/cartera/import_model/import/" target="blank">
+                <span class="glyphicon glyphicon-cloud"></span> Upload
+            </a>
+            <p>Descarga un Formato en Blanco desde
+                <a href="/admin/cartera/import_model/export/" target="blank">aqui</a>
+            </p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class=" well upload-option">
+            <label>Subir Rebaja de Cartera y Pagos Diarios</label>
+            <a class="btn btn-lg btn-info" href="/admin/cartera/rebajacartera/import/" target="blank">
+                <span class="glyphicon glyphicon-cloud"></span> Upload
+            </a>
+            <p>Descarga un Formato en Blanco desde
+                <a href="/admin/cartera/rebajacartera/export/" target="blank">aqui</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+{% block javascript %}{% endblock javascript %}
+
