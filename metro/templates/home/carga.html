@@ -4,11 +4,12 @@
 
 {% block css %}
 .upload-option:hover, .upload-option h4:hover {
-    background-color: #428BCA;
-    color: white;
+    background-color: #C3F9B1;
+    color: black;
 }
 .upload-option {
     min-height: 200px;
+    color: #2fa4e7;
 }
 {% endblock css %}
 
@@ -44,6 +45,17 @@
             </a>
             <p>Descarga un Formato en Blanco desde
                 <a href="/admin/cartera/rebajacartera/export/" target="blank">aqui</a>
+            </p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class=" well upload-option">
+            <label>Subir Lista de Clientes para Verificaciones</label>
+            <a class="btn btn-lg btn-info" href="/admin/verificaciones/verificacion/import/" target="blank">
+                <span class="glyphicon glyphicon-cloud"></span> Upload
+            </a>
+            <p>Descarga un Formato en Blanco desde
+                <a href="/admin/verificaciones/verificacion/export/" target="blank">aqui</a>
             </p>
         </div>
     </div>
