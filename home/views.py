@@ -20,10 +20,6 @@ class barrios_huerfanos(TemplateView):
     template_name = "home/barrios_huerfanos.html"
 
 
-class reporte_gestiones(TemplateView):
-    template_name = "home/gestiones.html"
-
-
 def get_entregas(barrios):
     return Paquete.objects.filter(idbarrio__in=barrios, estado='PENDIENTE',
         cerrado=False, user__isnull=True)
@@ -225,3 +221,44 @@ def asignar_barrio(request):
 
 class carga_informacion(TemplateView):
     template_name = "home/carga.html"
+
+
+class reporte_gestiones(TemplateView):
+    template_name = "home/gestiones.html"
+
+    def get_profile(self, user):
+        try:
+            return UserProfile.objects.get(user=user)
+        except:
+            profile, created = UserProfile.objects.get_or_create(
+                is_supervisor=False, user=user)
+            profile.save()
+            return profile
+
+    def get_users(self, context):
+        users = []
+        zonas = Zona.objects.filter(
+            departamento__in=context['profile'].departamentos.all()
+            ).order_by('name')
+        for z in zonas:
+            for u in usuarios_asignados(z):
+                obj = {}
+                obj['user'] = u
+                obj['profile'] = self.get_profile(u)
+                obj['asignacion'] = []
+                users.append(obj)
+        return users
+
+    def get_extra_context(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['profile'] = self.get_profile(request.user)
+        context['gestores'] = self.get_users(context)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_extra_context(request, *args, **kwargs)
+        return super(reporte_gestiones, self).render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_extra_context(request, *args, **kwargs)
+        return super(reporte_gestiones, self).render_to_response(context)

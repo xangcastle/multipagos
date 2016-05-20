@@ -4,11 +4,55 @@
 
 {% block active %}reporte{% endblock active %}
 
-{% block javascript %}
-{% endblock javascript %}
+{% block css %}
+div.avatar {
+    height: 50px;
+    width: 50px;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-radius: 50%;
+    background-size: 100% auto;
+}
+div .name {
+    padding-left: 55px;
+    padding-top: 15px;
+}
+{% endblock css %}
 
 {% block content %}
 {% if profile.is_supervisor %}
-
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Gestor</th>
+                <th>Asignado</th>
+                <th>Realizado</th>
+                <th>Cumplimiento</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% for gestor in gestores%}
+        <tr>
+            <td>
+                <div
+                    {%if gestor.profile.foto %}
+                    class="avatar"
+                    style="background-image: url({{gestor.profile.foto.url}})">
+                    <div class="name">{{ gestor.user.username }}</div>
+                    {% endif %}
+                </div>
+                </td>
+            <td>0</td>
+            <td>0</td>
+            <td>0%</td>
+        </tr>
+    {% endfor%}
+        </tbody>
+    </table>
+{% else %}
+ <h3>Usted no es un supervisor</h3>
 {% endif %}
 {% endblock content %}
+
+{% block javascript %}
+{% endblock javascript %}
