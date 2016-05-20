@@ -2,6 +2,7 @@ $(document).ready(function (){
     $('#zonas').change(function(){
         obtener_barrios($(this).val());
         obtener_usuarios($(this).val());
+        $('#histogram').remove();
         });
     $('#dtpFecha').datepicker({
         format: "yyyy-mm-dd",
