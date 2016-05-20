@@ -497,15 +497,14 @@ class Barrio(Entidad):
 
 class Zona(Entidad):
     departamento = models.ForeignKey(Departamento)
-    municipio = models.ForeignKey(Municipio)
 
     def barrios(self):
         return Barrio.objects.filter(id__in=(zona_barrio.objects.filter(
             zona=self).values_list('barrio', flat=True)))
 
     def disponibles(self):
-        return Barrio.objects.filter(departamento=self.departamento,
-            municipio=self.municipio).exclude(id__in=(zona_barrio.objects.all(
+        return Barrio.objects.filter(departamento=self.departamento
+        ).exclude(id__in=(zona_barrio.objects.all(
             ).values_list('barrio', flat=True)))
 
     def autoasignar(self):

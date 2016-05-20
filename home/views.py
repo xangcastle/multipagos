@@ -4,6 +4,10 @@ import json
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from movil.models import UserProfile
+from django.contrib.auth.models import User
+from metropolitana.views import asignar_facturas, asignar_cobros, \
+asignar_verificaciones
 
 
 class index(TemplateView):
@@ -21,15 +25,53 @@ class reporte_gestiones(TemplateView):
 class panel_asignacion(TemplateView):
     template_name = "home/asignaciones.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(panel_asignacion, self).get_context_data(**kwargs)
-        context['zonas'] = Zona.objects.all().order_by('name')
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
         context['mensaje'] = \
         'En esta seccion usted podra asignar las distintas tareas'
         context['mensaje'] += \
-        ' en cada barrio al gestor hasta una cantidad maxima de x entregas'
+        ' en cada barrio a un gestor que trabaje en la zona elegida'
         context['msgclass'] = 'info'
-        return context
+        context['profile'] = UserProfile.objects.get(user=request.user)
+        context['zonas'] = Zona.objects.filter(
+            departamento__in=context['profile'].departamentos.all()
+            ).order_by('name')
+        return super(panel_asignacion, self).render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['profile'] = UserProfile.objects.get(user=request.user)
+        context['zonas'] = Zona.objects.filter(
+            departamento__in=context['profile'].departamentos.all()
+            ).order_by('name')
+        t = len(request.POST.getlist('barrio', ''))
+        u = User.objects.get(id=int(request.POST.get('usuario', '')))
+        fecha = request.POST.get('fecha', '')
+        for n in range(0, t):
+            idb = int(request.POST.getlist('barrio', '0')[n])
+            b = Barrio.objects.get(id=idb)
+            try:
+                entregas = int(request.POST.getlist('entrega', '0')[n])
+            except:
+                entregas = None
+            try:
+                cobros = int(request.POST.getlist('cobro', '0')[n])
+            except:
+                cobros = None
+            try:
+                verificaciones = int(request.POST.getlist(
+                    'verificacion', '0')[n])
+            except:
+                verificaciones = None
+            if entregas > 0:
+                asignar_facturas(b, u, entregas, fecha)
+            if cobros > 0:
+                asignar_cobros(b, u, cobros, fecha)
+            if verificaciones > 0:
+                asignar_verificaciones(b, u, verificaciones, fecha)
+        context['mensaje'] = 'Tarea asignada con exito!'
+        context['msgclass'] = 'success'
+        return super(panel_asignacion, self).render_to_response(context)
 
 
 @csrf_exempt

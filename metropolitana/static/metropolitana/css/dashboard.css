@@ -103,3 +103,13 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+
+.gm-style .gm-style-iw {
+    font-weight: 300;
+    font-size: 11px;
+    overflow: hidden;
+    background-color: #EAF2FB;
+    color: #3a87ad;
+    padding: 12px;
+}

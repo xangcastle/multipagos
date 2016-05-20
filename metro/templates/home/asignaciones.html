@@ -13,6 +13,7 @@
 
 
 {% block content %}
+{% if profile.is_supervisor %}
 <form runat="server" method="post" action".">
 {% csrf_token %}
 <div>
@@ -120,6 +121,9 @@
         <hr />
     </div>
 </form>
+{% else %}
+ <h3>Usted no es un supervisor</h3>
+{% endif %}
 {% endblock content%}
 
 {% block javascript %}

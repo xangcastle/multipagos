@@ -223,6 +223,7 @@ class import_model(models.Model):
     fecha_asignacion = models.DateField(null=True, blank=True)
     codigo = models.CharField(max_length=125, null=True, blank=True)
     comentario = models.CharField(max_length=125, null=True, blank=True)
+    fecha_fin = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
         return self.suscriptor
@@ -324,6 +325,8 @@ class import_model(models.Model):
         c.facturas_generadas = self.facturas_generadas
         c.facturas_pagadas = self.facturas_pagadas
         c.save()
+        if self.comentario == "COBRO":
+            c.generar_gestion(TipoGestion.objects.get(code='0002'))
         return c
 
     def get_factura(self):
@@ -579,6 +582,7 @@ class NewGestion(models.Model):
 def integrar_importacion(ps):
     message = ""
     ds = ps.order_by('departamento').distinct('departamento')
+    clientes = []
     for d in ds:
         depto = d.get_departamento()
         queryset = ps.filter(departamento=d.departamento)
@@ -601,6 +605,8 @@ def integrar_importacion(ps):
                     cl.municipio = mcipio
                     cl.barrio = brrio
                     cl.save()
+                    clientes.append(cl)
+    print(clientes)
     message += "integrado, total de facturas = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message

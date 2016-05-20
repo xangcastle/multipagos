@@ -237,7 +237,7 @@ def telecobranza(request):
     return render_to_response(template_name, data, context_instance=context)
 
 
-def crear_import_model(paquete):
+def crear_import_model(paquete, fecha_fac, fecha_venc, fecha_asig, fecha_fin):
     i, created = Factura.objects.get_or_create(no_cupon=paquete.cupon)
     i.suscriptor = paquete.cliente
     i.contrato = paquete.contrato
@@ -258,10 +258,14 @@ def crear_import_model(paquete):
     i.tel_contacto = paquete.get_telefono()
     i.direccion = paquete.direccion
     i.saldo_pend_factura = paquete.total_mes_factura
-    i.comentario = "Cartera Corriente"
+    i.comentario = "COBRO"
+    i.fecha_fact = fecha_fac
+    i.fecha_venc = fecha_venc
+    i.fecha_asignacion = fecha_asig
+    i.descr_plan = paquete.servicio
     i.save()
 
 
-def cargar_para_cobro(ciclo):
+def cargar_para_cobro(ciclo, fecha_fac, fecha_venc, fecha_asig, fecha_fin):
     for p in ciclo.paquetes():
-        crear_import_model(p)
+        crear_import_model(p, fecha_fac, fecha_venc, fecha_asig, fecha_fin)

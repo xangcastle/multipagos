@@ -182,9 +182,9 @@ admin.site.register(TipoMora, tipo_mora_admin)
 
 class gestion_admin(admin.ModelAdmin):
     date_hierarchy = "fecha_gestion"
-    list_display = ('cliente', 'ciclo', 'departamento', 'municipio', 'barrio',
-        'tipo_gestion', 'fecha_asignacion', 'fecha_vencimiento',
-        'fecha_gestion', 'tipo_resultado', 'user', 'estado')
+    list_display = ('cliente', 'tipo_gestion', 'fecha_asignacion',
+        'fecha_vencimiento', 'fecha_gestion', 'tipo_resultado', 'user',
+        'estado')
     list_filter = (('fecha_gestion', DateRangeFilter), 'departamento',
         'municipio', 'ciclo', 'tipo_gestion', 'estado', 'user')
     readonly_fields = ('cliente', 'departamento', 'municipio', 'barrio',
@@ -215,7 +215,7 @@ class gestion_admin(admin.ModelAdmin):
 
     def reporte_gestiones(self, request, queryset):
         book = xlwt.Workbook(encoding='utf8')
-        sheet = book.add_sheet('untitled')
+        sheet = book.add_sheet('Reporte Gestiones')
 
         default_style = xlwt.Style.default_style
 

@@ -19,6 +19,7 @@ actions.add_to_site(site)
 from datetime import datetime
 from .views import cargar_para_cobro
 from daterange_filter.filter import DateRangeFilter
+from django.contrib.admin import widgets
 
 
 def download_file(path):
@@ -98,8 +99,6 @@ class paquete_admin(ImportExportModelAdmin):
         'fecha_entrega')
     actions = ['action_integrar', 'action_imprimir',
         'action_exportar', 'generar_pods']
-
-    change_list_template = 'admin/metropolitana/paquete/change_list.html'
 
     def action_integrar(self, request, queryset):
         msj = integrar(queryset)
@@ -192,6 +191,16 @@ class estadistica_ciclo(admin.ModelAdmin):
         numero = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
             choices=((1, 1), (2, 2), (3, 3)))
 
+    class option_cartera(forms.Form):
+        _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
+        fecha_factura = forms.DateField(widget=widgets.AdminDateWidget())
+        fecha_vencimiento_factura = forms.DateField(
+            widget=widgets.AdminDateWidget())
+        fecha_asignacion_cartera = forms.DateField(
+            widget=widgets.AdminDateWidget())
+        fecha_vencimiento_cartera = forms.DateField(
+            widget=widgets.AdminDateWidget())
+
     def generar_rendicion(self, request, queryset):
         form = None
         if 'apply' in request.POST:
@@ -222,19 +231,46 @@ class estadistica_ciclo(admin.ModelAdmin):
     generar_rendicion.short_description = \
     "Generar rendicion de los ciclos seleccionados"
 
+    def action_cagar_cartera(self, request, queryset):
+        message = ""
+        form = None
+
+        if 'apply' in request.POST:
+            form = self.option_cartera(request.POST)
+            if form.is_valid():
+                for c in queryset:
+                    cargar_para_cobro(c, form.cleaned_data['fecha_factura'],
+                    form.cleaned_data['fecha_vencimiento_factura'],
+                    form.cleaned_data['fecha_asignacion_cartera'],
+                    form.cleaned_data['fecha_vencimiento_cartera'])
+                message = "facturas de los ciclos seleccionados fueron"\
+                + " cargados a la aplicacion de cartera y cobro"
+                self.message_user(request, message)
+                return HttpResponseRedirect(
+                    "/admin/metropolitana/estadisticaciclo")
+
+        if not form:
+            form = self.option_cartera(
+                initial={
+                    '_selected_action': request.POST.getlist(
+                        admin.ACTION_CHECKBOX_NAME)})
+        data = {'queryset': queryset, 'form': form,
+            'header_tittle': 'Por Favor complete todos los campos',
+            'explanation':
+                'Los siguientes ciclo se pasaran a la aplicacion de Cartera:',
+                'action': 'action_cagar_cartera'}
+        data.update(csrf(request))
+        self.message_user(request, message)
+        return render_to_response('metropolitana/numero_rendicion.html', data)
+
+    action_cagar_cartera.short_description = \
+    'cargar aplicacion de cartera'
+
     def action_integrar(self, request, queryset):
         message = ""
         for c in queryset:
             ps = Paquete.objects.filter(ciclo=c.ciclo, mes=c.mes, ano=c.ano)
             message = integrar(ps)
-        self.message_user(request, message)
-    action_integrar.short_description = \
-    'integrar ciclos seleccionados'
-
-    def action_cagar_cartera(self, request, queryset):
-        message = "facturas de los ciclos seleccionados fueron cargados a la aplicacion de cartera y cobro"
-        for c in queryset:
-            cargar_para_cobro(c)
         self.message_user(request, message)
     action_integrar.short_description = \
     'integrar ciclos seleccionados'
@@ -317,12 +353,17 @@ class zona_barrio_admin(base_tabular):
 
 
 class zona_admin(admin.ModelAdmin):
-    list_display = ('code', 'name', 'municipio', 'departamento')
+    list_display = ('code', 'name', 'departamento')
     list_filter = ('departamento', )
-    search_fields = ('departamento__name', 'municipio__name')
+    search_fields = ('departamento__name',)
     inlines = [zona_barrio_admin]
     readonly_fields = ('code', )
-    fields = (('code', 'name'), ('departamento', 'municipio'))
+    fields = (('code', 'name'), 'departamento')
+    actions = ['action_autoasignar', ]
+
+    def action_autoasignar(self, request, queryset):
+        for q in queryset:
+            q.autoasignar()
 
 
 class up_admin(ImportExportModelAdmin):
