@@ -10,7 +10,7 @@ from cartera.models import Gestion, TipoGestion
 from metropolitana.models import Paquete
 from verificaciones.models import Verificacion
 from django.core import serializers
-from datetime import date
+from datetime import date, datetime
 
 
 class index(TemplateView):
@@ -257,22 +257,30 @@ class reporte_gestiones(TemplateView):
 ##REALIZADO
 
     def realizado_distribucion(self, user):
-        return Paquete.objects.filter(user=user, estado__in=['ENTREGADO',
-            'REZAGADO'], fecha_entrega=date.today())
+        return Paquete.objects.filter(user=user,
+            fecha_entrega__day=datetime.now().day,
+            fecha_entrega__month=datetime.now().month,
+            fecha_entrega__year=datetime.now().year)
 
     def realizado_cobros(self, user):
         return Gestion.objects.filter(user=user,
             tipo_gestion=TipoGestion.objects.get(code="0002"),
-            fecha_gestion=date.today())
+            fecha_gestion__day=datetime.now().day,
+            fecha_gestion__month=datetime.now().month,
+            fecha_gestion__year=datetime.now().year)
 
     def realizado_cortes(self, user):
         return Gestion.objects.filter(user=user,
             tipo_gestion=TipoGestion.objects.get(code="0003"),
-            fecha_gestion=date.today())
+            fecha_gestion__day=datetime.now().day,
+            fecha_gestion__month=datetime.now().month,
+            fecha_gestion__year=datetime.now().year)
 
     def realizado_verificaciones(self, user):
         return Verificacion.objects.filter(user=user,
-            fecha_entrega=date.today())
+            fecha_entrega__day=datetime.now().day,
+            fecha_entrega__month=datetime.now().month,
+            fecha_entrega__year=datetime.now().year)
 
     def user_pendiente(self, user):
         asignacion = {}
