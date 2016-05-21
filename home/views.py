@@ -10,7 +10,7 @@ from cartera.models import Gestion, TipoGestion
 from metropolitana.models import Paquete
 from verificaciones.models import Verificacion
 from django.core import serializers
-from datetime import datetime
+from datetime import date
 
 
 class index(TemplateView):
@@ -235,14 +235,75 @@ class reporte_gestiones(TemplateView):
                 is_supervisor=False, user=user)
             profile.save()
             return profile
+##PENDIENTE
 
-    def user_distribucion(self, user):
+    def pendiente_distribucion(self, user):
         return Paquete.objects.filter(user=user, estado='PENDIENTE',
-            fecha_asignacion_user__lte=datetime.now())
+            fecha_asignacion_user__lte=date.today())
 
-    def user_asignado(self, user):
+    def pendiente_cobros(self, user):
+        return Gestion.objects.filter(user=user, estado="PENDIENTE",
+            tipo_gestion=TipoGestion.objects.get(code="0002"),
+            fecha_asignacion__lte=date.today())
+
+    def pendiente_cortes(self, user):
+        return Gestion.objects.filter(user=user, estado="PENDIENTE",
+            tipo_gestion=TipoGestion.objects.get(code="0003"),
+            fecha_asignacion__lte=date.today())
+
+    def pendiente_verificaciones(self, user):
+        return Verificacion.objects.filter(user=user, estado='PENDIENTE',
+            fecha_asignacion__lte=date.today())
+##REALIZADO
+
+    def realizado_distribucion(self, user):
+        return Paquete.objects.filter(user=user, estado__in=['ENTREGADO',
+            'REZAGADO'], fecha_entrega=date.today())
+
+    def realizado_cobros(self, user):
+        return Gestion.objects.filter(user=user,
+            tipo_gestion=TipoGestion.objects.get(code="0002"),
+            fecha_gestion=date.today())
+
+    def realizado_cortes(self, user):
+        return Gestion.objects.filter(user=user,
+            tipo_gestion=TipoGestion.objects.get(code="0003"),
+            fecha_gestion=date.today())
+
+    def realizado_verificaciones(self, user):
+        return Verificacion.objects.filter(user=user,
+            fecha_entrega=date.today())
+
+    def user_pendiente(self, user):
         asignacion = {}
-        asignacion['distribucion'] = self.user_distribucion(user).count()
+        asignacion['distribucion'] = self.pendiente_distribucion(user).count()
+        asignacion['cobros'] = self.pendiente_cobros(user).count()
+        asignacion['cortes'] = self.pendiente_cortes(user).count()
+        asignacion['verificaciones'] = \
+        self.pendiente_verificaciones(user).count()
+        asignacion['total'] = asignacion['distribucion'] + \
+        asignacion['cobros'] + asignacion['cortes'] + \
+        asignacion['verificaciones']
+        return asignacion
+
+    def user_realizado(self, user):
+        asignacion = {}
+        asignacion['distribucion'] = self.realizado_distribucion(user).count()
+        asignacion['cobros'] = self.realizado_cobros(user).count()
+        asignacion['cortes'] = self.realizado_cortes(user).count()
+        asignacion['verificaciones'] = \
+        self.realizado_verificaciones(user).count()
+        asignacion['total'] = asignacion['distribucion'] + \
+        asignacion['cobros'] + asignacion['cortes'] + \
+        asignacion['verificaciones']
+        return asignacion
+
+    def user_estadisticas(self, user):
+        asignacion = {}
+        asignacion['pendiente'] = self.user_pendiente(user)
+        asignacion['realizado'] = self.user_realizado(user)
+        asignacion['total'] = asignacion['pendiente']['total'] + \
+        asignacion['realizado']['total']
         return asignacion
 
     def get_users(self, context):
@@ -258,7 +319,7 @@ class reporte_gestiones(TemplateView):
             obj = {}
             obj['user'] = u
             obj['profile'] = self.get_profile(u)
-            obj['asignado'] = self.user_asignado(u)
+            obj['estadisticas'] = self.user_estadisticas(u)
             data.append(obj)
         return data
 
