@@ -11,6 +11,7 @@ from metropolitana.models import Paquete
 from verificaciones.models import Verificacion
 from django.core import serializers
 from datetime import date, datetime
+from django.db.models import Q
 
 
 class index(TemplateView):
@@ -285,22 +286,47 @@ class reporte_gestiones(TemplateView):
 ##ASIGNADO
 
     def asignado_distribucion(self, user):
-        return Paquete.objects.filter(user=user,
-            fecha_asignacion_user__lte=date.today())
+        return Paquete.objects.filter(
+            Q(user=user, estado='PENDIENTE',
+            fecha_asignacion_user__lte=date.today()) |
+            Q(user=user,
+            fecha_entrega__day=datetime.now().day,
+            fecha_entrega__month=datetime.now().month,
+            fecha_entrega__year=datetime.now().year)
+        )
 
     def asignado_cobros(self, user):
-        return Gestion.objects.filter(user=user,
+        return Gestion.objects.filter(
+            Q(user=user, estado="PENDIENTE",
             tipo_gestion=TipoGestion.objects.get(code="0002"),
-            fecha_asignacion__lte=date.today())
+            fecha_asignacion__lte=date.today()) |
+            Q(user=user,
+            tipo_gestion=TipoGestion.objects.get(code="0002"),
+            fecha_gestion__day=datetime.now().day,
+            fecha_gestion__month=datetime.now().month,
+            fecha_gestion__year=datetime.now().year)
+        )
 
     def asignado_cortes(self, user):
-        return Gestion.objects.filter(user=user,
+        return Gestion.objects.filter(
+            Q(user=user, estado="PENDIENTE",
             tipo_gestion=TipoGestion.objects.get(code="0003"),
-            fecha_asignacion__lte=date.today())
+            fecha_asignacion__lte=date.today()) |
+            Q(user=user,
+            tipo_gestion=TipoGestion.objects.get(code="0003"),
+            fecha_gestion__day=datetime.now().day,
+            fecha_gestion__month=datetime.now().month,
+            fecha_gestion__year=datetime.now().year))
 
     def asignado_verificaciones(self, user):
-        return Verificacion.objects.filter(user=user,
-            fecha_asignacion__lte=date.today())
+        return Verificacion.objects.filter(
+            Q(user=user, estado='PENDIENTE',
+            fecha_asignacion__lte=date.today()) |
+            Q(user=user,
+            fecha_entrega__day=datetime.now().day,
+            fecha_entrega__month=datetime.now().month,
+            fecha_entrega__year=datetime.now().year)
+        )
 
     def user_pendiente(self, user):
         asignacion = {}
