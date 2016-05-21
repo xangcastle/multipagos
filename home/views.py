@@ -338,17 +338,19 @@ class reporte_gestiones(TemplateView):
         asignacion['verificaciones']
         return asignacion
 
+    def calcular_cumplimiento(self, asignado, realizado):
+        if asignado < 1:
+            return 0.0
+        else:
+            return round((realizado * 100) / asignado, 0)
+
     def user_estadisticas(self, user):
         asignacion = {}
         asignacion['pendiente'] = self.user_pendiente(user)
         asignacion['realizado'] = self.user_realizado(user)
         asignacion['asignado'] = self.user_asignado(user)
-        asignacion['total'] = asignacion['pendiente']['total'] + \
-        asignacion['realizado']['total'] + \
-        asignacion['asignado']['total']
-        asignacion['cumplimiento'] = round((
-            asignacion['realizado']['total'] * 100) /
-        asignacion['total'], 0)
+        asignacion['cumplimiento'] = self.calcular_cumplimiento(
+            asignacion['asignado']['total'], asignacion['realizado']['total'])
         return asignacion
 
     def get_users(self, context):
