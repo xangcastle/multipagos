@@ -368,7 +368,7 @@ class reporte_gestiones(TemplateView):
         if asignado < 1:
             return 0.0
         else:
-            return round((realizado * 100) / asignado, 0)
+            return round((realizado * 100) / asignado, 1)
 
     def user_estadisticas(self, user):
         asignacion = {}
