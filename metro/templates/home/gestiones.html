@@ -17,11 +17,14 @@ div .name {
     padding-left: 55px;
     padding-top: 15px;
 }
+#usuarios td {
+    text-align: left;
+}
 {% endblock css %}
 
 {% block content %}
 {% if profile.is_supervisor %}
-    <table class="table">
+    <table class="table" id='usuarios'>
         <thead>
             <tr>
                 <th>Gestor</th>
@@ -42,10 +45,10 @@ div .name {
                     <div class="name">{{ gestor.user.username }}</div>
                 </div>
                 </td>
-            <td>0</td>
+            <td>{{ gestor.estadisticas.asignado.total }}</td>
             <td>{{ gestor.estadisticas.realizado.total }}</td>
             <td>{{ gestor.estadisticas.pendiente.total }}</td>
-            <td>0%</td>
+            <td>{{ gestor.estadisticas.cumplimiento }}%</td>
         </tr>
     {% endfor%}
         </tbody>

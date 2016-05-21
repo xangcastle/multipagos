@@ -282,6 +282,26 @@ class reporte_gestiones(TemplateView):
             fecha_entrega__month=datetime.now().month,
             fecha_entrega__year=datetime.now().year)
 
+##ASIGNADO
+
+    def asignado_distribucion(self, user):
+        return Paquete.objects.filter(user=user,
+            fecha_asignacion_user__lte=date.today())
+
+    def asignado_cobros(self, user):
+        return Gestion.objects.filter(user=user,
+            tipo_gestion=TipoGestion.objects.get(code="0002"),
+            fecha_asignacion__lte=date.today())
+
+    def asignado_cortes(self, user):
+        return Gestion.objects.filter(user=user,
+            tipo_gestion=TipoGestion.objects.get(code="0003"),
+            fecha_asignacion__lte=date.today())
+
+    def asignado_verificaciones(self, user):
+        return Verificacion.objects.filter(user=user,
+            fecha_asignacion__lte=date.today())
+
     def user_pendiente(self, user):
         asignacion = {}
         asignacion['distribucion'] = self.pendiente_distribucion(user).count()
@@ -306,12 +326,29 @@ class reporte_gestiones(TemplateView):
         asignacion['verificaciones']
         return asignacion
 
+    def user_asignado(self, user):
+        asignacion = {}
+        asignacion['distribucion'] = self.asignado_distribucion(user).count()
+        asignacion['cobros'] = self.asignado_cobros(user).count()
+        asignacion['cortes'] = self.asignado_cortes(user).count()
+        asignacion['verificaciones'] = \
+        self.asignado_verificaciones(user).count()
+        asignacion['total'] = asignacion['distribucion'] + \
+        asignacion['cobros'] + asignacion['cortes'] + \
+        asignacion['verificaciones']
+        return asignacion
+
     def user_estadisticas(self, user):
         asignacion = {}
         asignacion['pendiente'] = self.user_pendiente(user)
         asignacion['realizado'] = self.user_realizado(user)
+        asignacion['asignado'] = self.user_asignado(user)
         asignacion['total'] = asignacion['pendiente']['total'] + \
-        asignacion['realizado']['total']
+        asignacion['realizado']['total'] + \
+        asignacion['asignado']['total']
+        asignacion['cumplimiento'] = round((
+            asignacion['realizado']['total'] * 100) /
+        asignacion['total'], 0)
         return asignacion
 
     def get_users(self, context):
