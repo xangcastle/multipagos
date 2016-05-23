@@ -452,6 +452,12 @@ class Gestion(models.Model):
     class Meta:
         verbose_name_plural = "gestiones"
 
+    def aplicar(self):
+        if self.cliente:
+            self.cliente.get_knowed_position()
+            self.cliente.comentario = self.tipo_resultado.descripcion
+            self.cliente.save()
+
 
 class TipoGestion(Entidad):
 
