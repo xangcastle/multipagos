@@ -287,7 +287,7 @@ class reporte_gestiones(TemplateView):
 
     def asignado_distribucion(self, user):
         return Paquete.objects.filter(
-            Q(user=user, estado='PENDIENTE',
+            Q(user=user, estado='PENDIENTE', cerrado=False,
             fecha_asignacion_user__lte=date.today()) |
             Q(user=user,
             fecha_entrega__day=datetime.now().day,
