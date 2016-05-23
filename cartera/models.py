@@ -454,7 +454,6 @@ class Gestion(models.Model):
 
     def aplicar(self):
         if self.cliente:
-            self.cliente.get_knowed_position()
             self.cliente.comentario = self.tipo_resultado.descripcion
             self.cliente.save()
 
