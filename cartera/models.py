@@ -139,7 +139,7 @@ class Cliente(Entidad):
         return o
 
     def get_knowed_position(self):
-        if self.entregas():
+        if self.facturas():
             entregadas = self.facturas().filter(
                 estado='ENTREGADO').order_by('-fecha_entrega')
             data = []
