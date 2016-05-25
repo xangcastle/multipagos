@@ -12,7 +12,7 @@ from verificaciones.models import Verificacion
 from django.core import serializers
 from datetime import date, datetime
 from django.db.models import Q
-
+from metropolitana.views import calcular_cortes
 
 class index(TemplateView):
     template_name = "home/base.html"
@@ -118,6 +118,7 @@ class panel_asignacion(TemplateView):
             o = model_to_dict(z)
             o['entregas'] = calcular_entregas(z.barrios())
             o['cobros'] = calcular_cobros(z.barrios())
+            o['cortes'] = calcular_cortes(z.barrios())
             o['verificaciones'] = calcular_verificaciones(z.barrios())
             o['total'] = o['entregas'] + o['cobros'] + o['verificaciones']
             data.append(o)
