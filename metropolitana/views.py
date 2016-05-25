@@ -101,8 +101,18 @@ def get_cobros(barrio):
         tipo_gestion=TipoGestion.objects.get(code='0002'))
 
 
+def get_cortes(barrio):
+    return Gestion.objects.filter(barrio=barrio, estado='PENDIENTE',
+        user__isnull=True,
+        tipo_gestion=TipoGestion.objects.get(code='0003'))
+
+
 def calcular_cobros(barrio):
     return get_cobros(barrio).count()
+
+
+def calcular_cortes(barrio):
+    return get_cortes(barrio).count()
 
 
 def get_verificaciones(barrio):
@@ -142,6 +152,7 @@ def get_zonas(request):
             bar_json['name'] = b.name
             bar_json['entregas'] = calcular_entregas(b)
             bar_json['cobros'] = calcular_cobros(b)
+            bar_json['cortes'] = calcular_cortes(b)
             bar_json['verificaciones'] = calcular_verificaciones(b)
             barrios.append(bar_json)
     obj_json['barrios'] = barrios
@@ -184,6 +195,10 @@ def asignacion_paquete(request):
             except:
                 cobros = None
             try:
+                cortes = int(request.POST.getlist('corte', '0')[n])
+            except:
+                cortes = None
+            try:
                 verificaciones = int(request.POST.getlist(
                     'verificacion', '0')[n])
             except:
@@ -192,6 +207,8 @@ def asignacion_paquete(request):
                 asignar_facturas(b, u, entregas, fecha)
             if cobros > 0:
                 asignar_cobros(b, u, cobros, fecha)
+            if cortes > 0:
+                asignar_cortes(b, u, cortes, fecha)
             if verificaciones > 0:
                 asignar_verificaciones(b, u, verificaciones, fecha)
         data['mensaje'] = 'Tarea asignada con exito!'
@@ -211,6 +228,15 @@ def asignar_facturas(barrio, user, cantidad, fecha):
 
 def asignar_cobros(barrio, user, cantidad, fecha):
     ps = get_cobros(barrio)[:cantidad]
+    for p in ps:
+        p.user = user
+        p.fecha_asignacion = fecha
+        p.save()
+    return ps
+
+
+def asignar_cortes(barrio, user, cantidad, fecha):
+    ps = get_cortes(barrio)[:cantidad]
     for p in ps:
         p.user = user
         p.fecha_asignacion = fecha
