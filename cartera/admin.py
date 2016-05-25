@@ -233,6 +233,7 @@ class gestion_admin(admin.ModelAdmin):
         sheet.write(0, 10, 'comentario', style=default_style)
         sheet.write(0, 11, 'fecha de compromiso de pago', style=default_style)
         sheet.write(0, 12, 'fecha de gestion', style=default_style)
+        sheet.write(0, 13, 'usuario', style=default_style)
 
         for row, gestion in enumerate(values_list):
             sheet.write(row + 1, 0, gestion.cliente.contrato,
@@ -259,6 +260,8 @@ class gestion_admin(admin.ModelAdmin):
             sheet.write(row + 1, 11, self.format_fecha(gestion.fecha_promesa),
                 style=default_style)
             sheet.write(row + 1, 12, self.format_fecha(gestion.fecha_gestion),
+                style=default_style)
+            sheet.write(row + 1, 13, gestion.user.username,
                 style=default_style)
 
         response = HttpResponse(content_type='application/vnd.ms-excel')
