@@ -222,34 +222,43 @@ class gestion_admin(admin.ModelAdmin):
         values_list = queryset
         sheet.write(0, 0, 'contrato', style=default_style)
         sheet.write(0, 1, 'nombre del cliente', style=default_style)
-        sheet.write(0, 2, 'ciclo', style=default_style)
-        sheet.write(0, 3, 'servicio', style=default_style)
-        sheet.write(0, 4, 'gestion', style=default_style)
-        sheet.write(0, 5, 'resultado de gestion', style=default_style)
-        sheet.write(0, 6, 'motivo de no pago', style=default_style)
-        sheet.write(0, 7, 'comentario', style=default_style)
-        sheet.write(0, 8, 'fecha de compromiso de pago', style=default_style)
-        sheet.write(0, 9, 'fecha de gestion', style=default_style)
+        sheet.write(0, 2, 'departamento', style=default_style)
+        sheet.write(0, 3, 'municipio', style=default_style)
+        sheet.write(0, 4, 'barrio', style=default_style)
+        sheet.write(0, 5, 'ciclo', style=default_style)
+        sheet.write(0, 6, 'servicio', style=default_style)
+        sheet.write(0, 7, 'gestion', style=default_style)
+        sheet.write(0, 8, 'resultado de gestion', style=default_style)
+        sheet.write(0, 9, 'motivo de no pago', style=default_style)
+        sheet.write(0, 10, 'comentario', style=default_style)
+        sheet.write(0, 11, 'fecha de compromiso de pago', style=default_style)
+        sheet.write(0, 12, 'fecha de gestion', style=default_style)
 
         for row, gestion in enumerate(values_list):
             sheet.write(row + 1, 0, gestion.cliente.contrato,
                 style=default_style)
             sheet.write(row + 1, 1, gestion.cliente.name, style=default_style)
-            sheet.write(row + 1, 2, gestion.cliente.ciclo, style=default_style)
-            sheet.write(row + 1, 3, gestion.cliente.descr_plan,
+            sheet.write(row + 1, 2, gestion.cliente.departamento.name,
                 style=default_style)
-            sheet.write(row + 1, 4, gestion.tipo_gestion.name,
+            sheet.write(row + 1, 3, gestion.cliente.municipio.name,
                 style=default_style)
-            sheet.write(row + 1, 5,
+            sheet.write(row + 1, 4, gestion.cliente.barrio.name,
+                style=default_style)
+            sheet.write(row + 1, 5, gestion.cliente.ciclo, style=default_style)
+            sheet.write(row + 1, 6, gestion.cliente.descr_plan,
+                style=default_style)
+            sheet.write(row + 1, 7, gestion.tipo_gestion.name,
+                style=default_style)
+            sheet.write(row + 1, 8,
                 self.format_resultado(gestion.tipo_resultado),
                 style=default_style)
-            sheet.write(row + 1, 6,
+            sheet.write(row + 1, 9,
                 self.format_descripcion(gestion.tipo_resultado),
                 style=default_style)
-            sheet.write(row + 1, 7, gestion.comentario, style=default_style)
-            sheet.write(row + 1, 8, self.format_fecha(gestion.fecha_promesa),
+            sheet.write(row + 1, 10, gestion.comentario, style=default_style)
+            sheet.write(row + 1, 11, self.format_fecha(gestion.fecha_promesa),
                 style=default_style)
-            sheet.write(row + 1, 9, self.format_fecha(gestion.fecha_gestion),
+            sheet.write(row + 1, 12, self.format_fecha(gestion.fecha_gestion),
                 style=default_style)
 
         response = HttpResponse(content_type='application/vnd.ms-excel')
