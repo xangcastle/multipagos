@@ -12,7 +12,6 @@
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/tipsy/1.0/javascripts/jquery.tipsy.js"></script>
 <link rel="stylesheet" type="text/css" href="http://xliberation.com/parse/colortable/css/schemer.css"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/tipsy/1.0/stylesheets/tipsy.css">
-
 {% endblock extrahead %}
 {% block css %}
 path {  stroke: #fff; }
@@ -113,32 +112,25 @@ path {  stroke: #fff; }
 {% block content %}
 {% if profile.is_supervisor %}
 {% csrf_token %}
-<div>
-    <div class="panel panel-default">
-        <div class="panel-body" id="panelEntrega">
-            {% if mensaje %}
-            <div class="alert alert-{{ msgclass }}">
-                {{ mensaje }}
-            </div>
-            {% endif %}
-            <div id="histogram"></div>
-            <div style="max-height:350px; overflow-y:auto;">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Barrio</th>
-                            <th>Entregas</th>
-                            <th>Cobros</th>
-                            <th>Cortes</th>
-                            <th>Verificaciones</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-        <hr />
+<div class="panel-body" id="panelEntrega">
+    {% if mensaje %}
+    <div class="alert alert-{{ msgclass }}">
+        {{ mensaje }}
     </div>
+    {% endif %}
+    <div id="histogram"></div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Barrio</th>
+                <th>Entregas</th>
+                <th>Cobros</th>
+                <th>Cortes</th>
+                <th>Verificaciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 {% else %}
  <h3>Usted no es un supervisor</h3>
 {% endif %}
