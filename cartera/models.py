@@ -327,6 +327,8 @@ class import_model(models.Model):
         c.save()
         if self.comentario == "COBRO":
             c.generar_gestion(TipoGestion.objects.get(code='0002'))
+        if self.comentario == "CORTE":
+            c.generar_gestion(TipoGestion.objects.get(code='0003'))
         return c
 
     def get_factura(self):
