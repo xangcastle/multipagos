@@ -145,7 +145,7 @@ def get_zonas(request):
     barrios = []
     for b in z.barrios():
         if calcular_entregas(b) + calcular_cobros(b) + \
-        calcular_verificaciones(b) > 0:
+        calcular_verificaciones(b) + calcular_cortes(b) > 0:
             bar_json = {}
             bar_json['pk'] = b.id
             bar_json['code'] = b.code
@@ -180,6 +180,7 @@ def asignacion_paquete(request):
         'msgclass': 'info'}
     template_name = "metropolitana/asignacion.html"
     if request.method == "POST":
+        print('peticion recibida')
         t = len(request.POST.getlist('barrio', ''))
         u = User.objects.get(id=int(request.POST.get('usuario', '')))
         fecha = request.POST.get('fecha', '')
@@ -208,6 +209,7 @@ def asignacion_paquete(request):
             if cobros > 0:
                 asignar_cobros(b, u, cobros, fecha)
             if cortes > 0:
+                print('asignando cortes....')
                 asignar_cortes(b, u, cortes, fecha)
             if verificaciones > 0:
                 asignar_verificaciones(b, u, verificaciones, fecha)
@@ -236,6 +238,7 @@ def asignar_cobros(barrio, user, cantidad, fecha):
 
 
 def asignar_cortes(barrio, user, cantidad, fecha):
+    print('print asignando cortes')
     ps = get_cortes(barrio)[:cantidad]
     for p in ps:
         p.user = user
