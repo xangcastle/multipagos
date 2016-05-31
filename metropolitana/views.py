@@ -1,18 +1,13 @@
 from django.views.generic.base import TemplateView
 import json
 from django.http.response import HttpResponse
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from .models import *
 from digitalizacion.models import *
 from verificaciones.models import *
-from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 from .models import *
 from movil.models import UserProfile
-from django.contrib.auth.models import User
-from cartera.models import import_model as Factura, Cliente, Gestion, \
+from cartera.models import import_model as Factura, Gestion, \
 TipoGestion
 
 
@@ -20,79 +15,9 @@ class home(TemplateView):
     template_name = "base/base.html"
 
 
-class indexar(TemplateView):
-    template_name = "metropolitana/pods.html"
-
-
-class verificacion_paquete(TemplateView):
-    template_name = "metropolitana/verificacion.html"
-
-
-class entrega_paquete(TemplateView):
-    template_name = "metropolitana/entrega.html"
-
-
-def datos_paquete_(request):
-
-    if request.method == 'GET':
-        p = Paquete()
-        try:
-            p = Paquete.objects.get(barra=request.GET.get('barra', ''))
-            datos = {'cliente': p.cliente, 'departamento': p.departamento,
-                'municipio': p.municipio, 'lote': 23,
-                'cantidad': 5, 'clase': estado(p)[0],
-                'valor': estado(p)[1]}
-            i = Impresion(paquete=p, user=request.user)
-            i.save()
-        except p.DoesNotExist:
-            datos = {'cliente': 'nada'}
-        resp = HttpResponse(json.dumps(datos),
-            content_type='application/json')
-        resp["Access-Control-Allow-Origin"] = "*"
-        resp["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        resp["Access-Control-Allow-Headers"] = "X-Requested-With"
-        return resp
-    else:
-        datos = {'nombre': 'nada'}
-        resp = HttpResponse(json.dumps(datos),
-            content_type='application/json')
-        resp["Access-Control-Allow-Origin"] = "*"
-        resp["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        resp["Access-Control-Allow-Headers"] = "X-Requested-With"
-        return resp
-
-
-from django.core import serializers
-
-
-def datos_paquete(request):
-    p = Paquete()
-    try:
-        p = Paquete.objects.get(barra=request.GET.get('barra', ''))
-        i = Impresion(paquete=p, user=request.user)
-        i.save()
-    except:
-        pass
-    data = serializers.serialize('json', [p, ])
-    struct = json.loads(data)
-    data = json.dumps(struct[0])
-    return HttpResponse(data, content_type='application/json')
-
-
-def descarga(request):
-    response = HttpResponse(content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename=%s' % "1065.pdf"
-    response['X-Sendfile'] = "/home/abel/PDF/1075.pdf"
-    return response
-
-
 def get_entregas(barrio):
     return Paquete.objects.filter(idbarrio=barrio, estado='PENDIENTE',
         cerrado=False, user__isnull=True)
-
-
-def calcular_entregas(barrio):
-    return get_entregas(barrio).count()
 
 
 def get_cobros(barrio):
@@ -105,14 +30,6 @@ def get_cortes(barrio):
     return Gestion.objects.filter(barrio=barrio, estado='PENDIENTE',
         user__isnull=True,
         tipo_gestion=TipoGestion.objects.get(code='0003'))
-
-
-def calcular_cobros(barrio):
-    return get_cobros(barrio).count()
-
-
-def calcular_cortes(barrio):
-    return get_cortes(barrio).count()
 
 
 def get_verificaciones(barrio):
@@ -171,54 +88,6 @@ def get_users_zona(request):
     return HttpResponse(data, content_type='application/json')
 
 
-@login_required(login_url='/admin/login/')
-def asignacion_paquete(request):
-    context = RequestContext(request)
-    data = {'zonas': Zona.objects.all().order_by('name'),
-        'mensaje': 'En esta seccion usted podra asignar las distintas tareas'
-        + ' en cada barrio al gestor hasta una cantidad maxima de x entregas',
-        'msgclass': 'info'}
-    template_name = "metropolitana/asignacion.html"
-    if request.method == "POST":
-        print('peticion recibida')
-        t = len(request.POST.getlist('barrio', ''))
-        u = User.objects.get(id=int(request.POST.get('usuario', '')))
-        fecha = request.POST.get('fecha', '')
-        for n in range(0, t):
-            idb = int(request.POST.getlist('barrio', '0')[n])
-            b = Barrio.objects.get(id=idb)
-            try:
-                entregas = int(request.POST.getlist('entrega', '0')[n])
-            except:
-                entregas = None
-            try:
-                cobros = int(request.POST.getlist('cobro', '0')[n])
-            except:
-                cobros = None
-            try:
-                cortes = int(request.POST.getlist('corte', '0')[n])
-            except:
-                cortes = None
-            try:
-                verificaciones = int(request.POST.getlist(
-                    'verificacion', '0')[n])
-            except:
-                verificaciones = None
-            if entregas > 0:
-                asignar_facturas(b, u, entregas, fecha)
-            if cobros > 0:
-                asignar_cobros(b, u, cobros, fecha)
-            if cortes > 0:
-                print('asignando cortes....')
-                asignar_cortes(b, u, cortes, fecha)
-            if verificaciones > 0:
-                asignar_verificaciones(b, u, verificaciones, fecha)
-        data['mensaje'] = 'Tarea asignada con exito!'
-        data['msgclass'] = 'success'
-
-    return render_to_response(template_name, data, context_instance=context)
-
-
 def asignar_facturas(barrio, user, cantidad, fecha):
     ps = get_entregas(barrio)[:cantidad]
     for p in ps:
@@ -254,16 +123,6 @@ def asignar_verificaciones(barrio, user, cantidad, fecha):
         p.fecha_asignacion_user = fecha
         p.save()
     return ps
-
-
-@login_required(login_url='/admin/login/')
-def telecobranza(request):
-    template_name = "metropolitana/telecobranza.html"
-    data = {}
-    context = RequestContext(request)
-    if request.method == "POST":
-        pass
-    return render_to_response(template_name, data, context_instance=context)
 
 
 def crear_import_model(paquete, fecha_fac, fecha_venc, fecha_asig, fecha_fin):

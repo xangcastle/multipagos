@@ -36,7 +36,7 @@ div .name {
         </thead>
         <tbody>
     {% for gestor in gestores%}
-        <tr>
+        <tr id="{{ gestor.user.id }}">
             <td>
                 <div class="avatar"
                     {%if gestor.profile.foto %}
@@ -45,18 +45,147 @@ div .name {
                     <div class="name">{{ gestor.user.username }}</div>
                 </div>
                 </td>
-            <td>{{ gestor.estadisticas.asignado.total }}</td>
-            <td>{{ gestor.estadisticas.realizado.total }}</td>
-            <td>{{ gestor.estadisticas.pendiente.total }}</td>
-            <td>{{ gestor.estadisticas.cumplimiento }}%</td>
+            <td class="asignado"'>{{ gestor.estadisticas.asignado.total }}</td>
+            <td class="realizado">{{ gestor.estadisticas.realizado.total }}</td>
+            <td class="pendiente">{{ gestor.estadisticas.pendiente.total }}</td>
+            <td class="cumplimiento">{{ gestor.estadisticas.cumplimiento }}%</td>
         </tr>
     {% endfor%}
         </tbody>
     </table>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#mAsingned">
+        Launch demo modal
+    </button>
 {% else %}
  <h3>Usted no es un supervisor</h3>
 {% endif %}
 {% endblock content %}
 
 {% block javascript %}
+var html_entregas = function(usuario){
+    var html = $('<table class="table table-responsive"></table>');
+    html.append('<tbody></tbody>');
+    $.ajax('/home/entregas_pendientes/', {
+        type: "POST",
+        data: {'usuario': usuario},
+        success: function(data){
+            $.each(data, function(key, value){
+                var row = $('<tr></tr>');
+                row.append($('<td><input type="checkbox"></td>'));
+                row.append($('<td></td>').html(value.fields.cliente));
+                row.append($('<td></td>').html(value.fields.direccion));
+                html.append(row);
+                });
+            }
+        });
+    return html;
+}
+var html_verificaciones = function(usuario){
+    var html = $('<table class="table table-responsive"></table>');
+    html.append('<tbody></tbody>');
+    $.ajax('/home/verificaciones_pendientes/', {
+        type: "POST",
+        data: {'usuario': usuario},
+        success: function(data){
+            $.each(data, function(key, value){
+                var row = $('<tr></tr>');
+                row.append($('<td><input type="checkbox"></td>'));
+                row.append($('<td></td>').html(value.fields.nombre_cliente));
+                row.append($('<td></td>').html(value.fields.direccion));
+                html.append(row);
+                });
+            }
+        });
+    return html;
+}
+var html_cobros = function(usuario){
+    var html = $('<table class="table table-responsive"></table>');
+    html.append('<tbody></tbody>');
+    $.ajax('/home/cobros_pendientes/', {
+        type: "POST",
+        data: {'usuario': usuario},
+        success: function(data){
+            $.each(data, function(key, value){
+                var row = $('<tr></tr>');
+                row.append($('<td><input type="checkbox"></td>'));
+                row.append($('<td></td>').html(value.cliente));
+                row.append($('<td></td>').html(value.direccion));
+                html.append(row);
+                });
+            }
+        });
+    return html;
+}
+var html_cortes = function(usuario){
+    var html = $('<table class="table table-responsive"></table>');
+    html.append('<tbody></tbody>');
+    $.ajax('/home/cortes_pendientes/', {
+        type: "POST",
+        data: {'usuario': usuario},
+        success: function(data){
+            $.each(data, function(key, value){
+                var row = $('<tr></tr>');
+                row.append($('<td><input type="checkbox"></td>'));
+                row.append($('<td></td>').html(value.cliente));
+                row.append($('<td></td>').html(value.direccion));
+                html.append(row);
+                });
+            }
+        });
+    return html;
+}
+var ver_asignacion = function(){
+    var modal  = $('#mAsingned');
+    var entregas = modal.find("#entregas");
+    var cobros = modal.find("#cobros");
+    var cortes = modal.find("#cortes");
+    var verificaciones = modal.find("#verificaciones");
+    entregas.empty()
+        .append(html_entregas($(this).parent().prop('id')));
+    cobros.empty()
+        .append(html_cobros($(this).parent().prop('id')));
+    cortes.empty()
+        .append(html_cortes($(this).parent().prop('id')));
+    verificaciones.empty()
+        .append(html_verificaciones($(this).parent().prop('id')));
+    modal.modal('show');
+}
+$('#usuarios').on('dblclick', 'tr .pendiente', ver_asignacion);
+$('#usuarios').on('dblclick', 'tr .realizado', ver_asignacion);
 {% endblock javascript %}
+
+{% block modal %}
+<div class="modal fade" id="mAsingned" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Trabajo Asignado al Usuario</h4>
+    </div>
+    <div class="modal-body">
+        <div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#entregas" aria-controls="home" role="tab" data-toggle="tab">Entregas</a></li>
+                <li role="presentation"><a href="#cobros" aria-controls="profile" role="tab" data-toggle="tab">Cobros</a></li>
+                <li role="presentation"><a href="#cortes" aria-controls="messages" role="tab" data-toggle="tab">Cortes</a></li>
+                <li role="presentation"><a href="#verificaciones" aria-controls="messages" role="tab" data-toggle="tab">Verificaciones</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="entregas">Contenido Tab 1...</div>
+                <div role="tabpanel" class="tab-pane" id="cobros">Contenido Tab 2...</div>
+                <div role="tabpanel" class="tab-pane" id="cortes">Contenido Tab 3...</div>
+                <div role="tabpanel" class="tab-pane" id="verificaciones">Contenido Tab 4...</div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Desasignar</button>
+    </div>
+    </div>
+</div>
+</div>
+{% endblock modal %}

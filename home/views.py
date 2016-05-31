@@ -1,9 +1,6 @@
 from django.views.generic.base import TemplateView
 from metropolitana.models import Barrio, Zona
-import json
 from django.forms.models import model_to_dict
-from django.http.response import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from movil.models import UserProfile
 from django.contrib.auth.models import User
 from cartera.models import Gestion, TipoGestion
@@ -11,7 +8,7 @@ from metropolitana.models import Paquete
 from verificaciones.models import Verificacion
 from datetime import date, datetime
 from django.db.models import Q
-from metropolitana.views import *
+from .ajax import *
 
 
 def get_profile(view, user):
@@ -24,17 +21,17 @@ def get_profile(view, user):
         return profile
 
 
-def get_zonas(view, context):
+def profile_get_zonas(view, context):
     data = []
     zonas = Zona.objects.filter(
         departamento__in=context['profile'].departamentos.all()
         ).order_by('name')
     for z in zonas:
         o = model_to_dict(z)
-        o['entregas'] = calcular_entregas(z.barrios())
-        o['cobros'] = calcular_cobros(z.barrios())
-        o['cortes'] = calcular_cortes(z.barrios())
-        o['verificaciones'] = calcular_verificaciones(z.barrios())
+        o['entregas'] = get_entregas(z.barrios()).count()
+        o['cobros'] = get_gestiones(z.barrios(), '0002').count()
+        o['cortes'] = get_gestiones(z.barrios(), '0003').count()
+        o['verificaciones'] = get_verificaciones(z.barrios()).count()
         o['total'] = o['entregas'] + o['cobros'] + o['verificaciones'] + \
         o['cortes']
         data.append(o)
@@ -44,7 +41,7 @@ def get_zonas(view, context):
 def get_extra_context(view, request, *args, **kwargs):
     context = view.get_context_data()
     context['profile'] = get_profile(view, request.user)
-    context['zonas'] = get_zonas(view, context)
+    context['zonas'] = profile_get_zonas(view, context)
     return context
 
 
@@ -91,40 +88,14 @@ class panel_asignacion(TemplateView):
             if entregas > 0:
                 asignar_facturas(b, u, entregas, fecha)
             if cobros > 0:
-                asignar_cobros(b, u, cobros, fecha)
+                asignar_gestiones(b, '0002', u, cobros, fecha)
             if verificaciones > 0:
                 asignar_verificaciones(b, u, verificaciones, fecha)
             if cortes > 0:
-                asignar_cortes(b, u, cortes, fecha)
+                asignar_gestiones(b, '0003', u, cortes, fecha)
         context['mensaje'] = 'Tarea asignada con exito!'
         context['msgclass'] = 'success'
         return super(panel_asignacion, self).render_to_response(context)
-
-
-@csrf_exempt
-def info_barrio(request):
-    if request.is_ajax:
-        result = []
-        obj = Barrio.objects.get(id=request.POST.get('id', None))
-        if obj:
-            try:
-                result = obj.to_json()
-            except:
-                result = model_to_dict(obj)
-            data = json.dumps(result)
-    else:
-        data = []
-    return HttpResponse(data, content_type='application/json')
-
-
-@csrf_exempt
-def asignar_barrio(request):
-    if request.is_ajax:
-        barrio = Barrio.objects.get(id=request.POST.get('idbarrio', None))
-        zona = Zona.objects.get(id=request.POST.get('idzona', None))
-        zona.add_barrio(barrio)
-    data = json.dumps(model_to_dict(zona))
-    return HttpResponse(data, content_type='application/json')
 
 
 class carga_informacion(TemplateView):
@@ -292,7 +263,7 @@ class reporte_gestiones(TemplateView):
         for u in User.objects.filter(id__in=users):
             obj = {}
             obj['user'] = u
-            obj['profile'] = self.get_profile(u)
+            obj['profile'] = get_profile(self, u)
             obj['estadisticas'] = self.user_estadisticas(u)
             data.append(obj)
         return data
@@ -305,3 +276,120 @@ class reporte_gestiones(TemplateView):
     def post(self, request, *args, **kwargs):
         context = get_extra_context(self, request, *args, **kwargs)
         return super(reporte_gestiones, self).render_to_response(context)
+
+
+@csrf_exempt
+def get_users_zona(request):
+    zona_id = int(request.POST.get('zona_id', ''))
+    z = Zona.objects.get(id=zona_id)
+    data = serializers.serialize('json', usuarios_asignados(z))
+    struct = json.loads(data)
+    data = json.dumps(struct)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def info_barrio(request):
+    if request.is_ajax:
+        result = []
+        obj = Barrio.objects.get(id=request.POST.get('id', None))
+        if obj:
+            try:
+                result = obj.to_json()
+            except:
+                result = model_to_dict(obj)
+            data = json.dumps(result)
+    else:
+        data = []
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def asignar_barrio(request):
+    if request.is_ajax:
+        barrio = Barrio.objects.get(id=request.POST.get('idbarrio', None))
+        zona = Zona.objects.get(id=request.POST.get('idzona', None))
+        zona.add_barrio(barrio)
+    data = json.dumps(model_to_dict(zona))
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_zonas(request):
+    zona_id = int(request.POST.get('zona_id', ''))
+    data = []
+    z = Zona.objects.get(id=zona_id)
+    obj_json = {}
+    obj_json['pk'] = z.id
+    obj_json['code'] = z.code
+    obj_json['name'] = z.name
+    barrios = []
+    for b in z.barrios():
+        bs = Barrio.objects.filter(id=b.id)
+        if get_entregas(bs).count() + \
+        get_gestiones(bs, '0002').count() + \
+        get_gestiones(bs, '0003').count() + \
+        get_verificaciones(bs).count():
+            bar_json = {}
+            bar_json['pk'] = b.id
+            bar_json['code'] = b.code
+            bar_json['name'] = b.name
+            bar_json['entregas'] = get_entregas(bs).count()
+            bar_json['cobros'] = get_gestiones(bs, '0002').count()
+            bar_json['cortes'] = get_gestiones(bs, '0003').count()
+            bar_json['verificaciones'] = get_verificaciones(bs).count()
+            barrios.append(bar_json)
+    obj_json['barrios'] = barrios
+    data.append(obj_json)
+    data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def entregas_pendientes(request):
+    ps = reporte_gestiones().pendiente_distribucion(
+        User.objects.get(id=int(request.POST.get('usuario', ''))))
+    data = serializers.serialize('json',
+        ps)
+    struct = json.loads(data)
+    data = json.dumps(struct)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def cobros_pendientes(request):
+    ps = reporte_gestiones().pendiente_cobros(
+        User.objects.get(id=int(request.POST.get('usuario', ''))))
+    data = []
+    for p in ps:
+        obj = {}
+        obj['cliente'] = p.cliente.name
+        obj['direccion'] = p.cliente.direccion
+        data.append(obj)
+    data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def cortes_pendientes(request):
+    ps = reporte_gestiones().pendiente_cortes(
+        User.objects.get(id=int(request.POST.get('usuario', ''))))
+    data = []
+    for p in ps:
+        obj = {}
+        obj['cliente'] = p.cliente.name
+        obj['direccion'] = p.cliente.direccion
+        data.append(obj)
+    data = json.dumps(data)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def verificaciones_pendientes(request):
+    ps = reporte_gestiones().pendiente_verificaciones(
+        User.objects.get(id=int(request.POST.get('usuario', ''))))
+    data = serializers.serialize('json',
+        ps)
+    struct = json.loads(data)
+    data = json.dumps(struct)
+    return HttpResponse(data, content_type='application/json')

@@ -5,7 +5,7 @@
 {% block active %}asignacion{% endblock active %}
 
 {% block extrahead %}
-<script type="text/javascript" src="/static/metropolitana/js/asignacion.js"></script>
+<script type="text/javascript" src="/static/home/asignacion.js"></script>
 <script src="/static/metropolitana/js/moment-with-locales.js"></script>
 <script src="/static/metropolitana/js/bootstrap-datepicker.js"></script>
 <script src="/static/metropolitana/js/bootstrap-datepicker.es.js"></script>
@@ -52,7 +52,7 @@ path {  stroke: #fff; }
         text-align: center;
     }
     .tipsy-inner {
-        min-width: 280px;
+        min-width: 380px;
     }
     .tiptable-value {
         color:white;
@@ -142,8 +142,8 @@ path {  stroke: #fff; }
             {% for e in zonas %}
             {zona: '{{ e.name }}', total: {{ e.total }},
             desgloce: [
-            ['ENTREGAS', 'COBROS', 'VERIFICACIONES'],
-             [{{ e.entregas }}, {{ e.cobros }}, {{ e.verificaciones }}],
+            ['ENTREGAS', 'COBROS', 'CORTES', 'VERIFICACIONES'],
+             [{{ e.entregas }}, {{ e.cobros }}, {{ e.cortes }}, {{ e.verificaciones }}],
              ]
             },
              {% endfor %}
@@ -232,7 +232,7 @@ path {  stroke: #fff; }
         var html =  "<h3>"+zona+"</h3><div> Gestiones Pendientes por Tipo de Gestion</div>" +
             "<table class='tiptable'><tbody>"
         for (var i = 0; i < d.length; i++) {
-            html += makeATableRow (d[i][0],d[i][1],d[i][2])
+            html += makeATableRow (d[i][0],d[i][1],d[i][2],d[i][3])
         }
         html += "</tbody></table>";
         return html
