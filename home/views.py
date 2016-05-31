@@ -274,8 +274,18 @@ class reporte_gestiones(TemplateView):
         return super(reporte_gestiones, self).render_to_response(context)
 
     def post(self, request, *args, **kwargs):
+        desasignar(request.POST.getlist('entrega', ''), Paquete)
+        desasignar(request.POST.getlist('cobro', ''), Gestion)
+        desasignar(request.POST.getlist('corte', ''), Gestion)
+        desasignar(request.POST.getlist('verificacion', ''), Verificacion)
         context = get_extra_context(self, request, *args, **kwargs)
+        context['gestores'] = self.get_users(context)
         return super(reporte_gestiones, self).render_to_response(context)
+
+
+def desasignar(selected, model):
+    qs = model.objects.filter(id__in=selected)
+    qs.update(user=None)
 
 
 @csrf_exempt
@@ -363,6 +373,7 @@ def cobros_pendientes(request):
     data = []
     for p in ps:
         obj = {}
+        obj['id'] = p.id
         obj['cliente'] = p.cliente.name
         obj['direccion'] = p.cliente.direccion
         data.append(obj)
@@ -377,6 +388,7 @@ def cortes_pendientes(request):
     data = []
     for p in ps:
         obj = {}
+        obj['id'] = p.id
         obj['cliente'] = p.cliente.name
         obj['direccion'] = p.cliente.direccion
         data.append(obj)

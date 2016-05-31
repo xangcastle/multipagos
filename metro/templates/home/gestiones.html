@@ -23,6 +23,7 @@ div .name {
 {% endblock css %}
 
 {% block content %}
+{% csrf_token %}
 {% if profile.is_supervisor %}
     <table class="table" id='usuarios'>
         <thead>
@@ -53,15 +54,19 @@ div .name {
     {% endfor%}
         </tbody>
     </table>
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#mAsingned">
-        Launch demo modal
-    </button>
 {% else %}
  <h3>Usted no es un supervisor</h3>
 {% endif %}
 {% endblock content %}
 
 {% block javascript %}
+var create_row = function(tipo, field1, field2, field3){
+    var row = $('<tr></tr>');
+    row.append($('<td><input type="checkbox" name="check-'+tipo+'" data-tipo="'+tipo+'"><input type="hidden" value="' + field1 + '" id="primary"></td>'));
+    row.append($('<td></td>').html(field2));
+    row.append($('<td></td>').html(field3));
+    return row
+}
 var html_entregas = function(usuario){
     var html = $('<table class="table table-responsive"></table>');
     html.append('<tbody></tbody>');
@@ -70,10 +75,7 @@ var html_entregas = function(usuario){
         data: {'usuario': usuario},
         success: function(data){
             $.each(data, function(key, value){
-                var row = $('<tr></tr>');
-                row.append($('<td><input type="checkbox"></td>'));
-                row.append($('<td></td>').html(value.fields.cliente));
-                row.append($('<td></td>').html(value.fields.direccion));
+                var row = create_row('entrega', value.pk, value.fields.cliente, value.fields.direccion)
                 html.append(row);
                 });
             }
@@ -89,9 +91,7 @@ var html_verificaciones = function(usuario){
         success: function(data){
             $.each(data, function(key, value){
                 var row = $('<tr></tr>');
-                row.append($('<td><input type="checkbox"></td>'));
-                row.append($('<td></td>').html(value.fields.nombre_cliente));
-                row.append($('<td></td>').html(value.fields.direccion));
+                var row = create_row('verificacion', value.pk, value.fields.nombre_cliente, value.fields.direccion)
                 html.append(row);
                 });
             }
@@ -107,9 +107,7 @@ var html_cobros = function(usuario){
         success: function(data){
             $.each(data, function(key, value){
                 var row = $('<tr></tr>');
-                row.append($('<td><input type="checkbox"></td>'));
-                row.append($('<td></td>').html(value.cliente));
-                row.append($('<td></td>').html(value.direccion));
+                var row = create_row('cobro', value.id, value.cliente, value.direccion)
                 html.append(row);
                 });
             }
@@ -125,9 +123,7 @@ var html_cortes = function(usuario){
         success: function(data){
             $.each(data, function(key, value){
                 var row = $('<tr></tr>');
-                row.append($('<td><input type="checkbox"></td>'));
-                row.append($('<td></td>').html(value.cliente));
-                row.append($('<td></td>').html(value.direccion));
+                var row = create_row('corte', value.id, value.cliente, value.direccion)
                 html.append(row);
                 });
             }
@@ -150,8 +146,19 @@ var ver_asignacion = function(){
         .append(html_verificaciones($(this).parent().prop('id')));
     modal.modal('show');
 }
+var activar = function(){
+    var ck = $(this);
+    if(ck.is(':checked')){
+        ck.closest('tr').addClass('active');
+        ck.parent().find('#primary').prop('name', ck.data('tipo'));
+    } else {
+        ck.closest('tr').removeClass('active');
+        ck.parent().find('#primary').prop('name', '');
+    }
+}
 $('#usuarios').on('dblclick', 'tr .pendiente', ver_asignacion);
 $('#usuarios').on('dblclick', 'tr .realizado', ver_asignacion);
+$('#mAsingned').on('change', 'input[type="checkbox"]', activar);
 {% endblock javascript %}
 
 {% block modal %}
@@ -183,7 +190,7 @@ $('#usuarios').on('dblclick', 'tr .realizado', ver_asignacion);
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Desasignar</button>
+        <button type="submit" class="btn btn-primary">Desasignar</button>
     </div>
     </div>
 </div>
