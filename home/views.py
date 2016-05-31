@@ -126,7 +126,7 @@ class reporte_gestiones(TemplateView):
 
     def pendiente_verificaciones(self, user):
         return Verificacion.objects.filter(user=user, estado='PENDIENTE',
-            fecha_asignacion__lte=date.today())
+            fecha_asignacion_user__lte=date.today())
 ##REALIZADO
 
     def realizado_distribucion(self, user):
@@ -193,7 +193,7 @@ class reporte_gestiones(TemplateView):
     def asignado_verificaciones(self, user):
         return Verificacion.objects.filter(
             Q(user=user, estado='PENDIENTE',
-            fecha_asignacion__lte=date.today()) |
+            fecha_asignacion_user__lte=date.today()) |
             Q(user=user,
             fecha_entrega__day=datetime.now().day,
             fecha_entrega__month=datetime.now().month,

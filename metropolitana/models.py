@@ -243,9 +243,11 @@ class Paquete(base):
         if self.comprobante:
             return '<a href="/media/%s" target="blank" onclick="return showAddAnotherPopup(this);">%s</a>' % (self.comprobante,
                 'comprobante')
+        elif self.imagen:
+            return '<a href="/media/%s" target="blank" onclick="return showAddAnotherPopup(this);">%s</a>' % (self.imagen,
+                'Foto')
         else:
             return None
-
     link_comprobante.short_description = 'comprobante'
     link_comprobante.allow_tags = True
 
