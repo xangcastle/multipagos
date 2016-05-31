@@ -103,7 +103,7 @@ class carga_informacion(TemplateView):
 
     def get(self, request, *args, **kwargs):
         context = get_extra_context(self, request, *args, **kwargs)
-        return super(reporte_gestiones, self).render_to_response(context)
+        return super(carga_informacion, self).render_to_response(context)
 
 
 class reporte_gestiones(TemplateView):
