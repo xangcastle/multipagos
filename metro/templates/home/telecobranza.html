@@ -1,0 +1,127 @@
+{% extends "home/base.html" %}
+
+{% block name %}Modulo de Telecobranza{% endblock name %}
+
+{% block active %}telecobro{% endblock active %}
+
+{% block content %}
+{% csrf_token %}
+<div class="row">
+        <div class="col-md-6">
+        {% if cliente %}
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" value="{{ cliente.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="identificacion">Identificacion</label>
+                <input type="text" class="form-control" id="identificacion" value="{{ cliente.identificacion }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Contrato</label>
+                <input name="contrato" type="text" class="form-control" id="contrato" value="{{ cliente.contrato }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="ciclo">Ciclo</label>
+                <input type="text" class="form-control" id="ciclo" value="{{ cliente.ciclo }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="departamento">Departamento</label>
+                <input type="text" class="form-control" id="departamento" value="{{ cliente.departamento.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="municipio">Municipio</label>
+                <input type="text" class="form-control" id="municipio" value="{{ cliente.municipio.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="barrio">Barrio</label>
+                <input type="text" class="form-control" id="barrio" value="{{ cliente.barrio.name }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="direccion">Direccion</label>
+                <textarea class="form-control" id="direccion" readonly>{{ cliente.direccion }}</textarea>
+            </div>
+            {% else %}
+                <div class="form-group">
+                <input type="text" class="form-control" id="buscador" placeholder="BUSCAR CLIENTE" name="buscador">
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+        {% if cliente %}
+            <h3>Facturas Pendientes</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Factura</th>
+                        <th>Saldo</th>
+                        <th>Fecha Factura</th>
+                        <th>Fecha de Vencimiento</th>
+                        <th>Fecha de Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in cliente.facturas %}
+                    <tr>
+                        <td>{{ f.factura }}</td>
+                        <td>{{ f.saldo }}</td>
+                        <td>{{ f.fecha_fact|date:"Y-m-d h:i a" }}</td>
+                        <td>{{ f.fecha_venc|date:"Y-m-d h:i a" }}</td>
+                        <td>{{ f.fecha_pago|date:"Y-m-d h:i a" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h3>Gestiones Anteriores</h3>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Tipo Gestion</th>
+                        <th>Usuario</th>
+                        <th>Fecha Gestion</th>
+                        <th>Resultado</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in cliente.gestiones %}
+                    <tr>
+                        <td>{{ g.tipo_gestion }}</td>
+                        <td>{{ g.user }}</td>
+                        <td>{{ g.fecha_gestion|date:"Y-m-d h:i a" }}</td>
+                        <td>{{ g.tipo_resultado }}</td>
+                        <td>{{ g.observaciones }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="form-group">
+                <label for="tipo_resultado">Tipo de Resultados</label>
+                <select id="tipo_resultado" class="form-control" name="tipo_resultado">
+                    <option value={{ t.id }}>------</option>
+                    {% for t in resultados %}
+                    <option value={{ t.id }}>{{ t.descripcion }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="observaciones">Observaciones</label>
+                <textarea class="form-control" id="observaciones" name="observaciones"></textarea>
+            </div>
+            <label for="fecha_promesa">Fecha de Promesa de Pago</label>
+            <div class="form-group">
+                <div class='input-group date' id='fecha_promesa'>
+                    <input type='text' class="form-control" name="fecha_promesa"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary">Grabar</button>
+        </div>
+    </div>
+    {% endif %}
+{% endblock content %}
+
+{% block javascript %}
+{% endblock javascript %}

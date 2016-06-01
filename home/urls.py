@@ -28,4 +28,6 @@ urlpatterns = patterns('home.views',
         name='cortes_pendientes'),
     url(r'^verificaciones_pendientes/$', 'verificaciones_pendientes',
         name='verificaciones_pendientes'),
+    url(r'^telecobranza/$', telecobranza.as_view(),
+        name='telecobranza'),
 )

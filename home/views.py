@@ -3,7 +3,7 @@ from metropolitana.models import Barrio, Zona
 from django.forms.models import model_to_dict
 from movil.models import UserProfile
 from django.contrib.auth.models import User
-from cartera.models import Gestion, TipoGestion
+from cartera.models import Gestion, TipoGestion, Cliente, TipoResultado
 from metropolitana.models import Paquete
 from verificaciones.models import Verificacion
 from datetime import date, datetime
@@ -405,3 +405,27 @@ def verificaciones_pendientes(request):
     struct = json.loads(data)
     data = json.dumps(struct)
     return HttpResponse(data, content_type='application/json')
+
+
+class telecobranza(TemplateView):
+    template_name = "home/telecobranza.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['resultados'] = \
+        TipoResultado.objects.all().order_by('descripcion')
+        contrato = request.GET.get('contrato', None)
+        if contrato:
+            cliente = Cliente.objects.get(contrato=contrato)
+            context['cliente'] = cliente
+        return super(telecobranza, self).render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['resultados'] = \
+        TipoResultado.objects.all().order_by('descripcion')
+        contrato = request.POST.get('buscador', None)
+        if contrato:
+            cliente = Cliente.objects.get(contrato=contrato)
+            context['cliente'] = cliente
+        return super(telecobranza, self).render_to_response(context)

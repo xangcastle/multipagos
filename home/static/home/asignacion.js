@@ -1,8 +1,10 @@
 $(document).ready(function (){
     $('#zonas').change(function(){
-        obtener_barrios($(this).val());
         obtener_usuarios($(this).val());
         $('#histogram').remove();
+        });
+    $('#usuario').change(function(){
+        obtener_barrios($('#zonas').val());
         });
     $('#dtpFecha').datepicker({
         format: "yyyy-mm-dd",
