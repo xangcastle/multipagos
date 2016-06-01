@@ -199,7 +199,7 @@ class gestion_admin(admin.ModelAdmin):
         if not fecha:
             return ""
         else:
-            return fecha.strftime('%x')
+            return fecha.strftime('%d/%m/%y')
 
     def format_resultado(self, resultado):
         if not resultado:
