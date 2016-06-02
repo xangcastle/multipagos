@@ -4,6 +4,11 @@
 
 {% block active %}telecobro{% endblock active %}
 
+{% block extrahead %}
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script src="/static/metropolitana/js/bootstrap-datepicker.js"></script>
+{% endblock extrahead %}
+
 {% block content %}
 {% csrf_token %}
 <div class="row">
@@ -117,11 +122,16 @@
                     </span>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary">Grabar</button>
+            <button type="submit" class="btn btn-primary">Grabar</button>
         </div>
     </div>
     {% endif %}
 {% endblock content %}
 
 {% block javascript %}
+$(function () {
+                $('#fecha_promesa').datepicker({
+                  format: 'yyyy-mm-dd'
+              });
+            });
 {% endblock javascript %}

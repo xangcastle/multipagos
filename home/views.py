@@ -428,4 +428,16 @@ class telecobranza(TemplateView):
         if contrato:
             cliente = Cliente.objects.get(contrato=contrato)
             context['cliente'] = cliente
+        else:
+            cliente = Cliente.objects.get(
+                contrato=request.POST.get('contrato', ''))
+            g = cliente.generar_gestion(TipoGestion.objects.get(code='0001'),
+                request.user)
+            g.fecha_gestion = datetime.now()
+            g.fecha_promesa = request.POST.get('fecha_promesa', '')
+            g.tipo_resultado = TipoResultado.objects.get(
+                id=int(request.POST.get('tipo_resultado', '')))
+            g.observaciones = request.POST.get('observaciones', '')
+            g.estado = "REALIZADO"
+            g.save()
         return super(telecobranza, self).render_to_response(context)
