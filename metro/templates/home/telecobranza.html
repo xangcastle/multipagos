@@ -9,6 +9,7 @@
 {% endblock extrahead %}
 
 {% block content %}
+{% if user %}
 {% csrf_token %}
 <div class="row">
         <div class="col-md-6">
@@ -74,6 +75,13 @@
                         <td>{{ f.fecha_pago|date:"Y-m-d h:i a" }}</td>
                     </tr>
                     {% endfor %}
+                    <tr>
+                        <td>Total</td>
+                        <td>{{ cliente.saldo_total }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
             <h3>Gestiones Anteriores</h3>
@@ -124,6 +132,9 @@
             <button type="submit" class="btn btn-primary">Grabar</button>
         </div>
     </div>
+    {% endif %}
+    {% else %}
+    <h3>Please Login</h3>
     {% endif %}
 {% endblock content %}
 

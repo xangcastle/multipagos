@@ -434,7 +434,9 @@ class telecobranza(TemplateView):
             g = cliente.generar_gestion(TipoGestion.objects.get(code='0001'),
                 request.user)
             g.fecha_gestion = datetime.now()
-            g.fecha_promesa = request.POST.get('fecha_promesa', '')
+            fecha_promesa = request.POST.get('fecha_promesa', None)
+            if fecha_promesa:
+                g.fecha_promesa = fecha_promesa
             g.tipo_resultado = TipoResultado.objects.get(
                 id=int(request.POST.get('tipo_resultado', '')))
             g.observaciones = request.POST.get('observaciones', '')
