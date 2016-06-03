@@ -45,7 +45,7 @@ admin.site.register(NewGestion, new_gestion_admin)
 
 
 class rebaja_cartera_admin(ImportExportModelAdmin):
-    list_display = ('no_cupon', 'fecha_pago', 'abono')
+    list_display = ('factura_interna', 'fecha_pago', 'abono')
 
     def action_integrar(self, request, queryset):
         for q in queryset:
