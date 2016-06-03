@@ -534,7 +534,7 @@ class RebajaCartera(models.Model):
             f.save()
             self.delete()
         except:
-            if not self.no_cupon:
+            if not self.factura_interna:
                 self.delete()
 
 
