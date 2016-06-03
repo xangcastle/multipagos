@@ -516,7 +516,7 @@ class AsignacionCliente(models.Model):
 
 
 class RebajaCartera(models.Model):
-    no_cupon = models.CharField(max_length=65, null=True)
+    factura_interna = models.CharField(max_length=65, null=True)
     fecha_pago = models.DateField(null=True)
     abono = models.FloatField(null=True)
 
@@ -526,7 +526,7 @@ class RebajaCartera(models.Model):
 
     def integrar(self):
         try:
-            f = Factura.objects.get(no_cupon=self.no_cupon)
+            f = Factura.objects.get(factura_interna=self.factura_interna)
             f.gestionada = True
             f.monto_abonado = self.abono
             f.fecha_pago = self.fecha_pago
