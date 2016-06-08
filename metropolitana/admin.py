@@ -20,6 +20,7 @@ from datetime import datetime
 from .views import cargar_para_cobro
 from daterange_filter.filter import DateRangeFilter
 from django.contrib.admin import widgets
+from django.http import HttpResponseRedirect
 
 
 def download_file(path):
