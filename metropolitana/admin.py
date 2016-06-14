@@ -203,10 +203,13 @@ class estadistica_ciclo(admin.ModelAdmin):
             widget=widgets.AdminDateWidget())
 
     def generar_rendicion(self, request, queryset):
+        message = ""
         form = None
+
         if 'apply' in request.POST:
             form = self.numero_rendicion(request.POST)
             if form.is_valid():
+                message = "Genero las redicion con los numero seleccionados"
                 numero = form.cleaned_data['numero']
                 for c in queryset:
                     for n in numero:
@@ -220,13 +223,21 @@ class estadistica_ciclo(admin.ModelAdmin):
                             nombre, nombre)
                         os.system(cmd)
                         return download_file(archivo)
+
         if not form:
             form = self.numero_rendicion(
                 initial={
                     '_selected_action': request.POST.getlist(
                         admin.ACTION_CHECKBOX_NAME)})
-        data = {'ciclos': queryset, 'form': form}
+
+        data = {'queryset': queryset, 'form': form,
+            'header_tittle': 'Por Favor seleccione los numero de redicion a generar',
+            'explanation':
+                'Los numeros de redicion selecionados generaran la redicion:',
+                'action': 'generar_rendicion'}
+
         data.update(csrf(request))
+        self.message_user(request, message)
         return render_to_response('metropolitana/numero_rendicion.html', data)
 
     generar_rendicion.short_description = \
@@ -379,4 +390,3 @@ admin.site.register(Municipio, municipio_admin)
 admin.site.register(Departamento, entidad_admin)
 admin.site.register(Zona, zona_admin)
 admin.site.register(uPaquete, up_admin)
-

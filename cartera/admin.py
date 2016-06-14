@@ -185,7 +185,8 @@ class gestion_admin(admin.ModelAdmin):
     list_display = ('cliente', 'tipo_gestion', 'fecha_asignacion',
         'fecha_vencimiento', 'fecha_gestion', 'tipo_resultado', 'user',
         'estado')
-    list_filter = (('fecha_gestion', DateRangeFilter), 'departamento',
+    list_filter = (('fecha_gestion', DateRangeFilter),
+        ('fecha_asignacion', DateRangeFilter), 'departamento',
         'municipio', 'ciclo', 'tipo_gestion', 'estado', 'user')
     readonly_fields = ('cliente', 'departamento', 'municipio', 'barrio',
         'tipo_gestion', 'fecha_asignacion', 'fecha_vencimiento',

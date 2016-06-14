@@ -10,7 +10,7 @@ class verificacion_admin(ImportExportModelAdmin):
     list_display = ('contrato', 'solicitud', 'nombre_cliente', 'servicio',
         'categoria', 'iddepartamento', 'idmunicipio', 'idbarrio', 'direccion',
         'fecha_entrega', 'user', 'estado')
-    list_filter = ('sucursal', 'iddepartamento', 'idmunicipio', 'idbarrio',
+    list_filter = ('sucursal', 'iddepartamento', 'idmunicipio',
         'servicio', 'categoria', 'user', 'estado', 'integrado')
 
     fieldsets = (('Datos Generales', {
