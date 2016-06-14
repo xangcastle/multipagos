@@ -190,7 +190,7 @@ class Paquete(base):
     entrega = models.NullBooleanField(default=False,
         verbose_name='Comprobante POD')
     comprobante = models.FileField(upload_to=generar_ruta_comprobante,
-        null=True, blank=True)
+        null=True, blank=True)#aqui se guardaba el pdf escaneado originalmente
     cerrado = models.NullBooleanField(default=False)
     barra = models.CharField(max_length=30, null=True, blank=True)
     orden_impresion = models.PositiveIntegerField(null=True, blank=True)
@@ -207,7 +207,7 @@ class Paquete(base):
     fecha_entrega = models.DateTimeField(null=True, blank=True)
     parentezco = models.CharField(max_length=75, null=True, blank=True)
     recibe = models.CharField(max_length=75, null=True, blank=True)
-    imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)
+    imagen = models.FileField(upload_to=get_media_url, null=True, blank=True)#foto tomada con el celular
     ESTADOS_DE_ENTREGA = (('ENTREGADO', 'ENTREGADO'),
                           ('PENDIENTE', 'PENDIENTE'),
                           ('REZAGADO', 'REZAGADO'),
@@ -387,7 +387,7 @@ class Paquete(base):
         if not os.path.exists(carpeta):
             os.makedirs(carpeta)
         return os.path.join(carpeta, 'ci' + self.codificacion_ciclo() +
-        '_rec_im.txt')
+        '_rec_im.txt')            
 
     def autoasignar(self):
         if self.idbarrio:

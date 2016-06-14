@@ -233,7 +233,7 @@ class estadistica_ciclo(admin.ModelAdmin):
         data = {'queryset': queryset, 'form': form,
             'header_tittle': 'Por Favor seleccione los numero de redicion a generar',
             'explanation':
-                'Los numeros de redicion selecionados generaran la redicion:',
+                'Se generaran rendicion a los siguientes ciclos:',
                 'action': 'generar_rendicion'}
 
         data.update(csrf(request))
