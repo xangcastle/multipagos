@@ -59,7 +59,8 @@ def comprobacion(contrato, ciclo, mes, ano):
     else:
         return None
 
-
+#esta funcion recibe una instancia del Model Paquete y un path. Y asigna ese archivo como pdf del paquete
+#asi que despues de covenrtir la salida de la otra funcion se le manda a esta y listo
 def cargar_comprobante(paquete, path):
     p = Paquete.objects.get(id=paquete.id)
     p.comprobante.name = generar_ruta_comprobante(paquete, 'archivo.pdf')
@@ -87,6 +88,15 @@ def make_ocr(path):
             descomponer(path)['extension']))
     os.system("pypdfocr " + path)
     os.remove(path)
+    return nr
+
+
+def convert_toPdf(path):
+    nr = os.path.join(descomponer(path)['carpeta'],
+        '{}.{}'.format(descomponer(path)['archivo'],
+            descomponer(path)['pdf']))
+    os.system("convert %s %s" % (path, nr))
+    print nr
     return nr
 
 
@@ -152,4 +162,3 @@ def recoger_archivos(fecha):
 if __name__ == "__main__":
     import sys
     indexar_carpeta(sys.argv[1])
-
