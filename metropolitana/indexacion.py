@@ -93,10 +93,8 @@ def make_ocr(path):
 
 def convert_toPdf(path):
     nr = os.path.join(descomponer(path)['carpeta'],
-        '{}.{}'.format(descomponer(path)['archivo'],
-            descomponer(path)['pdf']))
+        '{}.{}'.format(descomponer(path)['archivo'], 'pdf'))
     os.system("convert %s %s" % (path, nr))
-    print nr
     return nr
 
 
