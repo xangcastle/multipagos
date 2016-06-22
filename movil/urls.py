@@ -31,5 +31,9 @@ urlpatterns = patterns('',
         name='get_gestion'),
     url(r'^get_verificacion_sms/$', 'movil.views.get_verificacion_sms',
         name='get_verificacion_sms'),
+    url(r'^set_re_envio_claro/$', 'movil.views.set_re_envio_claro',
+       name='set_re_envio_claro'),
+    url(r'^get_re_envio_claro/$', 'movil.views.get_re_envio_claro',
+       name='get_re_envio_claro'),
 )
 

@@ -390,3 +390,19 @@ admin.site.register(Municipio, municipio_admin)
 admin.site.register(Departamento, entidad_admin)
 admin.site.register(Zona, zona_admin)
 admin.site.register(uPaquete, up_admin)
+
+
+class ReEnvioClaroAdmin(ImportExportModelAdmin):
+
+    list_display = ('id', 'barra', 'fecha_asignacion', 'fecha_envio', 'get_estado', 'enviado', )
+
+    list_filter = ('barra', 'paquete__estado', 'enviado', )
+
+    search_fields = ('barra', 'paquete__estado', 'enviado', )
+
+    def get_estado(self, obj):
+        return obj.paquete.estado
+    get_estado.short_description = 'Estado'
+    get_estado.admin_order_field = 'paquete__estado'
+
+admin.site.register(ReEnvioClaro, ReEnvioClaroAdmin)

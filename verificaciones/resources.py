@@ -10,4 +10,4 @@ class verificacion_resouce(resources.ModelResource):
             'cedula', 'servicio', 'categoria', 'sucursal', 'vendedor',
             'departamento', 'municipio', 'barrio', 'direccion', 'telefono',
             'celular', 'costo_instalacion', 'equipo', 'serial', 'mac', 'sim',
-            'solicitud')
+            'solicitud', 'hasta_50', 'mas_50')

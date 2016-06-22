@@ -140,6 +140,8 @@ class Verificacion(models.Model):
     idbarrio = models.ForeignKey(Barrio, null=True, blank=True)
     fecha_asignacion_user = models.DateField(null=True, blank=True)
     integrado = models.BooleanField(default=False)
+    hasta_50 = models.BooleanField(default=False)
+    mas_50 = models.BooleanField(default=False)
 
     def get_departamento(self):
         d = None
@@ -211,7 +213,6 @@ class Verificacion(models.Model):
         self.integrar()
         super(Verificacion, self).save()
 
-
 def integrar(ps):
     message = ""
     ds = ps.order_by('departamento').distinct('departamento')
@@ -234,3 +235,4 @@ def integrar(ps):
     message += "integrado, total de verificaciones = %s end %s departamentos" \
     % (str(ps.count()), str(ds.count()))
     return message
+

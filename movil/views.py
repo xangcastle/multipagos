@@ -3,14 +3,15 @@ from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from django.core import serializers
 from metropolitana.models import Paquete, Tipificacion, EstadisticaCiclo, \
-    Departamento, estadisticas_por_departamento
+    Departamento, estadisticas_por_departamento, ReEnvioClaro
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from geoposition import Geoposition
 from verificaciones.models import Verificacion
 from cartera.models import Cliente, Gestion, TipoResultado, Factura,\
 TipoGestion
-
+from datetime import datetime
+from django.core import serializers
 
 @csrf_exempt
 def get_user(request):
@@ -187,6 +188,8 @@ def get_verificacion(request):
     obj_json['estado_equipos'] = request.POST.get('estado_equipos', None)
     obj_json['visita_supervisor'] = request.POST.get('visita_supervisor', None)
     obj_json['comentarios'] = request.POST.get('comentarios', None)
+    obj_json['hasta_50'] = request.POST.get('hasta_50', False)
+    obj_json['mas_50'] = request.POST.get('mas_50', False)
 
     obj_json['Mensaje'] = ''
     try:
@@ -228,9 +231,15 @@ def get_verificacion(request):
         v.estado_equipos = obj_json['estado_equipos']
         v.visita_supervisor = obj_json['visita_supervisor']
         v.comentarios = obj_json['comentarios']
+        v.hasta_50 = (False, True)[obj_json['hasta_50'].lower()=='true']
+        v.mas_50 = (False, True)[obj_json['mas_50'].lower()=='true']
+
+        print v.hasta_50
+        print v.mas_50
 
         obj_json['Mensaje'] = "Verificacion cargada Correctamente"
         v.save()
+
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')
 
@@ -484,5 +493,51 @@ def get_verificacion_sms(request):
         v.estado = obj_json['Estado']
         obj_json['Mensaje'] = "Verificacion cargada Correctamente"
         v.save()
+    data = json.dumps(obj_json)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def set_re_envio_claro(request):
+    obj_json = {}
+    try:
+        obj_json['id'] = request.POST.get('id', '')
+        r = ReEnvioClaro.objects.get(id=obj_json['id'])
+        if r and r.enviado == False:
+            r.fecha_envio = datetime.now()
+            r.enviado = True
+            r.reenviar = False
+            r.save()
+            obj_json['msg'] = 'ok'
+        else:
+            obj_json['msg'] = 'La transsacion ya fue enviada'
+    except Exception as e:
+        obj_json = {}
+        obj_json['error'] = 'Ocurrio un error inespedado'
+        print e.message
+    data = json.dumps(obj_json)
+    return HttpResponse(data, content_type='application/json')
+
+
+@csrf_exempt
+def get_re_envio_claro(request):
+    obj_json = {}
+    try:
+        datos = ReEnvioClaro.objects.all().filter(enviado=False)
+        if datos:
+            d = []
+            for r in datos:
+                tmp = {}
+                tmp['id'] = r.id
+                tmp['barra'] = r.barra
+                tmp['reenviar'] = r.reenviar
+                tmp['fecha_asignacion'] = str(r.fecha_asignacion)
+                tmp['fecha_envio'] = str(r.fecha_envio)
+                tmp['estado'] = r.paquete.estado
+                d.append(tmp)
+            obj_json['datos'] = d
+    except Exception as e:
+        obj_json['error'] = 'Ocurrio un error inespedado'
+        print e
     data = json.dumps(obj_json)
     return HttpResponse(data, content_type='application/json')

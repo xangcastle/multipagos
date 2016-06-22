@@ -8,6 +8,7 @@ import subprocess
 from geoposition.fields import GeopositionField
 from django.contrib.auth.models import User
 import time
+from datetime import datetime
 from django.forms.models import model_to_dict
 
 
@@ -989,3 +990,25 @@ def get_zona(barrio):
             id=zona_barrio.objects.filter(barrio=barrio)[0].zona.id)
     except:
         return None
+
+class ReEnvioClaro(models.Model):
+    barra = models.CharField(max_length=255)
+    reenviar = models.BooleanField(default=True, blank=True)
+    enviado = models.BooleanField(default=False, blank=True)
+    fecha_asignacion = models.DateTimeField(default=datetime.now, blank=True, null=True)
+    fecha_envio = models.DateTimeField(blank=True, null=True)
+    paquete = models.ForeignKey(Paquete, null=True, blank=True)
+
+    def __unicode__(self):
+        return "%s" % self.barra
+
+    def get_paquete(self):
+        try:
+            return Paquete.objects.get(barra=self.barra)
+        except:
+            return None
+
+    def save(self, *args, **kwargs):
+        if not self.paquete and self.get_paquete():
+            self.paquete = self.get_paquete()
+        super(ReEnvioClaro, self).save()

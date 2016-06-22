@@ -12,3 +12,9 @@ class paquete_resouce(resources.ModelResource):
                   'idbarrio', 'iddepartemento', 'idmunicipio', 'servicio',
                   'total_mes_factura',)
         #exclude = ('id',)
+
+class ReEnvioClaroResource(resources.ModelResource):
+    class Meta:
+        model = ReEnvioClaro
+        fields = ('id', 'barra', 'reenviar', 'enviado',
+            'fecha_asignacion', 'fecha_envio', 'paquete',)
