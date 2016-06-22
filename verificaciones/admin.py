@@ -1,8 +1,9 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from django.template.context import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response,  get_object_or_404, render
 from .models import *
+from django.http import HttpResponseRedirect, HttpResponse
 from .resources import *
 
 
@@ -20,7 +21,7 @@ class verificacion_admin(ImportExportModelAdmin):
 
     fieldsets = (('Datos Generales', {
         'classes': ('grp-collapse grp-open',),
-        'fields': (('contrato', 'solicitud', 'fecha_alta'),
+        'fields': (('contrato', 'solicitud', 'fecha_alta', 'fecha_instalacion'),
                    ('cedula', 'nombre_cliente', 'direccion'),
                    ('sucursal', 'plan', 'servicio'),
                    ('departamento', 'municipio', 'barrio'),
@@ -49,7 +50,7 @@ class verificacion_admin(ImportExportModelAdmin):
                                 'comentarios'
                                 )}))
 
-    readonly_fields = ('contrato', 'nombre_cliente', 'fecha_alta',
+    readonly_fields = ('contrato', 'nombre_cliente', 'fecha_alta', 'fecha_instalacion',
                        'cedula', 'plan', 'servicio', 'sucursal', 'departamento', 'municipio',
                        'barrio', 'celular', 'direccion', 'telefono', 'costo_instalacion',
                        'equipo', 'serial', 'mac', 'sim', 'solicitud')
@@ -64,8 +65,13 @@ class verificacion_admin(ImportExportModelAdmin):
     action_integrar.short_description = 'integrar verificaciones seleccionadas'
 
     def action_generar_instalacion_pdf(self, request, queryset):
-        print request
-        ctx = {'data': queryset}
+        '''
+        return render(request, 'verificaciones/rpt_verificacion_dth.html', {
+            'data': 'queryset',
+        })
+        '''
+        print queryset.get().contrato
+        ctx = {'data': queryset.get()}
         response = render_to_response(
             'verificaciones/rpt_verificacion_dth.html', ctx,
             context_instance=RequestContext(request))

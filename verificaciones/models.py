@@ -142,6 +142,7 @@ class Verificacion(models.Model):
     integrado = models.BooleanField(default=False)
     hasta_50 = models.BooleanField(default=False)
     mas_50 = models.BooleanField(default=False)
+    fecha_instalacion = models.DateTimeField(null=True, blank=True)
 
     def get_departamento(self):
         d = None
