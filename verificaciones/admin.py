@@ -64,6 +64,7 @@ class verificacion_admin(ImportExportModelAdmin):
     action_integrar.short_description = 'integrar verificaciones seleccionadas'
 
     def action_generar_instalacion_pdf(self, request, queryset):
+        print request
         ctx = {'data': queryset}
         response = render_to_response(
             'verificaciones/rpt_verificacion_dth.html', ctx,

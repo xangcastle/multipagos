@@ -396,7 +396,7 @@ class ReEnvioClaroAdmin(ImportExportModelAdmin):
 
     list_display = ('id', 'barra', 'fecha_asignacion', 'fecha_envio', 'get_estado', 'enviado', )
 
-    list_filter = ('barra', 'paquete__estado', 'enviado', )
+    list_filter = ('paquete__estado', 'enviado', )
 
     search_fields = ('barra', 'paquete__estado', 'enviado', )
 
